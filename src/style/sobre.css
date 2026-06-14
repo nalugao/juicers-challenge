@@ -1,0 +1,14 @@
+.sobre-pagina {
+  --bg-primary: #111;
+  --bg-surface: #000000;
+  --color-primary: #E24B4A;
+  --color-danger: #732727;
+  --color-text: #FFFFFF;
+  --color-muted: #B3B3B3;
+
+  background: var(--bg-primary);
+  color: var(--color-text);
+
+  padding: clamp(2rem, 6vw, 4rem) clamp(1.5rem, 5vw, 3rem);
+
+}

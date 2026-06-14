@@ -1,0 +1,312 @@
+.he-wrap {
+    min-height: 100vh;
+}
+
+/* PAGE */
+.he-page {
+    max-width: 1850px;
+    margin: 0 auto;
+    padding: 32px 32px 0px;
+    background-color: #111;
+    border: 1px solid #161616;
+    border-radius: 10px
+}
+
+/* PAGE HEADER */
+.he-page-header {
+    margin-bottom: 28px;
+}
+
+.he-page-header h1 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #fff;
+    letter-spacing: -.3px;
+    margin-bottom: 4px;
+}
+
+.he-page-header p {
+    font-size: 14px;
+    color: #ded9d9;
+}
+
+/* STATS */
+.he-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.he-stat-card {
+    background: #0f0f0f;
+    border: 1px solid #1a1a1a;
+    border-radius: 9px;
+    padding: 14px 16px;
+}
+
+.he-stat-label {
+    font-size: 14px;
+    color: #ded9d9;
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    font-weight: 600;
+    margin-bottom: 7px;
+}
+
+.he-stat-val {
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -.5px;
+}
+
+.he-stat-val--red {
+    color: #c0392b;
+}
+
+.he-stat-val--green {
+    color: #27ae60;
+}
+
+.he-stat-val--muted {
+    color: #e2e2e2;
+    font-size: 15px;
+    margin-top: 4px;
+}
+
+.he-stat-sub {
+    font-size: 13px;
+    color: #ded9d9;
+    margin-top: 3px;
+}
+
+/* UPLOAD ZONE */
+.he-upload-zone {
+    border: 1.5px dashed #1e1e1e;
+    border-radius: 10px;
+    padding: 28px 24px;
+    text-align: center;
+    cursor: pointer;
+    background: transparent;
+    transition: all .2s;
+    margin-bottom: 28px;
+}
+
+.he-upload-zone:hover,
+.he-upload-zone--dragging {
+    border-color: #c0392b;
+    background: #140808;
+}
+
+.he-upload-icon {
+    width: 42px;
+    height: 42px;
+    background: #141414;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 12px;
+}
+
+.he-upload-icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+.he-upload-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: #ccc;
+    margin-bottom: 5px;
+}
+
+.he-upload-sub {
+    font-size: 12px;
+    color: #ded9d9;
+    margin-bottom: 14px;
+}
+
+.he-upload-btn {
+    display: inline-block;
+    padding: 7px 18px;
+    background: #c0392b;
+    color: #fff;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* SECTION TITLE */
+.he-section-title {
+    font-size: 14px;
+    color: #ded9d9;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+/* EXAM LIST */
+.he-exam-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.he-exam-empty {
+    text-align: center;
+    padding: 40px 0;
+    color: #ded9d9;
+    font-size: 16px;
+}
+
+.he-exam-card {
+    background: #0f0f0f;
+    border: 1px solid #1a1a1a;
+    border-radius: 9px;
+    padding: 14px 16px;
+    display: grid;
+    grid-template-columns: 34px 1fr auto;
+    gap: 13px;
+    align-items: center;
+    transition: border-color .15s;
+    cursor: pointer;
+}
+
+.he-exam-card:hover {
+    border-color: #ded9d9;
+}
+
+/* PDF ICON */
+.he-pdf-icon {
+    width: 34px;
+    height: 34px;
+    background: #141414;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.he-pdf-icon svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* EXAM INFO */
+.he-exam-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: #ccc;
+    margin-bottom: 3px;
+}
+
+.he-exam-meta {
+    font-size: 11px;
+    color: #ded9d9;
+}
+
+/* EXAM BADGES */
+.he-exam-badges {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* RISK BADGES */
+.he-badge {
+    padding: 3px 9px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 600;
+    border: 1px solid transparent;
+}
+
+.he-badge--high {
+    background: #1a0808;
+    border-color: #2a0f0f;
+    color: #c0392b;
+}
+
+.he-badge--warn {
+    background: #1a160a;
+    border-color: #2a1e0f;
+    color: #e67e22;
+}
+
+.he-badge--normal {
+    background: #0a1a0a;
+    border-color: #0f2a0f;
+    color: #27ae60;
+}
+
+.he-badge--processing {
+    background: #141414;
+    border-color: #1e1e1e;
+    color: #4a4a4a;
+}
+
+.he-badge--pdf {
+    background: #141414;
+    border-color: #1e1e1e;
+    color: #4a4a4a;
+    font-weight: 500;
+}
+
+/* REMOVE BUTTON */
+.he-btn-remove {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #ded9d9;
+    font-size: 14px;
+    line-height: 1;
+    padding: 2px 4px;
+    border-radius: 4px;
+    transition: color .15s;
+    font-family: inherit;
+}
+
+.he-btn-remove:hover {
+    color: #c0392b;
+}
+
+/* TOAST */
+.he-toast {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    z-index: 999;
+    background: #161616;
+    border: 1px solid #ded9d9;
+    border-radius: 9px;
+    padding: 11px 18px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-size: 13px;
+    color: #ccc;
+    transform: translateY(80px);
+    opacity: 0;
+    transition: all .3s ease;
+}
+
+.he-toast--show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.he-toast-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #27ae60;
+    flex-shrink: 0;
+}
+
+.he-toast-dot--warn {
+    background: #e67e22;
+}

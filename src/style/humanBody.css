@@ -1,0 +1,402 @@
+.hbd-root,
+.hbd-root *,
+.hbd-root *::before,
+.hbd-root *::after {
+    box-sizing: border-box;
+}
+
+.hbd-root {
+    /* Theme tokens */
+    --hbd-bg: #0a0a0a;
+    --hbd-surface: rgba(16, 16, 16, 0.85);
+    --hbd-text: #e5e5e5;
+    --hbd-text-dim: #a3a3a3;
+    --hbd-text-faint: #525252;
+    --hbd-border: rgba(255, 255, 255, 0.07);
+    --hbd-border-faint: rgba(255, 255, 255, 0.05);
+    --hbd-accent: #dc2626;
+    --hbd-stroke: rgba(255, 255, 255, 0.32);
+
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: var(--hbd-bg);
+    color: var(--hbd-text);
+    font-family: Manrope, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    container-type: inline-size;
+    container-name: hbd;
+
+    flex: 1;
+    min-height: 500px;
+    height: calc(100vh - 10px);
+}
+
+@media (max-width: 700px) {
+    .hbd-root {
+        height: auto;
+        min-height: 100vh;
+    }
+
+    .hbd-content {
+        grid-template-columns: 1fr;
+        overflow-y: auto;
+    }
+
+    .hbd-stage {
+        height: 400px;
+    }
+}
+
+.hbd-root ::selection {
+    background: rgba(220, 38, 38, 0.3);
+    
+}
+
+/* Header strip ─────────────────────────────────────────────────────────── */
+.hbd-header {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--hbd-border);
+}
+
+@container hbd (min-width: 700px) {
+    .hbd-header {
+        padding: 18px 40px;
+    }
+}
+
+.hbd-status {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.hbd-status-dot {
+    position: relative;
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+}
+
+.hbd-status-dot::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: var(--hbd-accent);
+    opacity: 0.7;
+    animation: hbd-ping 1.6s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+.hbd-status-dot::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: var(--hbd-accent);
+}
+
+@keyframes hbd-ping {
+
+    75%,
+    100% {
+        transform: scale(2.2);
+        opacity: 0;
+    }
+}
+
+.hbd-status-label {
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--hbd-text-dim);
+    font-weight: 500;
+}
+
+.hbd-status-meta {
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    color: var(--hbd-text-faint);
+    font-weight: 300;
+}
+
+@container hbd (max-width: 540px) {
+    .hbd-status-meta {
+        display: none;
+    }
+}
+
+/* Content grid ─────────────────────────────────────────────────────────── */
+.hbd-content {
+    flex: 1;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 20px;
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+@container hbd (min-width: 700px) {
+    .hbd-content {
+        grid-template-columns: 1fr 1fr;
+        padding: 28px 40px;
+        gap: 36px;
+    }
+}
+
+/* Body diagram column ──────────────────────────────────────────────────── */
+.hbd-stage {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.hbd-stage::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse 60% 50% at 50% 45%, rgba(220, 38, 38, 0.06), transparent 70%),
+        radial-gradient(ellipse 80% 60% at 50% 50%, rgba(255, 255, 255, 0.015), transparent 70%);
+    pointer-events: none;
+}
+
+.hbd-svg {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    max-width: 300px;
+}
+
+.hbd-body-path {
+    fill: none;
+    stroke: var(--hbd-stroke);
+    stroke-width: 0.5;
+    stroke-linejoin: round;
+}
+
+/* Pain dots ───────────────────────────────────────────────────────────── */
+.hbd-dot {
+    cursor: pointer;
+    transition: transform 0.18s ease;
+    transform-origin: center;
+    transform-box: fill-box;
+    outline: none;
+}
+
+.hbd-dot:hover {
+    transform: scale(1.12);
+}
+
+.hbd-dot-pulse {
+    fill: rgba(220, 38, 38, 0.30);
+    transform-origin: center;
+    transform-box: fill-box;
+    animation: hbd-pulse 2.4s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+}
+
+.hbd-dot-pulse--lag {
+    animation-delay: 1.2s;
+}
+
+.hbd-dot-halo {
+    fill: rgba(220, 38, 38, 0.20);
+}
+
+.hbd-dot-core {
+    fill: var(--hbd-accent);
+}
+
+.hbd-dot-mark {
+    fill: #fff;
+}
+
+@keyframes hbd-pulse {
+    0% {
+        transform: scale(0.9);
+        opacity: 0.55;
+    }
+
+    100% {
+        transform: scale(2.6);
+        opacity: 0;
+    }
+}
+
+/* Card column ─────────────────────────────────────────────────────────── */
+.hbd-card-area {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 0;
+    overflow-y: auto;
+}
+
+.hbd-card {
+    position: relative;
+    width: 100%;
+    max-width: 28rem;
+    padding: 26px 24px;
+    background: var(--hbd-surface);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--hbd-border);
+    border-radius: 16px;
+    box-shadow: 0 30px 80px -30px rgba(220, 38, 38, 0.18);
+    animation: hbd-slide-in 0.36s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@container hbd (min-width: 700px) {
+    .hbd-card {
+        padding: 30px;
+    }
+}
+
+@keyframes hbd-slide-in {
+    from {
+        opacity: 0;
+        transform: translateX(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.hbd-card-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--hbd-text-faint);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.15s, background-color 0.15s;
+}
+
+.hbd-card-close:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.hbd-card-title {
+    margin: 0 0 6px;
+    font-size: 26px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    color: #fff;
+}
+
+@container hbd (min-width: 700px) {
+    .hbd-card-title {
+        font-size: 30px;
+    }
+}
+
+.hbd-card-subtitle {
+    font-size: 10.5px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--hbd-accent);
+    font-weight: 600;
+    margin-bottom: 22px;
+}
+
+.hbd-card-body {
+    margin: 0;
+    font-size: 14.5px;
+    line-height: 1.7;
+    color: var(--hbd-text-dim);
+    font-weight: 300;
+}
+
+.hbd-card-footer {
+    margin-top: 26px;
+    padding-top: 18px;
+    border-top: 1px solid var(--hbd-border-faint);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.hbd-card-footer-label {
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--hbd-text-faint);
+    font-weight: 500;
+}
+
+.hbd-pager {
+    display: flex;
+    gap: 6px;
+}
+
+.hbd-pager-btn {
+    width: 6px;
+    height: 6px;
+    padding: 0;
+    border: none;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.18);
+    cursor: pointer;
+    transition: background-color 0.2s, width 0.2s;
+}
+
+.hbd-pager-btn:hover {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+.hbd-pager-btn[data-active="true"] {
+    width: 16px;
+    background: var(--hbd-accent);
+}
+
+/* Empty state ─────────────────────────────────────────────────────────── */
+.hbd-empty {
+    text-align: center;
+    max-width: 280px;
+    padding: 0 16px;
+}
+
+.hbd-empty-label {
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 500;
+    margin-bottom: 12px;
+    color: var(--hbd-text-faint);
+}
+
+.hbd-empty-text {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.6;
+    font-weight: 300;
+    color: var(--hbd-text-faint);
+}
+
+.titulo_bloco--escuro .h2_titulo { color: #ffffff; }
+.titulo_bloco--escuro .p_subtitulo { color: #888888; }

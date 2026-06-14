@@ -1,0 +1,59 @@
+.chart-card {
+    overflow: hidden;
+}
+
+.chart-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 16px 0;
+    border-bottom: 1px solid #141414;
+}
+
+.chart-wrap {
+    padding: 16px 8px 8px;
+}
+
+.chart-tooltip {
+    background: #1a1a1a;
+    border: 0.5px solid #ded9d9;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 11px;
+}
+
+.chart-tooltip-label {
+    color: #555;
+    margin-bottom: 6px;
+    font-size: 10px;
+}
+
+.chart-legend {
+    display: flex;
+    gap: 16px;
+    padding: 0 16px 14px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.legend-line {
+    width: 20px;
+    height: 2px;
+    display: inline-block;
+    border-radius: 1px;
+}
+
+.legend-dashed {
+    background: transparent;
+    border-top: 1.5px dashed #333;
+    border-radius: 0;
+}
+
+.legend-label {
+    font-size: 10px;
+    color: #333;
+}

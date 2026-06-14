@@ -1,0 +1,184 @@
+/* Widget flutuante */
+.audio-reader-widget {
+  position: fixed;
+  bottom: 120px;
+  right: 130px;
+  z-index: 9998;
+  width: 210px;
+  background: #1a1f2e;
+  border-radius: 14px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255,255,255,0.07);
+  font-family: "Segoe UI", system-ui, sans-serif;
+  color: #e8eaf0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  user-select: none;
+}
+.audio-reader-widget.minimized {
+  width: 170px;
+}
+
+/* Header */
+.ar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 12px;
+  background: linear-gradient(135deg, #2a3550 0%, #1e2a42 100%);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  cursor: default;
+}
+.ar-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  color: #a8c0ff;
+}
+.ar-icon {
+  display: flex;
+  align-items: center;
+  color: #6c8fff;
+}
+
+/* Animação de onda sonora */
+.ar-wave {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 16px;
+}
+.ar-wave span {
+  display: block;
+  width: 3px;
+  background: #6c8fff;
+  border-radius: 2px;
+  animation: arWave 0.8s ease-in-out infinite;
+}
+.ar-wave span:nth-child(1) { height: 5px;  animation-delay: 0s; }
+.ar-wave span:nth-child(2) { height: 10px; animation-delay: 0.15s; }
+.ar-wave span:nth-child(3) { height: 7px;  animation-delay: 0.3s; }
+.ar-wave span:nth-child(4) { height: 12px; animation-delay: 0.45s; }
+
+@keyframes arWave {
+  0%, 100% { transform: scaleY(1); }
+  50%       { transform: scaleY(0.35); }
+}
+
+.ar-minimize-btn {
+  background: rgba(255,255,255,0.07);
+  border: none;
+  color: #8899bb;
+  cursor: pointer;
+  font-size: 10px;
+  width: 22px;
+  height: 22px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, color 0.2s;
+}
+.ar-minimize-btn:hover {
+  background: rgba(255,255,255,0.14);
+  color: #e0e8ff;
+}
+
+/* Corpo do widget */
+.ar-body {
+  padding: 10px 12px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+/* Barra de progresso */
+.ar-progress-bar {
+  width: 100%;
+  height: 3px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 99px;
+  overflow: hidden;
+}
+.ar-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4d7cff, #a78bfa);
+  border-radius: 99px;
+  transition: width 0.4s ease;
+}
+.ar-progress-label {
+  font-size: 10px;
+  color: #5566aa;
+  text-align: right;
+  display: block;
+  margin-top: -6px;
+}
+
+/* Botões principais */
+.ar-controls {
+  display: flex;
+  gap: 6px;
+}
+.ar-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  border: none;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 7px 10px;
+  transition: transform 0.15s, box-shadow 0.15s, background 0.2s;
+  flex: 1;
+  justify-content: center;
+  letter-spacing: 0.2px;
+}
+.ar-btn:active {
+  transform: scale(0.96);
+}
+.ar-btn-play {
+  background: linear-gradient(135deg, #4d7cff 0%, #6c8fff 100%);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(77, 124, 255, 0.35);
+  width: 100%;
+}
+.ar-btn-play:hover {
+  background: linear-gradient(135deg, #3d6cef 0%, #5c7fff 100%);
+  box-shadow: 0 6px 18px rgba(77, 124, 255, 0.45);
+}
+.ar-btn-pause {
+  background: rgba(255, 200, 80, 0.12);
+  color: #ffd060;
+  border: 1px solid rgba(255, 200, 80, 0.2);
+}
+.ar-btn-pause:hover {
+  background: rgba(255, 200, 80, 0.2);
+}
+.ar-btn-stop {
+  background: rgba(255, 90, 90, 0.12);
+  color: #ff7070;
+  border: 1px solid rgba(255, 90, 90, 0.2);
+}
+.ar-btn-stop:hover {
+  background: rgba(255, 90, 90, 0.22);
+}
+
+.audio-word-highlight {
+  background: linear-gradient(120deg, rgba(77, 124, 255, 0.18) 0%, rgba(167, 139, 250, 0.18) 100%) !important;
+  outline: 2px solid rgba(108, 143, 255, 0.45) !important;
+  border-radius: 4px !important;
+  transition: background 0.3s ease, outline 0.3s ease !important;
+  box-shadow: 0 0 0 4px rgba(77, 124, 255, 0.07) !important;
+}
+
+/* Responsivo — mobile */
+@media (max-width: 480px) {
+  .audio-reader-widget {
+    width: calc(100vw - 32px);
+    right: 16px;
+    bottom: 16px;
+  }
+}

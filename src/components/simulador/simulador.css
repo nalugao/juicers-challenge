@@ -1,0 +1,115 @@
+.sim-wrapper {
+  background-color: #0f0f0f;
+  min-height: 100vh;
+}
+
+/* ── Card principal ─ */
+.sim-card {
+  background-color: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 16px;
+}
+
+.sim-range {
+  accent-color: #dc3545;
+  /* variável semântica do Bootstrap: --bs-danger */
+}
+
+.sim-ticks {
+  color: #444;
+  font-size: 0.72rem;
+  margin-top: 0.15rem;
+}
+
+
+.sim-score {
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+
+.sim-progress {
+  height: 6px;
+  background-color: #111;
+  border-radius: 3px;
+}
+
+.sim-progress .progress-bar {
+  transition: width 0.5s ease;
+  border-radius: 3px;
+}
+
+.sim-msg-header {
+  color: #555;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  margin-bottom: 0.75rem;
+}
+
+.sim-msg {
+  border-radius: 10px;
+  padding: 0.9rem 1rem;
+  border: 1px solid transparent;
+}
+
+
+.sim-msg--danger {
+  border-color: #dc262555;
+  background-color: #1a000066;
+}
+
+.sim-msg--warning {
+  border-color: #eab30855;
+  background-color: #1c100066;
+}
+
+.sim-msg--info {
+  border-color: #3b82f655;
+  background-color: #0c1a3066;
+}
+
+.sim-msg__dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.sim-msg__dot--danger {
+  background-color: #dc2626;
+}
+
+.sim-msg__dot--warning {
+  background-color: #eab308;
+}
+
+.sim-msg__dot--info {
+  background-color: #3b82f6;
+}
+
+/* Títulos */
+.sim-msg__title {
+  font-size: 0.82rem;
+}
+
+.sim-msg__title--danger {
+  color: #ef4444;
+}
+
+.sim-msg__title--warning {
+  color: #eab308;
+}
+
+.sim-msg__title--info {
+  color: #60a5fa;
+}
+
+/* Texto descritivo */
+.sim-msg__text {
+  color: #888;
+  font-size: 0.78rem;
+  line-height: 1.65;
+}

@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="./src/assets/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Juicer</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+    <script
+      src="https://cdn.userway.org/widget.js"
+      data-account="9AycmX4hek"
+    ></script>
+  </head>
+  <body>
+<style>
+  /* Impede UserWay de interferir dentro do FAQ */
+  #faqArea.uw-ignore *,
+  #faqArea *,
+  .uw-ignore * {
+    pointer-events: auto !important;
+  }
+
+  /* Esconde o botão padrão do VLibras */
+  [vw-access-button] {
+    display: none !important;
+  }
+
+  /* Esconde o botão padrão do UserWay ← adiciona isso */
+  #userwayAccessibilityIcon,
+  [id^="userway"],
+  [class^="userway"],
+  .__userway_button {
+    display: none !important;
+  }
+</style>
+
+    <div id="root"></div>
+    <!-- VLibras: mantém o plugin mas sem o botão visível -->
+    <div vw class="enabled">
+      <div vw-access-button></div>
+      <div vw-plugin-wrapper>
+        <div class="vw-plugin-top-wrapper"></div>
+      </div>
+    </div>
+    <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+    <script>
+      new window.VLibras.Widget('https://vlibras.gov.br/app');
+    </script>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+  </head>
+</html>

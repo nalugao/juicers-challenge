@@ -1,0 +1,503 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #0c0c0c;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+  color: #e2e2e2;
+}
+
+.shell {
+  min-height: 100vh;
+  background: #0c0c0c;
+}
+
+/* Layout */
+.main {
+  display: grid;
+  grid-template-columns: 1fr;
+  min-height: calc(100vh - 52px);
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  color: #fff;
+  transition: all 0.15s;
+  text-decoration: none;
+}
+
+.nav-item:hover {
+  background: #141414;
+  color: #888;
+}
+
+.nav-item.active {
+  background: #161616;
+  color: #e2e2e2;
+}
+
+.nav-item svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+/* Content */
+.content {
+  padding: 28px;
+  overflow-y: auto;
+}
+
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.page-title {
+  font-size: 25px;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: -0.3px;
+}
+
+.page-sub {
+  font-size: 16px;
+  color: #fff;
+  margin-top: 3px;
+}
+
+/* Metrics */
+.metrics-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+/* Main grid */
+.grid-main {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+/* Bottom grid */
+.bottom-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+/* Shared card base */
+.card {
+  background: #111;
+  border: 1px solid #161616;
+  border-radius: 10px;
+}
+
+.card-head {
+  padding: 14px 16px;
+  border-bottom: 1px solid #141414;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-head-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #ccc;
+}
+
+/* Badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 10px;
+  font-weight: 500;
+  padding: 3px 8px;
+  border-radius: 99px;
+}
+
+.badge-red {
+  background: #1a0a0a;
+  color: #c0392b;
+  border: 1px solid #2a1010;
+}
+
+.badge-yellow {
+  background: #1a1500;
+  color: #d4a017;
+  border: 1px solid #2a2200;
+}
+
+.badge-green {
+  background: #0a1a0a;
+  color: #27ae60;
+  border: 1px solid #102a10;
+}
+
+/* Tabs */
+.tab-bar {
+  display: flex;
+  gap: 0;
+}
+
+.tab {
+  font-size: 11px;
+  padding: 6px 14px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #ded9d9;
+  border-bottom: 1.5px solid transparent;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+
+.tab.active {
+  color: #e2e2e2;
+  border-bottom-color: #c0392b;
+}
+
+.tab:hover:not(.active) {
+  color: #666;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .grid-main {
+    grid-template-columns: 1fr;
+  }
+
+  .metrics-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .main {
+    grid-template-columns: 1fr;
+  }
+
+  .bottom-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .metrics-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .content {
+    padding: 16px;
+  }
+}
+
+/* Gráficos*/
+.chart-hepatico {
+  width: 100%;
+  padding: 18px 22px 16px;
+  box-sizing: border-box;
+}
+
+.chart-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 28px;
+  padding: 0 6px;
+  gap: 16px;
+}
+
+.chart-header h3 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+}
+
+.chart-header p {
+  color: #9ca3af;
+  margin-top: 4px;
+  font-size: 14px;
+}
+
+.badge-risco {
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.badge-risco.normal {
+  background: rgba(34, 197, 94, 0.15);
+  color: #22c55e;
+}
+
+.badge-risco.alerta {
+  background: rgba(250, 204, 21, 0.15);
+  color: #facc15;
+}
+
+.badge-risco.critico {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+}
+
+.tooltip-hepatico {
+  background: #181818;
+  border: 1px solid #2f2f2f;
+  border-radius: 14px;
+  padding: 14px;
+  color: #fff;
+  min-width: 230px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
+.tooltip-hepatico p {
+  margin: 5px 0;
+  font-size: 13px;
+  color: #d1d5db;
+}
+
+.tooltip-data {
+  display: block;
+  margin-bottom: 8px;
+  color: #9ca3af;
+  font-size: 13px;
+}
+
+.tooltip-status {
+  margin: 10px 0;
+  padding: 6px 10px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.tooltip-status.normal {
+  background: rgba(34, 197, 94, 0.15);
+  color: #22c55e;
+}
+
+.tooltip-status.alerta {
+  background: rgba(250, 204, 21, 0.15);
+  color: #facc15;
+}
+
+.tooltip-status.critico {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+}
+
+.tooltip-hepatico small {
+  display: block;
+  color: #9ca3af;
+  line-height: 1.4;
+}
+
+/* Afasta o gráfico SVG das bordas internas */
+.chart-hepatico .recharts-responsive-container {
+  padding: 8px 12px 4px;
+  box-sizing: border-box;
+}
+
+/* Evita cortes em textos, bolinhas e tooltips */
+.chart-hepatico .recharts-wrapper {
+  overflow: visible;
+}
+
+.chart-insight {
+  margin-top: 24px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.chart-insight.normal {
+  background: rgba(34, 197, 94, 0.08);
+  color: #bbf7d0;
+}
+
+.chart-insight.alerta {
+  background: rgba(250, 204, 21, 0.08);
+  color: #fef3c7;
+}
+
+.chart-insight.critico {
+  background: rgba(239, 68, 68, 0.08);
+  color: #fecaca;
+}
+
+.limites-hepaticos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+  padding: 0 6px;
+}
+
+.limites-hepaticos span {
+  font-size: 12px;
+  color: #9ca3af;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 6px 10px;
+  border-radius: 999px;
+}
+
+.tooltip-simples {
+  min-width: 130px;
+  padding: 10px 12px;
+}
+
+.tooltip-simples p {
+  margin: 0;
+}
+
+.chart-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 30px;
+  padding: 0 6px;
+  flex-wrap: wrap;
+}
+
+.chart-tabs button {
+  border: none;
+  background: rgba(255, 255, 255, 0.05);
+  color: #9ca3af;
+  padding: 8px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.chart-tabs button:hover {
+  background: rgba(255, 255, 255, 0.09);
+  color: #fff;
+}
+
+.chart-tabs button.active {
+  background: rgba(59, 130, 246, 0.18);
+  color: #3b82f6;
+}
+
+.chart-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 30px;
+  padding: 16px 18px 0;
+  flex-wrap: wrap;
+}
+
+.sub-chart-tabs button {
+  border: none;
+  background: rgba(255, 255, 255, 0.05);
+  color: #9ca3af;
+  padding: 7px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.sub-chart-tabs button:hover {
+  background: rgba(255, 255, 255, 0.09);
+  color: #fff;
+}
+
+.sub-chart-tabs button.active {
+  background: rgba(59, 130, 246, 0.18);
+  color: #3b82f6;
+}
+
+/* ── Collapse: Dados da conta ── */
+.perfil-collapse {
+    margin-bottom: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 10px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.perfil-collapse-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 13px 18px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    transition: color 0.2s, background 0.2s;
+}
+
+.perfil-collapse-btn:hover {
+    color: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.perfil-collapse-btn--open {
+    color: rgba(255, 255, 255, 0.8);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.perfil-collapse-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.perfil-collapse-chevron {
+    transition: transform 0.25s ease;
+    flex-shrink: 0;
+}
+
+.perfil-collapse-btn--open .perfil-collapse-chevron {
+    transform: rotate(180deg);
+}
+
+/* Animação suave via grid-template-rows */
+.perfil-collapse-body {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.3s ease;
+}
+
+.perfil-collapse-body--open {
+    grid-template-rows: 1fr;
+}
+
+.perfil-collapse-inner {
+    overflow: hidden;
+}
+
+/* Quando DadosDaConta está embedded, remove padding/background próprios */
+.dc-wrap--embedded {
+    background: transparent !important;
+    padding: 0 !important;
+}
+
+.dc-wrap--embedded .dc-page {
+    padding: 0 !important;
+}

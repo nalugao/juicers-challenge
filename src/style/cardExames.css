@@ -1,0 +1,57 @@
+.exams-card {
+    overflow: hidden;
+}
+
+.exam-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    border-bottom: 1px solid #0e0e0e;
+}
+
+.exam-row:last-child {
+    border-bottom: none;
+}
+
+.exam-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.exam-name {
+    font-size: 11px;
+    color: #aaa;
+    flex: 1;
+}
+
+.exam-date {
+    font-size: 10px;
+    color: #ded9d9;
+}
+
+.exam-badge {
+    font-size: 9px;
+    padding: 2px 7px;
+    border-radius: 99px;
+    font-weight: 500;
+}
+
+.btn-upload {
+    font-size: 10px;
+    color: #ded9d9;
+    background: #161616;
+    border: 1px solid #1e1e1e;
+    border-radius: 6px;
+    padding: 4px 10px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: color 0.15s, border-color 0.15s;
+}
+
+.btn-upload:hover {
+    color: #666;
+    border-color: #252525;
+}

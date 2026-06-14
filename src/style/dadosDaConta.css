@@ -1,0 +1,486 @@
+/* ─── DadosDaConta.css ─── */
+
+.dc-wrap {
+    background: #080808;
+    min-height: 100vh;
+    font-family: 'DM Sans', system-ui, sans-serif;
+    color: #e2e2e2;
+}
+
+.dc-page {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 24px 24px 60px;
+}
+
+/* PAGE HEADER */
+.dc-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+    margin-bottom: 24px;
+}
+
+.dc-header-info h1 {
+    font-size: 28px;
+    font-weight: 600;
+    color: #fff;
+    letter-spacing: -.3px;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.dc-header-info p {
+    font-size: 12px;
+    color: #888;
+}
+
+/* DIRTY BADGE */
+.dc-dirty-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 9px;
+    border-radius: 4px;
+    background: #1a1000;
+    border: 1px solid #3a2000;
+    color: #e67e22;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+/* GRID — 4 colunas no desktop, colapsa progressivamente */
+.dc-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: auto auto auto auto;
+    gap: 12px;
+    align-items: start;
+}
+
+/* Perfil básico ocupa 2 colunas, 2 linhas */
+.dc-section--perfil {
+    grid-column: span 2;
+    grid-row: span 2;
+}
+
+/* Ciclo atual: 2 colunas */
+.dc-section--ciclo {
+    grid-column: span 2;
+}
+
+/* Compostos: linha inteira */
+.dc-section--compostos {
+    grid-column: 1 / -1;
+}
+
+/* Exames e condições: 2 colunas cada */
+.dc-section--exames {
+    grid-column: span 2;
+}
+
+.dc-section--condicoes {
+    grid-column: span 2;
+}
+
+/* Save bar: linha inteira */
+.dc-full {
+    grid-column: 1 / -1;
+}
+
+/* SECTION */
+.dc-section {
+    background: #0f0f0f;
+    border: 1px solid #1a1a1a;
+    border-radius: 10px;
+    padding: 16px 18px;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.dc-section-title {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 14px;
+    font-size: 11px;
+    color: #c0392b;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    font-weight: 700;
+}
+
+/* FIELD */
+.dc-field {
+    margin-bottom: 11px;
+}
+
+.dc-field:last-child {
+    margin-bottom: 0;
+}
+
+.dc-field label {
+    display: block;
+    font-size: 11px;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.dc-field input,
+.dc-field select {
+    width: 100%;
+    background: #111;
+    border: 1px solid #1e1e1e;
+    border-radius: 7px;
+    padding: 8px 11px;
+    font-size: 13px;
+    color: #e2e2e2;
+    outline: none;
+    font-family: inherit;
+    appearance: none;
+    transition: border-color .15s;
+    box-sizing: border-box;
+}
+
+.dc-field input:focus,
+.dc-field select:focus {
+    border-color: #c0392b;
+}
+
+.dc-field input::placeholder {
+    color: #333;
+}
+
+.dc-row2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+/* RADIO */
+.dc-radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.dc-radio-opt {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 7px 11px;
+    border: 1px solid #1e1e1e;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: all .15s;
+}
+
+.dc-radio-opt:hover {
+    border-color: #333;
+}
+
+.dc-radio-opt--sel {
+    border-color: #c0392b;
+    background: #1a0a0a;
+}
+
+.dc-radio-dot {
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    border: 1.5px solid #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: border-color .15s;
+}
+
+.dc-radio-opt--sel .dc-radio-dot {
+    border-color: #c0392b;
+}
+
+.dc-radio-inner {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #c0392b;
+}
+
+.dc-radio-text {
+    font-size: 13px;
+    color: #555;
+}
+
+.dc-radio-opt--sel .dc-radio-text {
+    color: #ccc;
+}
+
+/* TAGS */
+.dc-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.dc-tag {
+    padding: 4px 10px;
+    border-radius: 5px;
+    border: 1px solid #1e1e1e;
+    background: #111;
+    color: #666;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all .15s;
+}
+
+.dc-tag:hover {
+    border-color: #333;
+    color: #aaa;
+}
+
+.dc-tag--sel {
+    background: #1a0a0a;
+    border-color: #c0392b;
+    color: #c0392b;
+}
+
+.dc-tag-count {
+    font-size: 11px;
+    color: #444;
+    margin-top: 8px;
+}
+
+/* CHECKS */
+.dc-check-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.dc-check-opt {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 7px 11px;
+    border: 1px solid #1e1e1e;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: all .15s;
+}
+
+.dc-check-opt:hover {
+    border-color: #333;
+}
+
+.dc-check-opt--sel {
+    border-color: #c0392b;
+    background: #1a0a0a;
+}
+
+.dc-check-box {
+    width: 13px;
+    height: 13px;
+    border-radius: 3px;
+    border: 1.5px solid #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 10px;
+    color: #fff;
+    transition: all .15s;
+}
+
+.dc-check-opt--sel .dc-check-box {
+    border-color: #c0392b;
+    background: #c0392b;
+}
+
+.dc-check-text {
+    font-size: 13px;
+    color: #555;
+}
+
+.dc-check-opt--sel .dc-check-text {
+    color: #ccc;
+}
+
+/* SAVE BAR */
+.dc-save-bar {
+    padding: 13px 18px;
+    background: #0f0f0f;
+    border: 1px solid #1a1a1a;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.dc-save-info {
+    font-size: 11px;
+    color: #444;
+}
+
+.dc-save-info span {
+    color: #333;
+}
+
+.dc-save-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.dc-btn-discard {
+    background: none;
+    border: 1px solid #1e1e1e;
+    color: #444;
+    border-radius: 7px;
+    padding: 7px 14px;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all .15s;
+}
+
+.dc-btn-discard:hover {
+    border-color: #333;
+    color: #777;
+}
+
+.dc-btn-save {
+    background: #1a1a1a;
+    color: #444;
+    border: none;
+    border-radius: 7px;
+    padding: 8px 20px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: default;
+    font-family: inherit;
+    transition: all .2s;
+    min-width: 140px;
+    text-align: center;
+}
+
+.dc-btn-save--active {
+    background: #c0392b;
+    color: #fff;
+    cursor: pointer;
+}
+
+.dc-btn-save--active:hover {
+    opacity: .88;
+}
+
+.dc-btn-save--saving {
+    opacity: .65;
+}
+
+/* TOAST */
+.dc-toast {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    z-index: 999;
+    background: #161616;
+    border: 1px solid #222;
+    border-radius: 9px;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-size: 12px;
+    color: #aaa;
+    transform: translateY(80px);
+    opacity: 0;
+    transition: all .3s ease;
+}
+
+.dc-toast--show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.dc-toast-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #27ae60;
+    flex-shrink: 0;
+}
+
+.dc-toast-dot--warn {
+    background: #e67e22;
+}
+
+/* EMBEDDED (dentro do Perfil) */
+.dc-wrap--embedded {
+    background: transparent;
+    min-height: unset;
+}
+
+.dc-wrap--embedded .dc-page {
+    padding: 16px 16px 24px;
+    max-width: 100%;
+}
+
+/* ── RESPONSIVO ── */
+
+/* Tablet: 2 colunas */
+@media (max-width: 900px) {
+    .dc-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .dc-section--perfil {
+        grid-column: span 2;
+        grid-row: auto;
+    }
+
+    .dc-section--ciclo,
+    .dc-section--exames,
+    .dc-section--condicoes {
+        grid-column: span 1;
+    }
+}
+
+/* Mobile: 1 coluna */
+@media (max-width: 540px) {
+    .dc-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dc-section--perfil,
+    .dc-section--ciclo,
+    .dc-section--compostos,
+    .dc-section--exames,
+    .dc-section--condicoes {
+        grid-column: 1 / -1;
+        grid-row: auto;
+    }
+
+    .dc-row2 {
+        grid-template-columns: 1fr;
+    }
+
+    .dc-save-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .dc-save-actions {
+        width: 100%;
+        justify-content: flex-end;
+    }
+}
