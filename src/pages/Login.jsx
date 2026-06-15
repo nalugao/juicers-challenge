@@ -3,12 +3,14 @@ import '../style/login.css'
 import { Link, useNavigate } from 'react-router-dom'
 import logoIcon from '../assets/juicers.png'
 import OnboardingForm from '../components/OnboardingForm'
+import { loginUser, registerUser } from '../services/api'
 
 export default function Login() {
     const navigate = useNavigate()
 
     const [modoCadastro, setModoCadastro] = useState(false)
     const [mostrarOnboarding, setMostrarOnboarding] = useState(false)
+    const [carregando, setCarregando] = useState(false)
 
     const [nomeCadastro, setNomeCadastro] = useState('')
     const [email, setEmail] = useState('')
@@ -34,51 +36,67 @@ export default function Login() {
         setMostrarOnboarding(false)
     }
 
-    function fazerCadastro() {
-        if (!nomeCadastro || !email || !senha || !confirmarSenha) {
-            alert('Preencha todos os campos.')
-            return
+    async function fazerCadastro() {
+        try {
+            if (!nomeCadastro || !email || !senha || !confirmarSenha) {
+                alert('Preencha todos os campos.')
+                return
+            }
+
+            if (senha !== confirmarSenha) {
+                alert('As senhas não são iguais.')
+                return
+            }
+
+            setCarregando(true)
+
+            await registerUser({
+                name: nomeCadastro,
+                email,
+                password: senha,
+                role: 'patient',
+            })
+
+            const loginResponse = await loginUser({
+                email,
+                password: senha,
+            })
+
+            localStorage.setItem('tokenJuicers', loginResponse.token)
+            localStorage.setItem('usuarioLogadoJuicers', JSON.stringify(loginResponse.user))
+
+            setMostrarOnboarding(true)
+            setModoCadastro(false)
+        } catch (error) {
+            alert(error.message)
+        } finally {
+            setCarregando(false)
         }
-
-        if (senha !== confirmarSenha) {
-            alert('As senhas não são iguais.')
-            return
-        }
-
-        const novoUsuario = {
-            nome: nomeCadastro,
-            email,
-            senha,
-        }
-
-        localStorage.setItem('usuarioCicloRisco', JSON.stringify(novoUsuario))
-        localStorage.setItem('usuarioLogadoCicloRisco', JSON.stringify(novoUsuario))
-
-        setMostrarOnboarding(true)
-        setModoCadastro(false)
     }
 
-    function fazerLogin() {
-        if (!email || !senha) {
-            alert('Preencha o e-mail e a senha.')
-            return
+    async function fazerLogin() {
+        try {
+            if (!email || !senha) {
+                alert('Preencha o e-mail e a senha.')
+                return
+            }
+
+            setCarregando(true)
+
+            const data = await loginUser({
+                email,
+                password: senha,
+            })
+
+            localStorage.setItem('tokenJuicers', data.token)
+            localStorage.setItem('usuarioLogadoJuicers', JSON.stringify(data.user))
+
+            navigate('/perfil')
+        } catch (error) {
+            alert(error.message)
+        } finally {
+            setCarregando(false)
         }
-
-        const usuarioSalvo = JSON.parse(localStorage.getItem('usuarioCicloRisco'))
-
-        if (!usuarioSalvo) {
-            alert('Nenhuma conta cadastrada. Crie uma conta primeiro.')
-            return
-        }
-
-        if (usuarioSalvo.email !== email || usuarioSalvo.senha !== senha) {
-            alert('E-mail ou senha incorretos.')
-            return
-        }
-
-        localStorage.setItem('usuarioLogadoCicloRisco', JSON.stringify(usuarioSalvo))
-
-        navigate('/perfil')
     }
 
     if (mostrarOnboarding) {
@@ -151,8 +169,9 @@ export default function Login() {
                             <button
                                 className="btn_entrar"
                                 onClick={fazerLogin}
+                                disabled={carregando}
                             >
-                                Entrar
+                                {carregando ? 'Entrando...' : 'Entrar'}
                             </button>
 
                             <div className="divider"><span>ou</span></div>
@@ -222,8 +241,9 @@ export default function Login() {
                             <button
                                 className="btn_entrar"
                                 onClick={fazerCadastro}
+                                disabled={carregando}
                             >
-                                Criar conta
+                                {carregando ? 'Criando conta...' : 'Criar conta'}
                             </button>
 
                             <div className="divider"><span>ou</span></div>
