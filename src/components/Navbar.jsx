@@ -14,7 +14,7 @@ export default function Navbar() {
                 </a>
                 <ul className="menu_list">
                     <li><a href="/">Menu</a></li>
-                    <li><a href="#sobre-pagina">Sobre o Projeto</a></li>
+                    <li><Link to="/equipe">Sobre o projeto </Link></li>
                     <li><Link className="btn-login" to="/login">Entrar</Link></li>
                 </ul>
                 <div
