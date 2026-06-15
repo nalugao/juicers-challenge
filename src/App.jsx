@@ -3,7 +3,7 @@ import { Routes, Route, Outlet } from 'react-router-dom'
 import Layout from './components/Layout' 
 
 import Home from './pages/Home'
-import Sobre from './pages/Sobre'
+import Equipe from "./pages/Equipe";
 import Login from './pages/Login'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
@@ -28,7 +28,7 @@ export default function App() {
                     </>
                 }>
                     <Route path="/" element={<Home />} />
-                    <Route path="/sobre" element={<Sobre />} />
+                    <Route path="/equipe" element={<Equipe />} /> 
                 </Route>
                 <Route path="/login" element={<Login />} />
                 <Route path="/perfil" element={<Perfil />} />
