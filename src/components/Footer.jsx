@@ -1,5 +1,5 @@
 import '../style/footer.css'
-import logoIcon from '../assets/logo-nome.png'
+import logoIcon from '../assets/juicers.png'
 
 export default function Footer() {
 

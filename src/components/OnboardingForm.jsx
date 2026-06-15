@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import '../style/onboarding.css'
-import logoIcon from '../assets/logo-nome.png'
+import logoIcon from '../assets/juicers.png'
 
 const COMPOSTOS = [
     'Testosterona Enantato', 'Testosterona Cipionato', 'Trembolona',

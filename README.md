@@ -1,4 +1,4 @@
-# Juicer
+# Juicers
 
 Aplicação web desenvolvida como projeto de challenge da FIAP (1º ano) para monitoramento de saúde voltado a usuários que fazem uso de esteroides anabolizantes. O sistema permite acompanhar marcadores laboratoriais, visualizar alertas de risco por sistema orgânico e simular o impacto de compostos no organismo.
 

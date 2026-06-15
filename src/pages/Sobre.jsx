@@ -12,7 +12,7 @@ export default function Sobre() {
 
             <TituloSubtitulo
                 titulo="Sobre o projeto"
-                subtitulo="O Juicer foi desenvolvido com o objetivo de conscientizar sobre os impactos do uso de esteroides anabolizantes através de visualizações interativas, dados científicos e análise de riscos à saúde."
+                subtitulo="O Juicers foi desenvolvido com o objetivo de conscientizar sobre os impactos do uso de esteroides anabolizantes através de visualizações interativas, dados científicos e análise de riscos à saúde."
                 variante="escuro"
             />
             <Time />

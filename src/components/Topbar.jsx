@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import "../style/navbar.css"
-import logoIcon from '../assets/logo-nome.png'
+import logoIcon from '../assets/juicers.png'
 import logoExit from '../assets/exit.png'
 
 export default function Topbar() {

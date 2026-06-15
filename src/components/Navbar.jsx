@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import '../style/navbar.css'
 import { Link } from 'react-router-dom'
-import logoIcon from '../assets/logo-nome.png'
+import logoIcon from '../assets/juicers.png'
 
 export default function Navbar() {
     const [menuOpen, setMenuOpen] = useState(false)

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import '../style/login.css'
 import { Link, useNavigate } from 'react-router-dom'
-import logoIcon from '../assets/logo-nome.png'
+import logoIcon from '../assets/juicers.png'
 import OnboardingForm from '../components/OnboardingForm'
 
 export default function Login() {
