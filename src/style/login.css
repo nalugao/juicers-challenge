@@ -224,6 +224,20 @@
     text-decoration: underline;
 }
 
+.login_selected_role {
+    margin-bottom: 1.25rem;
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: #f7f7f7;
+    border: 1px solid #e5e5e5;
+    font-size: 13px;
+    color: #666;
+}
+
+.login_selected_role strong {
+    color: #111;
+}
+
 @media (max-width: 700px) {
     .login_wrap {
         grid-template-columns: 1fr;

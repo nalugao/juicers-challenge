@@ -20,9 +20,8 @@ export default function Login() {
     const [email, setEmail] = useState('')
     const [senha, setSenha] = useState('')
     const [confirmarSenha, setConfirmarSenha] = useState('')
-    const [tipoUsuario, setTipoUsuario] = useState('patient')
 
-    const destino = role === 'medico' ? '/medico' : '/perfil'
+    const destinoMock = role === 'medico' ? '/medico' : '/perfil'
 
     function limparCampos() {
         setNomeCadastro('')
@@ -32,8 +31,17 @@ export default function Login() {
         setErroLogin(false)
     }
 
-    function abrirCadastro() { limparCampos(); setModoCadastro(true); setMostrarOnboarding(false) }
-    function abrirLogin()    { limparCampos(); setModoCadastro(false); setMostrarOnboarding(false) }
+    function abrirCadastro() {
+        limparCampos()
+        setModoCadastro(true)
+        setMostrarOnboarding(false)
+    }
+
+    function abrirLogin() {
+        limparCampos()
+        setModoCadastro(false)
+        setMostrarOnboarding(false)
+    }
 
     async function backendOnline() {
         try {
@@ -43,11 +51,19 @@ export default function Login() {
                 body: JSON.stringify({ email: '__ping__', password: '__ping__' }),
                 signal: AbortSignal.timeout(2000),
             })
-            // qualquer resposta HTTP (mesmo 401/400) = backend online
+
             return res.status !== 0
         } catch {
             return false
         }
+    }
+
+    function getRoleApi() {
+        return role === 'medico' ? 'doctor' : 'patient'
+    }
+
+    function getRoleFront(userRole) {
+        return userRole === 'doctor' ? 'medico' : 'atleta'
     }
 
     function redirecionarPorTipo(user) {
@@ -64,6 +80,7 @@ export default function Login() {
             alert('Preencha todos os campos.')
             return
         }
+
         if (senha !== confirmarSenha) {
             alert('As senhas não são iguais.')
             return
@@ -75,23 +92,25 @@ export default function Login() {
         const online = await backendOnline()
 
         if (!online) {
-            // mock: cria sessão falsa e abre onboarding (atleta) ou vai direto (médico)
-            const fakeToken = `mock-token-${Date.now()}`
             const fakeUser = {
                 id: Date.now(),
                 name: nomeCadastro,
                 email,
-                role: role === 'medico' ? 'doctor' : 'patient',
+                role: getRoleApi(),
             }
+
+            const fakeToken = `mock-token-${Date.now()}`
+
             loginComToken(fakeToken, fakeUser, role)
             setCarregando(false)
 
-            if (role === 'atleta') {
-                setMostrarOnboarding(true)
-                setModoCadastro(false)
-            } else {
+            if (fakeUser.role === 'doctor') {
                 navigate('/medico')
+                return
             }
+
+            setMostrarOnboarding(true)
+            setModoCadastro(false)
             return
         }
 
@@ -100,17 +119,27 @@ export default function Login() {
                 name: nomeCadastro,
                 email,
                 password: senha,
-                role: role === 'medico' ? 'doctor' : 'patient',
+                role: getRoleApi(),
             })
-            const loginResponse = await loginUser({ email, password: senha })
-            loginComToken(loginResponse.token, loginResponse.user, role)
 
-            if (role === 'atleta') {
-                setMostrarOnboarding(true)
-                setModoCadastro(false)
-            } else {
+            const loginResponse = await loginUser({
+                email,
+                password: senha,
+            })
+
+            loginComToken(
+                loginResponse.token,
+                loginResponse.user,
+                getRoleFront(loginResponse.user.role)
+            )
+
+            if (loginResponse.user.role === 'doctor') {
                 navigate('/medico')
+                return
             }
+
+            setMostrarOnboarding(true)
+            setModoCadastro(false)
         } catch (error) {
             alert(error.message)
         } finally {
@@ -130,21 +159,31 @@ export default function Login() {
         const online = await backendOnline()
 
         if (!online) {
-            // backend offline → tenta mock
             const resultado = loginMock(email, senha, role)
             setCarregando(false)
+
             if (resultado.ok) {
-                navigate(destino)
+                navigate(destinoMock)
             } else {
                 setErroLogin(true)
             }
+
             return
         }
 
         try {
-            const data = await loginUser({ email, password: senha })
-            loginComToken(data.token, data.user, role)
-            navigate(destino)
+            const data = await loginUser({
+                email,
+                password: senha,
+            })
+
+            loginComToken(
+                data.token,
+                data.user,
+                getRoleFront(data.user.role)
+            )
+
+            redirecionarPorTipo(data.user)
         } catch (error) {
             alert(error.message)
         } finally {
@@ -157,7 +196,10 @@ export default function Login() {
             <OnboardingForm
                 nomeCompleto={nomeCadastro}
                 emailUsuario={email}
-                onBack={() => { setMostrarOnboarding(false); setModoCadastro(true) }}
+                onBack={() => {
+                    setMostrarOnboarding(false)
+                    setModoCadastro(true)
+                }}
                 onFinish={() => navigate('/perfil')}
             />
         )
@@ -165,30 +207,34 @@ export default function Login() {
 
     return (
         <div className="login_wrap">
-
             <div className="login_left">
                 <a className="logo" href="/">
                     <img src={logoIcon} alt="Logo" className="logo-icon" />
                 </a>
+
                 <div className="login_left_middle">
                     <h1 className="login_left_headline">
                         Monitore o impacto<br /><em>no seu corpo.</em>
                     </h1>
+
                     <p className="login_left_sub">
                         Acompanhe exames, identifique riscos reais e entenda como os anabolizantes afetam sua saúde.
                     </p>
                 </div>
+
                 <div className="login_left_stats"></div>
             </div>
 
             <div className="login_right">
                 <div className="login_card">
-
-                    {/* Toggle médico / atleta */}
                     <div className="login_role_toggle">
                         <button
+                            type="button"
                             className={`login_role_btn${role === 'atleta' ? ' login_role_btn--active login_role_btn--atleta' : ''}`}
-                            onClick={() => { setRole('atleta'); setErroLogin(false) }}
+                            onClick={() => {
+                                setRole('atleta')
+                                setErroLogin(false)
+                            }}
                         >
                             <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.4">
                                 <path d="M8 2C6 2 5 3.5 5 5C5 7 6.5 8.5 8 8.5C9.5 8.5 11 7 11 5C11 3.5 10 2 8 2Z" />
@@ -196,9 +242,14 @@ export default function Login() {
                             </svg>
                             Atleta
                         </button>
+
                         <button
+                            type="button"
                             className={`login_role_btn${role === 'medico' ? ' login_role_btn--active login_role_btn--medico' : ''}`}
-                            onClick={() => { setRole('medico'); setErroLogin(false) }}
+                            onClick={() => {
+                                setRole('medico')
+                                setErroLogin(false)
+                            }}
                         >
                             <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.4">
                                 <rect x="2" y="2" width="12" height="12" rx="2" />
@@ -214,7 +265,9 @@ export default function Login() {
                                 <circle cx="8" cy="8" r="6" />
                                 <path d="M8 5v4M8 11v.5" strokeLinecap="round" />
                             </svg>
+
                             Credenciais não encontradas. Use as contas de teste:
+
                             <span className="login_offline_hint">
                                 atleta@juicers.com · medico@juicers.com · senha: 123456
                             </span>
@@ -224,7 +277,9 @@ export default function Login() {
                     {!modoCadastro ? (
                         <>
                             <p className="login_card_title">Entrar</p>
-                            <p className="login_card_sub">Acesse sua conta para visualizar seus dados.</p>
+                            <p className="login_card_sub">
+                                Acesse sua conta para visualizar seus dados.
+                            </p>
 
                             <div className="field">
                                 <label>E-mail</label>
@@ -232,7 +287,10 @@ export default function Login() {
                                     type="email"
                                     placeholder="seu@email.com"
                                     value={email}
-                                    onChange={e => { setEmail(e.target.value); setErroLogin(false) }}
+                                    onChange={e => {
+                                        setEmail(e.target.value)
+                                        setErroLogin(false)
+                                    }}
                                 />
                             </div>
 
@@ -242,7 +300,10 @@ export default function Login() {
                                     type="password"
                                     placeholder="••••••••"
                                     value={senha}
-                                    onChange={e => { setSenha(e.target.value); setErroLogin(false) }}
+                                    onChange={e => {
+                                        setSenha(e.target.value)
+                                        setErroLogin(false)
+                                    }}
                                 />
                             </div>
 
@@ -257,11 +318,18 @@ export default function Login() {
                             </button>
 
                             <div className="divider"><span>ou</span></div>
-                            <Link to="/" className="btn_voltar">← Voltar para o site</Link>
+
+                            <Link to="/" className="btn_voltar">
+                                ← Voltar para o site
+                            </Link>
 
                             <p className="login_card_footer">
                                 Não tem conta?{' '}
-                                <button type="button" className="link_button" onClick={abrirCadastro}>
+                                <button
+                                    type="button"
+                                    className="link_button"
+                                    onClick={abrirCadastro}
+                                >
                                     Cadastre-se
                                 </button>
                             </p>
@@ -275,15 +343,11 @@ export default function Login() {
                                     : 'Preencha seus dados para começar.'}
                             </p>
 
-                            <div className="field">
-                                <label>Tipo de conta</label>
-                                <select
-                                    value={tipoUsuario}
-                                    onChange={(e) => setTipoUsuario(e.target.value)}
-                                >
-                                    <option value="patient">Paciente</option>
-                                    <option value="doctor">Médico</option>
-                                </select>
+                            <div className="login_selected_role">
+                                Tipo de conta:{' '}
+                                <strong>
+                                    {role === 'medico' ? 'Médico' : 'Atleta'}
+                                </strong>
                             </div>
 
                             <div className="field">
@@ -340,7 +404,11 @@ export default function Login() {
 
                             <div className="divider"><span>ou</span></div>
 
-                            <button type="button" className="btn_voltar" onClick={abrirLogin}>
+                            <button
+                                type="button"
+                                className="btn_voltar"
+                                onClick={abrirLogin}
+                            >
                                 ← Já tenho conta
                             </button>
 
@@ -349,7 +417,6 @@ export default function Login() {
                             </p>
                         </>
                     )}
-
                 </div>
             </div>
         </div>
