@@ -13,7 +13,7 @@ export default function Footer() {
                         <img src={logoIcon} alt="Logo" className="logo-icon" />
                     </a>
                     <p className="footer_tagline">
-                        Um projeto baseado em evidências científicas sobre o impacto dos esteroides anabolizantes.
+                        A Juicers é uma ferramenta consultiva de apoio para usuários e profissionais. Acompanhe o histórico de exames, visualize a evolução dos indicadores ao longo do tempo, identifique tendências de risco mais cedo e tome decisões mais conscientes com base em dados organizados.
                     </p>
 
                     {/* Redes sociais */}
