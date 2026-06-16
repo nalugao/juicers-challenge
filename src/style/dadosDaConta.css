@@ -107,7 +107,7 @@
     gap: 7px;
     margin-bottom: 14px;
     font-size: 11px;
-    color: #c0392b;
+    color: #e67e22;
     text-transform: uppercase;
     letter-spacing: .1em;
     font-weight: 700;
@@ -150,7 +150,7 @@
 
 .dc-field input:focus,
 .dc-field select:focus {
-    border-color: #c0392b;
+    border-color: #e67e22;
 }
 
 .dc-field input::placeholder {
@@ -186,7 +186,7 @@
 }
 
 .dc-radio-opt--sel {
-    border-color: #c0392b;
+    border-color: #e67e22;
     background: #1a0a0a;
 }
 
@@ -203,14 +203,14 @@
 }
 
 .dc-radio-opt--sel .dc-radio-dot {
-    border-color: #c0392b;
+    border-color: #e67e22;
 }
 
 .dc-radio-inner {
     width: 5px;
     height: 5px;
     border-radius: 50%;
-    background: #c0392b;
+    background: #e67e22;
 }
 
 .dc-radio-text {
@@ -247,8 +247,8 @@
 
 .dc-tag--sel {
     background: #1a0a0a;
-    border-color: #c0392b;
-    color: #c0392b;
+    border-color: #e67e22;
+    color: #e67e22;
 }
 
 .dc-tag-count {
@@ -280,7 +280,7 @@
 }
 
 .dc-check-opt--sel {
-    border-color: #c0392b;
+    border-color: #e67e22;
     background: #1a0a0a;
 }
 

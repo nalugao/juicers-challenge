@@ -1,0 +1,211 @@
+/* ============================================================
+   meusAtletas.css  —  accent #2FD6BE
+   ============================================================ */
+
+.ma-page {
+    padding: 30px 34px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    min-height: 100vh;
+}
+
+/* header */
+.ma-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.ma-titulo { margin: 0 0 4px; font-size: 1.6rem; font-weight: 700; letter-spacing: -0.02em; color: #ded9d9; }
+.ma-sub { margin: 0; font-size: 0.85rem; color: #6b6b6b; }
+
+.ma-btn-add {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 18px; border-radius: 10px;
+    border: none; background: #2FD6BE; color: #04201c;
+    font-size: 0.875rem; font-weight: 600; cursor: pointer;
+    transition: filter 0.15s;
+    white-space: nowrap;
+}
+.ma-btn-add:hover { filter: brightness(1.08); }
+
+/* filtros */
+.ma-filtros {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.ma-busca {
+    display: flex; align-items: center; gap: 10px;
+    flex: 1; min-width: 200px;
+    height: 42px; padding: 0 14px;
+    background: #0f0f0f; border: 1px solid #1e1e1e; border-radius: 10px;
+}
+
+.ma-busca input {
+    flex: 1; border: none; background: transparent;
+    color: #ded9d9; font-size: 0.875rem; outline: none;
+}
+.ma-busca input::placeholder { color: #6b6b6b; }
+
+.ma-select {
+    height: 42px; padding: 0 14px;
+    background: #0f0f0f; border: 1px solid #1e1e1e; border-radius: 10px;
+    color: #ded9d9; font-size: 0.875rem; outline: none; cursor: pointer;
+    min-width: 160px;
+}
+
+/* grid */
+.ma-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.ma-empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: #6b6b6b;
+    padding: 40px;
+    font-size: 0.9rem;
+}
+
+/* card */
+.ma-card {
+    background: #0f0f0f;
+    border: 1px solid #1e1e1e;
+    border-radius: 14px;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    cursor: pointer;
+    transition: border-color 0.15s, transform 0.15s;
+}
+
+.ma-card:hover {
+    border-color: rgba(47, 214, 190, 0.35);
+    transform: translateY(-2px);
+}
+
+.ma-card-top { display: flex; align-items: center; gap: 13px; }
+
+.ma-avatar {
+    width: 48px; height: 48px; border-radius: 999px;
+    background: linear-gradient(135deg, #1e1e1e, #0f0f0f);
+    border: 1px solid #2a2a2a;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.9rem; font-weight: 600; color: #6b6b6b;
+    flex-shrink: 0;
+}
+
+.ma-card-info { display: flex; flex-direction: column; gap: 3px; flex: 1; }
+.ma-card-nome { font-size: 0.95rem; font-weight: 500; color: #ded9d9; }
+.ma-card-idade { font-size: 0.75rem; color: #6b6b6b; }
+
+/* badge de risco */
+.ma-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 3px 9px; border-radius: 999px;
+    font-size: 0.7rem; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.02em; white-space: nowrap; flex-shrink: 0;
+}
+
+.ma-badge--none { background: rgba(107,107,107,0.14); color: #6b6b6b; }
+.ma-badge-dot { width: 5px; height: 5px; border-radius: 999px; flex-shrink: 0; }
+
+.ma-card-divider { height: 1px; background: #1e1e1e; }
+
+.ma-card-bottom { display: flex; justify-content: space-between; }
+
+.ma-card-field { display: flex; flex-direction: column; gap: 5px; }
+.ma-card-field--right { align-items: flex-end; }
+
+.ma-field-label { font-size: 0.7rem; color: #6b6b6b; }
+
+.ma-field-val {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 0.8rem; font-weight: 500;
+}
+.ma-field-val--muted { color: #ded9d9; }
+.ma-field-dot { width: 6px; height: 6px; border-radius: 999px; flex-shrink: 0; }
+
+/* modal */
+.ma-modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(4, 4, 4, 0.74);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 500;
+    padding: 24px;
+}
+
+.ma-modal {
+    width: 100%; max-width: 440px;
+    background: #0f0f0f;
+    border: 1px solid #1e1e1e;
+    border-radius: 16px;
+    padding: 28px;
+    display: flex; flex-direction: column; gap: 20px;
+    box-shadow: 0 30px 70px rgba(0,0,0,0.6);
+}
+
+.ma-modal-header h2 {
+    margin: 0 0 7px;
+    font-size: 1.2rem; font-weight: 700;
+    letter-spacing: -0.01em; color: #ded9d9;
+}
+.ma-modal-header p { margin: 0; font-size: 0.82rem; color: #6b6b6b; line-height: 1.5; }
+
+.ma-modal-field { display: flex; flex-direction: column; gap: 8px; }
+.ma-modal-field label { font-size: 0.75rem; color: #6b6b6b; }
+.ma-modal-field input {
+    height: 46px; background: #0a0a0a;
+    border: 1px solid #1e1e1e; border-radius: 10px;
+    padding: 0 14px; color: #ded9d9; font-size: 0.9rem; outline: none;
+    transition: border-color 0.15s;
+}
+.ma-modal-field input:focus { border-color: #2FD6BE; }
+
+.ma-modal-actions { display: flex; gap: 10px; }
+
+.ma-btn-cancelar {
+    flex: 1; height: 46px;
+    border: 1px solid #1e1e1e; border-radius: 10px;
+    background: transparent; color: #ded9d9;
+    font-size: 0.875rem; font-weight: 500; cursor: pointer;
+    transition: background 0.15s;
+}
+.ma-btn-cancelar:hover { background: #1a1a1a; }
+
+.ma-btn-enviar {
+    flex: 1; height: 46px;
+    background: #2FD6BE; border: none; border-radius: 10px;
+    color: #04201c; font-size: 0.875rem; font-weight: 600;
+    cursor: pointer; transition: filter 0.15s;
+}
+.ma-btn-enviar:disabled { opacity: 0.5; cursor: not-allowed; }
+.ma-btn-enviar:not(:disabled):hover { filter: brightness(1.08); }
+
+.ma-modal-hint {
+    margin: 0; font-size: 0.75rem; color: #6b6b6b;
+    line-height: 1.5; text-align: center;
+}
+
+.ma-modal-success {
+    display: flex; flex-direction: column;
+    align-items: center; gap: 14px; padding: 10px 0;
+}
+.ma-modal-success-icon { display: flex; }
+.ma-modal-success-text { margin: 0; font-size: 0.875rem; color: #ded9d9; text-align: center; }
+.ma-modal-success-text strong { color: #2FD6BE; }
+
+/* responsive */
+@media (max-width: 900px) { .ma-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) {
+    .ma-page { padding: 20px 16px; }
+    .ma-grid { grid-template-columns: 1fr; }
+}
