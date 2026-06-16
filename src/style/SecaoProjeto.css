@@ -1,0 +1,39 @@
+
+.juicer .about-grid{
+    display:grid;
+    grid-template-columns:1.3fr .7fr;
+    gap:40px;align-items:center
+}
+
+.juicer .about-grid p{
+    color:var(--j-mid);
+    font-size:1.05rem
+}
+
+.juicer .seal{
+    background:var(--j-surface);
+    border:1px solid var(--j-teal-dim);
+    border-radius:var(--j-radius);
+    padding:28px;text-align:center
+}
+
+.juicer .seal svg{
+    width:42px;
+    height:42px;
+    color:var(--j-teal);
+    margin-bottom:14px
+}
+
+.juicer .seal h4{
+    font-family:'Space Grotesk';
+    font-size:1.15rem;
+    margin-bottom:8px
+}
+
+.juicer .seal p{
+    color:var(--j-mid);
+    font-size:.9rem;
+    margin:0
+}
+
+@media (max-width:880px){ .juicer .about-grid{grid-template-columns:1fr} }

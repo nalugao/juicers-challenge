@@ -1,0 +1,45 @@
+
+.juicer .mon-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:20px
+}
+
+.juicer .mon{
+    background:var(--j-surface);
+    border:1px solid var(--j-hairline);
+    border-radius:var(--j-radius);
+    padding:26px;
+    transition:.2s
+}
+.juicer .mon:hover{
+    border-color:var(--j-teal-dim);
+    transform:translateY(-3px)
+}
+.juicer .mon-head{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:12px
+}
+.juicer .mon-head h3{
+    font-size:1.15rem;
+    font-weight:600
+}
+.juicer .mon-ico{
+    width:40px;
+    height:40px;
+    border-radius:11px;
+    display:grid;
+    place-items:center;
+    background:rgba(47,214,190,.08);
+    border:1px solid var(--j-teal-dim);
+    flex-shrink:0
+}
+.juicer .mon-ico svg{
+    width:21px;
+    height:21px;
+    color:var(--j-teal)
+}
+.juicer .mon p{color:var(--j-mid);font-size:.95rem;margin-bottom:16px}
+@media (max-width:880px){ .juicer .mon-grid{grid-template-columns:1fr} }

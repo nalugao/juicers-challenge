@@ -1,0 +1,117 @@
+.juicer .aud{
+    display:grid;
+    grid-template-columns:.78fr 1.22fr;
+    gap:0;
+    margin-top:50px;
+    background:linear-gradient(180deg,var(--j-raised),var(--j-surface));
+    border:1px solid var(--j-hairline);border-radius:20px;
+    overflow:hidden
+}
+
+.juicer .aud-tabs{
+    border-right:1px solid var(--j-hairline);
+    padding:14px
+}
+
+.juicer .aud-tab{
+    width:100%;
+    text-align:left;
+    background:transparent;
+    border:1px solid transparent;
+    border-radius:13px;
+    padding:18px;
+    cursor:pointer;
+    transition:.18s;
+    display:block;
+    color:inherit
+}
+
+.juicer .aud-tab:hover{
+    background:var(--j-raised)
+}
+
+.juicer .aud-tab.on{
+    background:var(--j-raised);
+    border-color:var(--j-hairline)
+}
+
+.juicer .aud-tab .tt{
+    font-family:'Space Grotesk';
+    font-weight:600;
+    font-size:1.05rem;
+    display:flex;
+    align-items:center;
+    gap:10px
+}
+
+.juicer .aud-tab .tt .tnum{
+    font-family:'IBM Plex Mono';
+    font-size:.72rem;
+    color:var(--j-teal)
+}
+
+.juicer .aud-tab .tdesc{
+    font-size:.82rem;
+    color:var(--j-mid);
+    margin-top:6px;
+    opacity:.7
+}
+.juicer .aud-tab.on .tdesc{
+    opacity:1
+}
+.juicer .aud-panel{
+    padding:34px 38px
+}
+.juicer .aud-panel .ap-role{
+    color:var(--j-teal);
+    font-family:'IBM Plex Mono';
+    font-size:.72rem;
+    letter-spacing:.08em;
+    text-transform:uppercase
+}
+.juicer .aud-panel h3{
+    font-size:1.5rem;
+    margin:10px 0 14px
+}
+.juicer .aud-panel p{
+    color:var(--j-mid);
+    max-width:52ch;
+    margin-bottom:22px
+}
+
+.juicer .aud-feats{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px
+}
+.juicer .aud-feat{
+    background:var(--j-ink);
+    border:1px solid var(--j-hairline);
+    border-radius:11px;
+    padding:14px
+}
+.juicer .aud-feat .af-t{
+    font-size:.86rem;
+    font-weight:600;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-bottom:4px
+}
+.juicer .aud-feat .af-t svg{
+    width:15px;
+    height:15px;
+    color:var(--j-teal)
+}
+.juicer .aud-feat p{
+    font-size:.8rem;
+    color:var(--j-mid);
+    margin:0
+}
+.juicer .aud-panel-anim{
+    animation:jfade .35s ease
+}
+
+@keyframes jfade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (max-width:980px){ .juicer .aud{grid-template-columns:1fr} }
+@media (max-width:620px){ .juicer .aud-feats{grid-template-columns:1fr} }
