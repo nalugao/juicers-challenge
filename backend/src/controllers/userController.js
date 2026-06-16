@@ -79,7 +79,7 @@ export const loginUser = async (req, res) => {
       process.env.JWT_SECRET,
       {
         expiresIn: "7d",
-      }
+      },
     );
 
     return res.status(200).json({
@@ -91,6 +91,40 @@ export const loginUser = async (req, res) => {
         email: user.email,
         role: user.role,
       },
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
+export const updateUserProfile = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { name } = req.body;
+
+    if (!name) {
+      return res.status(400).json({
+        message: "Nome é obrigatório",
+      });
+    }
+
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { name },
+      { new: true, runValidators: true },
+    ).select("-password");
+
+    if (!user) {
+      return res.status(404).json({
+        message: "Usuário não encontrado",
+      });
+    }
+
+    return res.status(200).json({
+      message: "Usuário atualizado com sucesso",
+      user,
     });
   } catch (error) {
     return res.status(500).json({
