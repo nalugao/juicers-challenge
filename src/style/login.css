@@ -5,7 +5,6 @@
     grid-template-columns: 1fr 1fr;
 }
 
-
 .login_left {
     background: #0a0a0a;
     display: flex;
@@ -18,18 +17,6 @@
     width: 150px;
     display: flex;
     align-items: center;
-}
-
-.login_logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.login_logo_text {
-    font-size: 15px;
-    font-weight: 600;
-    color: #fff;
 }
 
 .login_left_headline {
@@ -48,26 +35,9 @@
 
 .login_left_sub {
     font-size: 14px;
-    color: #555;
+    color: #777;
     line-height: 1.65;
     max-width: 320px;
-}
-
-.login_left_stats {
-    display: flex;
-    gap: 2rem;
-}
-
-.stat_item p:first-child {
-    font-size: 22px;
-    font-weight: 700;
-    color: #E24B4A;
-}
-
-.stat_item p:last-child {
-    font-size: 11px;
-    color: #444;
-    margin-top: 2px;
 }
 
 .login_right {
@@ -80,22 +50,23 @@
 
 .login_card {
     background: #fff;
-    border: 0.5px solid #e0e0e0;
-    border-radius: 14px;
+    border: 1px solid #e0e0e0;
+    border-radius: 18px;
     padding: 2.5rem 2rem;
     width: 100%;
-    max-width: 380px;
+    max-width: 400px;
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.08);
 }
 
 .login_card_title {
-    font-size: 20px;
-    font-weight: 600;
+    font-size: 24px;
+    font-weight: 700;
     color: #111;
-    margin-bottom: 4px;
+    margin-bottom: 8px;
 }
 
 .login_card_sub {
-    font-size: 13px;
+    font-size: 14px;
     color: #888;
     margin-bottom: 2rem;
 }
@@ -106,27 +77,45 @@
 
 .field label {
     display: block;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 500;
-    color: #555;
-    margin-bottom: 6px;
+    color: #333;
+    margin-bottom: 8px;
 }
 
-.field input {
+.field input,
+.field select {
     width: 100%;
-    padding: 10px 14px;
-    font-size: 14px;
+    height: 52px;
+    padding: 0 16px;
+    font-size: 15px;
     color: #111;
-    border: 0.5px solid #ccc;
-    border-radius: 8px;
+    border: 1px solid #d7d7d7;
+    border-radius: 10px;
     background: #fafafa;
     outline: none;
-    transition: border-color 0.2s;
+    transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+    font-family: inherit;
 }
 
-.field input:focus {
+.field input:focus,
+.field select:focus {
     border-color: #E24B4A;
     background: #fff;
+    box-shadow: 0 0 0 3px rgba(226, 75, 74, 0.12);
+}
+
+.field select {
+    appearance: none;
+    cursor: pointer;
+    background-image:
+        linear-gradient(45deg, transparent 50%, #777 50%),
+        linear-gradient(135deg, #777 50%, transparent 50%);
+    background-position:
+        calc(100% - 20px) 21px,
+        calc(100% - 14px) 21px;
+    background-size: 6px 6px, 6px 6px;
+    background-repeat: no-repeat;
 }
 
 .forgot {
@@ -145,19 +134,26 @@
 
 .btn_entrar {
     width: 100%;
-    padding: 12px;
+    padding: 13px;
     background: #E24B4A;
     color: #fff;
     border: none;
-    border-radius: 8px;
+    border-radius: 10px;
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 700;
     cursor: pointer;
-    transition: opacity 0.2s;
+    transition: transform 0.2s, opacity 0.2s;
 }
 
 .btn_entrar:hover {
-    opacity: 0.85;
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+.btn_entrar:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
 }
 
 .divider {
@@ -176,23 +172,24 @@
 .divider::after {
     content: '';
     flex: 1;
-    height: 0.5px;
+    height: 1px;
     background: #e0e0e0;
 }
 
 .btn_voltar {
     width: 100%;
-    padding: 11px;
+    padding: 12px;
     background: transparent;
     color: #555;
-    border: 0.5px solid #ccc;
-    border-radius: 8px;
+    border: 1px solid #d7d7d7;
+    border-radius: 10px;
     font-size: 13px;
     cursor: pointer;
     text-decoration: none;
     display: block;
     text-align: center;
     transition: background 0.2s, color 0.2s;
+    font-family: inherit;
 }
 
 .btn_voltar:hover {
@@ -212,7 +209,21 @@
     text-decoration: none;
 }
 
-/* Mobile — esconde o lado esquerdo, card vira dark */
+.link_button {
+    background: none;
+    border: none;
+    padding: 0;
+    color: #c0392b;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: inherit;
+}
+
+.link_button:hover {
+    text-decoration: underline;
+}
+
 @media (max-width: 700px) {
     .login_wrap {
         grid-template-columns: 1fr;
@@ -230,30 +241,43 @@
     .login_card {
         background: #111;
         border-color: #1f1f1f;
+        box-shadow: none;
     }
 
     .login_card_title {
         color: #fff;
     }
 
-    .field label {
+    .login_card_sub {
         color: #888;
     }
 
-    .field input {
-        background: #1a1a1a;
-        border-color: #ded9d9;
+    .field label {
+        color: #bbb;
+    }
+
+    .field input,
+    .field select {
+        background-color: #1a1a1a;
+        border-color: #333;
         color: #fff;
     }
 
-    .field input:focus {
+    .field input:focus,
+    .field select:focus {
         border-color: #E24B4A;
-        background: #1a1a1a;
+        background-color: #1a1a1a;
+    }
+
+    .field select {
+        background-image:
+            linear-gradient(45deg, transparent 50%, #aaa 50%),
+            linear-gradient(135deg, #aaa 50%, transparent 50%);
     }
 
     .btn_voltar {
-        color: #888;
-        border-color: #ded9d9;
+        color: #aaa;
+        border-color: #333;
     }
 
     .btn_voltar:hover {
@@ -263,7 +287,7 @@
 
     .divider::before,
     .divider::after {
-        background: #ded9d9;
+        background: #333;
     }
 }
 

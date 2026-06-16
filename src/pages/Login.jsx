@@ -20,6 +20,7 @@ export default function Login() {
     const [email, setEmail] = useState('')
     const [senha, setSenha] = useState('')
     const [confirmarSenha, setConfirmarSenha] = useState('')
+    const [tipoUsuario, setTipoUsuario] = useState('patient')
 
     const destino = role === 'medico' ? '/medico' : '/perfil'
 
@@ -47,6 +48,15 @@ export default function Login() {
         } catch {
             return false
         }
+    }
+
+    function redirecionarPorTipo(user) {
+        if (user.role === 'doctor') {
+            navigate('/medico')
+            return
+        }
+
+        navigate('/perfil')
     }
 
     async function fazerCadastro() {
@@ -264,6 +274,17 @@ export default function Login() {
                                     ? 'Crie sua conta para gerenciar seus atletas.'
                                     : 'Preencha seus dados para começar.'}
                             </p>
+
+                            <div className="field">
+                                <label>Tipo de conta</label>
+                                <select
+                                    value={tipoUsuario}
+                                    onChange={(e) => setTipoUsuario(e.target.value)}
+                                >
+                                    <option value="patient">Paciente</option>
+                                    <option value="doctor">Médico</option>
+                                </select>
+                            </div>
 
                             <div className="field">
                                 <label>Nome</label>
