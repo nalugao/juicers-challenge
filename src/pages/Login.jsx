@@ -16,12 +16,14 @@ export default function Login() {
     const [email, setEmail] = useState('')
     const [senha, setSenha] = useState('')
     const [confirmarSenha, setConfirmarSenha] = useState('')
+    const [tipoUsuario, setTipoUsuario] = useState('patient')
 
     function limparCamposLoginCadastro() {
         setNomeCadastro('')
         setEmail('')
         setSenha('')
         setConfirmarSenha('')
+        setTipoUsuario('patient')
     }
 
     function abrirCadastro() {
@@ -36,9 +38,18 @@ export default function Login() {
         setMostrarOnboarding(false)
     }
 
+    function redirecionarPorTipo(user) {
+        if (user.role === 'doctor') {
+            navigate('/medico')
+            return
+        }
+
+        navigate('/perfil')
+    }
+
     async function fazerCadastro() {
         try {
-            if (!nomeCadastro || !email || !senha || !confirmarSenha) {
+            if (!nomeCadastro || !email || !senha || !confirmarSenha || !tipoUsuario) {
                 alert('Preencha todos os campos.')
                 return
             }
@@ -54,7 +65,7 @@ export default function Login() {
                 name: nomeCadastro,
                 email,
                 password: senha,
-                role: 'patient',
+                role: tipoUsuario,
             })
 
             const loginResponse = await loginUser({
@@ -64,6 +75,11 @@ export default function Login() {
 
             localStorage.setItem('tokenJuicers', loginResponse.token)
             localStorage.setItem('usuarioLogadoJuicers', JSON.stringify(loginResponse.user))
+
+            if (loginResponse.user.role === 'doctor') {
+                navigate('/medico')
+                return
+            }
 
             setMostrarOnboarding(true)
             setModoCadastro(false)
@@ -91,7 +107,7 @@ export default function Login() {
             localStorage.setItem('tokenJuicers', data.token)
             localStorage.setItem('usuarioLogadoJuicers', JSON.stringify(data.user))
 
-            navigate('/perfil')
+            redirecionarPorTipo(data.user)
         } catch (error) {
             alert(error.message)
         } finally {
@@ -197,6 +213,17 @@ export default function Login() {
                             <p className="login_card_sub">
                                 Preencha seus dados para começar.
                             </p>
+
+                            <div className="field">
+                                <label>Tipo de conta</label>
+                                <select
+                                    value={tipoUsuario}
+                                    onChange={(e) => setTipoUsuario(e.target.value)}
+                                >
+                                    <option value="patient">Paciente</option>
+                                    <option value="doctor">Médico</option>
+                                </select>
+                            </div>
 
                             <div className="field">
                                 <label>Nome</label>
