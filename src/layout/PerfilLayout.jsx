@@ -1,11 +1,11 @@
 import { Outlet } from 'react-router-dom'
-import SidebarPerfil from '../components/Sidebar'
+import SidebarAtleta from '../components/SidebarAtleta'
 import '../style/perfilLayout.css'
 
 export default function PerfilLayout() {
     return (
         <div className="perfil-layout">
-            <SidebarPerfil />
+            <SidebarAtleta />
             <div className="perfil-layout-main">
                 <Outlet />
             </div>

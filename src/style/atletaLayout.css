@@ -1,0 +1,17 @@
+.atleta-layout {
+    display: flex;
+    min-height: 100vh;
+    background: #0a0a0a;
+}
+
+.atleta-layout-main {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+}
+
+@media (max-width: 768px) {
+    .atleta-layout-main {
+        padding-top: 56px;
+    }
+}

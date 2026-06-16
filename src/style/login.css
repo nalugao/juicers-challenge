@@ -290,3 +290,92 @@
         background: #333;
     }
 }
+
+.link_button {
+    background: none;
+    border: none;
+    padding: 0;
+    color: #c0392b;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: inherit;
+}
+
+.link_button:hover {
+    text-decoration: underline;
+}
+
+button.btn_voltar {
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.login_role_toggle {
+    display: flex;
+    gap: 6px;
+    /* background: #0a0a0a; */
+    /* border: 1px solid #1e1e1e; */
+    border-radius: 10px;
+    padding: 4px;
+    margin-bottom: 4px;
+}
+
+.login_role_btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 9px;
+    border-radius: 7px;
+    border: none;
+    background: transparent;
+    color: #6b6b6b;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+}
+
+.login_role_btn--active.login_role_btn--atleta {
+    background: rgba(230, 168, 23, 0.12);
+    color: #E6A817;
+}
+
+.login_role_btn--active.login_role_btn--medico {
+    background: rgba(47, 214, 190, 0.12);
+    color: #2FD6BE;
+}
+
+/* Botão entrar herda a cor do perfil selecionado */
+.btn_entrar--atleta {
+    background: #E6A817 !important;
+    color: #0a0a0a !important;
+}
+
+.btn_entrar--medico {
+    background: #2FD6BE !important;
+    color: #04201c !important;
+}
+
+/* Banner backend offline */
+.login_offline_banner {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 12px 14px;
+    background: rgba(229, 72, 77, 0.08);
+    border: 1px solid rgba(229, 72, 77, 0.25);
+    border-radius: 10px;
+    font-size: 0.8rem;
+    color: #E5484D;
+    line-height: 1.4;
+}
+
+.login_offline_hint {
+    font-size: 0.75rem;
+    color: #6b6b6b;
+    font-family: 'IBM Plex Mono', monospace;
+}

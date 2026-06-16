@@ -1,0 +1,154 @@
+/* ============================================================
+   sidebarMedico.css  —  accent: #2FD6BE (teal)
+   ============================================================ */
+:root {
+    --sm-accent: #2FD6BE;
+    --sm-accent-dim: rgba(47, 214, 190, 0.12);
+}
+
+.sm-sidebar {
+    width: 220px;
+    min-height: 100vh;
+    background: #0f0f0f;
+    border-right: 1px solid #1e1e1e;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    z-index: 100;
+}
+
+.sm-logo {
+    padding: 20px 22px 24px;
+    border-bottom: 1px solid #1e1e1e;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sm-logo-img {
+    width: 150px;
+    object-fit: contain;
+}
+
+.sm-logo-text {
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: #ded9d9;
+}
+
+.sm-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 16px 12px;
+    flex: 1;
+}
+
+.sm-link {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 10px 12px;
+    border-radius: 9px;
+    text-decoration: none;
+    color: #6b6b6b;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: background 0.15s, color 0.15s;
+}
+
+.sm-link:hover {
+    background: #1a1a1a;
+    color: #ded9d9;
+}
+
+.sm-link--active {
+    background: var(--sm-accent-dim);
+    color: var(--sm-accent);
+}
+
+.sm-link-icon {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.sm-footer {
+    padding: 16px 12px;
+    border-top: 1px solid #1e1e1e;
+}
+
+.sm-sair {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 9px;
+    border: none;
+    background: transparent;
+    color: #6b6b6b;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+}
+
+.sm-sair:hover {
+    background: #1a1a1a;
+    color: #E5484D;
+}
+
+.sm-hamburger {
+    display: none;
+    position: fixed;
+    top: 14px;
+    left: 14px;
+    z-index: 201;
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    border: 1px solid #1e1e1e;
+    background: #0f0f0f;
+    color: #ded9d9;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+}
+
+.sm-overlay {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .sm-sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        transform: translateX(-100%);
+        transition: transform 0.25s ease;
+        z-index: 200;
+    }
+
+    .sm-sidebar--open {
+        transform: translateX(0);
+    }
+
+    .sm-overlay {
+        display: block;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.55);
+        z-index: 199;
+    }
+
+    .sm-hamburger {
+        display: flex;
+    }
+}

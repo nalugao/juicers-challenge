@@ -23,7 +23,7 @@
     width: 22px;
     height: 22px;
     border-radius: 6px;
-    background: #c0392b;
+    background: #e67e22;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -80,14 +80,14 @@
 }
 
 .ob-step-num.done {
-    background: #c0392b;
+    background: #e67e22;
     color: #fff;
 }
 
 .ob-step-num.current {
     background: #1e1e1e;
-    color: #c0392b;
-    border: 1px solid #c0392b;
+    color: #e67e22;
+    border: 1px solid #e67e22;
 }
 
 .ob-step-num.pending {
@@ -145,14 +145,14 @@
 
 .ob-progress-bar {
     height: 100%;
-    background: #c0392b;
+    background: #e67e22;
     transition: width .4s ease;
     border-radius: 1px;
 }
 
 .ob-tag {
     font-size: 10px;
-    color: #c0392b;
+    color: #e67e22;
     text-transform: uppercase;
     letter-spacing: .1em;
     margin-bottom: 10px;
@@ -205,7 +205,7 @@
 
 .ob-field input:focus,
 .ob-field select:focus {
-    border-color: #c0392b;
+    border-color: #e67e22;
 }
 
 .ob-field input::placeholder {
@@ -240,7 +240,7 @@
 }
 
 .ob-radio-opt.selected {
-    border-color: #c0392b;
+    border-color: #e67e22;
     background: #1a0a0a;
 }
 
@@ -256,14 +256,14 @@
 }
 
 .ob-radio-opt.selected .ob-radio-dot {
-    border-color: #c0392b;
+    border-color: #e67e22;
 }
 
 .ob-radio-inner {
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background: #c0392b;
+    background: #e67e22;
 }
 
 .ob-radio-text {
@@ -295,8 +295,8 @@
 
 .ob-tag-item.selected {
     background: #1a0a0a;
-    border-color: #c0392b;
-    color: #c0392b;
+    border-color: #e67e22;
+    color: #e67e22;
 }
 
 .ob-check-group {
@@ -317,7 +317,7 @@
 }
 
 .ob-check-opt.selected {
-    border-color: #c0392b;
+    border-color: #e67e22;
     background: #1a0a0a;
 }
 
@@ -336,8 +336,8 @@
 }
 
 .ob-check-opt.selected .ob-check-box {
-    border-color: #c0392b;
-    background: #c0392b;
+    border-color: #e67e22;
+    background: #e67e22;
 }
 
 .ob-check-text {
@@ -357,7 +357,7 @@
 }
 
 .ob-btn-next {
-    background: #c0392b;
+    background: #e67e22;
     color: #fff;
     border: none;
     border-radius: 8px;
@@ -402,7 +402,7 @@
 
 .ob-field-error input,
 .ob-field-error select {
-    border-color: #c0392b !important;
+    border-color: #e67e22 !important;
     box-shadow: 0 0 0 2px rgba(192, 57, 43, 0.25);
 }
 

@@ -1,0 +1,13 @@
+.medico-layout {
+    display: flex;
+    min-height: 100vh;
+    background: #0a0a0a;
+}
+.medico-layout-main {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+}
+@media (max-width: 768px) {
+    .medico-layout-main { padding-top: 56px; }
+}

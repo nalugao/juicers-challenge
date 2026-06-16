@@ -1,0 +1,142 @@
+/* ============================================================
+   sidebarAtleta.css  —  accent: #E6A817 (mostarda)
+   ============================================================ */
+:root {
+    --sa-accent: #E6A817;
+    --sa-accent-dim: rgba(230, 168, 23, 0.12);
+    --sa-bg: #0f0f0f;
+    --sa-border: #1e1e1e;
+    --sa-text: #ded9d9;
+    --sa-muted: #6b6b6b;
+    --sa-hover: #1a1a1a;
+}
+
+.sa-sidebar {
+    width: 220px;
+    min-height: 100vh;
+    background: var(--sa-bg);
+    border-right: 1px solid var(--sa-border);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    z-index: 100;
+}
+
+.sa-logo {
+    padding: 20px 22px 24px;
+    border-bottom: 1px solid var(--sa-border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sa-logo-img {
+    width: 150px;
+    object-fit: contain;
+}
+
+.sa-logo-text {
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--sa-text);
+}
+
+.sa-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 16px 12px;
+    flex: 1;
+}
+
+.sa-link {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 10px 12px;
+    border-radius: 9px;
+    text-decoration: none;
+    color: var(--sa-muted);
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: background 0.15s, color 0.15s;
+}
+
+.sa-link:hover {
+    background: var(--sa-hover);
+    color: var(--sa-text);
+}
+
+.sa-link--active {
+    background: var(--sa-accent-dim);
+    color: var(--sa-accent);
+}
+
+.sa-link-icon { display: flex; align-items: center; flex-shrink: 0; }
+
+.sa-footer {
+    padding: 16px 12px;
+    border-top: 1px solid var(--sa-border);
+}
+
+.sa-sair {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 9px;
+    border: none;
+    background: transparent;
+    color: var(--sa-muted);
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+}
+
+.sa-sair:hover { background: var(--sa-hover); color: #E5484D; }
+
+.sa-hamburger {
+    display: none;
+    position: fixed;
+    top: 14px;
+    left: 14px;
+    z-index: 201;
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    border: 1px solid #1e1e1e;
+    background: #0f0f0f;
+    color: #ded9d9;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+}
+
+.sa-overlay { display: none; }
+
+@media (max-width: 768px) {
+    .sa-sidebar {
+        position: fixed;
+        top: 0; left: 0;
+        height: 100vh;
+        transform: translateX(-100%);
+        transition: transform 0.25s ease;
+        z-index: 200;
+    }
+    .sa-sidebar--open { transform: translateX(0); }
+    .sa-overlay {
+        display: block;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.55);
+        z-index: 199;
+    }
+    .sa-hamburger { display: flex; }
+}
