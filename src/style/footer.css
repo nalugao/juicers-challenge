@@ -1,3 +1,10 @@
+.footer .logo-icon {
+    width: 96px !important;
+    height: 96px !important;
+    object-fit: contain;
+    display: block;
+}
+
 .footer {
     width: 100%;
     background: #0a0a0a;

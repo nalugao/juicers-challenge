@@ -1,0 +1,149 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+:root{
+  --j-ink:#0E1116; --j-surface:#161A22; --j-raised:#1C222C; --j-hairline:#232A35;
+  --j-teal:#2FD6BE; --j-teal-dim:#1b6f64; --j-red:#F0524A; --j-amber:#F5B041;
+  --j-txt:#ECEFF4; --j-mid:#9AA4B2; --j-faint:#5b6675; --j-radius:16px; --j-maxw:1180px;
+}
+
+.juicer{
+  background:var(--j-ink);
+  color:var(--j-txt);
+  font-family:'Inter',system-ui,sans-serif;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden
+}
+
+.juicer h1,.juicer h2,.juicer h3{
+  font-family:'Space Grotesk',sans-serif;
+  letter-spacing:-.02em;line-height:1.08;
+  margin:0
+}
+
+.juicer a{
+  color:inherit;
+  text-decoration:none
+}
+
+.juicer .mono{
+  font-family:'IBM Plex Mono',monospace
+}
+
+.juicer .wrap{
+  max-width:var(--j-maxw);
+  margin:0 auto;
+  padding:0 28px
+}
+
+.juicer .section{
+  padding:96px 0;
+  position:relative
+}
+
+.juicer .sec-head{
+  max-width:680px;
+  margin-bottom:52px
+}
+
+.juicer .sec-head h2{
+  font-size:clamp(1.9rem,4vw,2.9rem);
+  font-weight:700;
+  margin:12px 0 14px
+}
+
+.juicer .sec-head p{
+  color:var(--j-mid);
+  font-size:1.05rem
+}
+
+.juicer .eyebrow{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:.72rem;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--j-teal)
+}
+
+.juicer .btn-j{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;font-family:'Space Grotesk';
+  font-weight:600;
+  font-size:.95rem;
+  padding:11px 20px;
+  border-radius:11px;
+  border:1px solid transparent;
+  cursor:pointer;
+  transition:.18s;
+  white-space:nowrap
+}
+
+.juicer .btn-primary-j{
+  background:var(--j-teal);
+  color:#06231f
+}
+
+.juicer .btn-primary-j:hover{
+  background:#46e3cc;
+  transform:translateY(-1px)
+}
+
+.juicer .btn-ghost-j{
+  background:transparent;
+  border-color:var(--j-hairline);
+  color:var(--j-txt)
+}
+.juicer .btn-ghost-j:hover{
+  border-color:var(--j-teal);
+  color:var(--j-teal)
+}
+
+.juicer .dot{
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  display:inline-block
+}
+
+.juicer .dot.teal{
+  background:var(--j-teal);
+  box-shadow:0 0 10px var(--j-teal)
+}
+.juicer .dot.amber{
+  background:var(--j-amber);
+  box-shadow:0 0 10px var(--j-amber)
+}
+
+.juicer .mon-track{
+  font-family:'IBM Plex Mono';
+  font-size:.82rem;
+  color:var(--j-txt);
+  background:var(--j-ink);
+  border:1px solid var(--j-hairline);
+  border-radius:10px;
+  padding:11px 13px;
+  display:flex;
+  gap:9px;
+  align-items:flex-start
+}
+
+.juicer .mon-track span{
+  color:var(--j-teal);
+  flex-shrink:0
+}
+
+.juicer .reveal{
+  opacity:0;
+  transform:translateY(22px);
+  transition:opacity .6s ease,transform .6s ease
+}
+
+.juicer .reveal.in{
+  opacity:1;
+  transform:none
+}
+
+@media (max-width:880px){ .juicer .section{padding:64px 0} }
+@media (prefers-reduced-motion:reduce){ .juicer *{animation:none!important;transition:none!important} .juicer .reveal{opacity:1;transform:none} }

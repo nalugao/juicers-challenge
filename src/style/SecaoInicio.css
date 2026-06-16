@@ -1,0 +1,126 @@
+
+.juicer .hero{
+    padding-top:70px;
+    padding-bottom:64px
+}
+
+.juicer .hero-grid{
+    display:grid;
+    grid-template-columns:1.05fr .95fr;
+    gap:56px;
+    align-items:center
+}
+.juicer .hero h1{
+    font-size:clamp(2.4rem,5.2vw,4rem);
+    font-weight:700;
+    margin:18px 0 20px
+}
+.juicer .hero h1 .accent{
+    color:var(--j-teal)
+}
+.juicer .hero .lead{
+    font-size:1.18rem;
+    color:var(--j-mid);
+    max-width:520px;
+    margin-bottom:18px
+}
+.juicer .hero .body-t{
+    color:var(--j-mid);
+    max-width:500px;
+    margin-bottom:30px
+}
+.juicer .hero .body-t b{
+    color:var(--j-txt);
+    font-weight:600
+}
+.juicer .hero-ctas{
+    display:flex;
+    gap:14px;
+    flex-wrap:wrap
+}
+.juicer .reassure{
+    margin-top:22px;
+    font-size:.85rem;
+    color:var(--j-faint);
+    display:flex;
+    align-items:center;
+    gap:8px
+}
+.juicer .reassure svg{
+    width:15px;
+    height:15px;
+    color:var(--j-teal)
+}
+.juicer .panel{
+    background:linear-gradient(180deg,var(--j-raised),var(--j-surface));
+    border:1px solid var(--j-hairline);
+    border-radius:22px;
+    padding:24px;
+    box-shadow:0 30px 70px -30px rgba(0,0,0,.7)
+}
+.juicer .panel-top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:18px
+}
+.juicer .panel-top .ttl{
+    font-family:'Space Grotesk';
+    font-weight:600;
+    font-size:1.05rem
+}
+.juicer .chip{
+    font-family:'IBM Plex Mono';
+    font-size:.7rem;
+    padding:4px 10px;
+    border-radius:20px;
+    border:1px solid var(--j-hairline);
+    color:var(--j-mid)
+}
+.juicer .chip.ok{
+    color:var(--j-teal);
+    border-color:var(--j-teal-dim);
+    background:rgba(47,214,190,.07)
+}
+.juicer .indicator-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:13px 0;
+    border-bottom:1px solid var(--j-hairline)
+}
+.juicer .indicator-row:last-child{
+    border-bottom:none
+}
+.juicer .ind-name{
+    display:flex;
+    align-items:center;
+    gap:11px;
+    font-size:.95rem
+}
+.juicer .ind-val{
+    font-family:'IBM Plex Mono';
+    font-size:.85rem;
+    color:var(--j-mid)
+}
+.juicer .ind-val b{
+    color:var(--j-txt)
+}
+.juicer .trend{
+    margin-top:18px
+}
+.juicer .trend-label{
+    display:flex;
+    justify-content:space-between;
+    font-family:'IBM Plex Mono';
+    font-size:.72rem;
+    color:var(--j-faint);
+    margin-bottom:6px;
+    text-transform:uppercase;
+    letter-spacing:.1em
+}
+@media (max-width:880px){
+    .juicer .hero-grid{
+        grid-template-columns:1fr
+    }
+}
