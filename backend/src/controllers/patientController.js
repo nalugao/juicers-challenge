@@ -6,10 +6,16 @@ export const createOrUpdatePatient = async (req, res) => {
 
     const {
       birthDate,
+      age,
       biologicalSex,
       weight,
       height,
+      cycleStatus,
+      weeklyDosage,
       cycleTime,
+      examStatus,
+      lastExamDate,
+      lastName,
       substances,
       healthConditions,
     } = req.body;
@@ -18,10 +24,16 @@ export const createOrUpdatePatient = async (req, res) => {
       { userId },
       {
         birthDate,
+        age,
+        lastName,
         biologicalSex,
         weight,
         height,
+        cycleStatus,
+        weeklyDosage,
         cycleTime,
+        examStatus,
+        lastExamDate,
         substances,
         healthConditions,
       },
@@ -29,7 +41,7 @@ export const createOrUpdatePatient = async (req, res) => {
         new: true,
         upsert: true,
         runValidators: true,
-      }
+      },
     );
 
     return res.status(200).json({
@@ -49,7 +61,7 @@ export const getMyPatientProfile = async (req, res) => {
 
     const patient = await Patient.findOne({ userId }).populate(
       "userId",
-      "name email role"
+      "name email role",
     );
 
     if (!patient) {

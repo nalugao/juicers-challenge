@@ -1,5 +1,9 @@
 import { Router } from "express";
-import { createUser, loginUser } from "../controllers/userController.js";
+import {
+  createUser,
+  loginUser,
+  updateUserProfile,
+} from "../controllers/userController.js";
 import { authMiddleware } from "../middlewares/authMiddleware.js";
 
 const router = Router();
@@ -11,7 +15,6 @@ router.get("/", (req, res) => {
 });
 
 router.post("/", createUser);
-
 router.post("/login", loginUser);
 
 router.get("/profile", authMiddleware, (req, res) => {
@@ -20,5 +23,7 @@ router.get("/profile", authMiddleware, (req, res) => {
     user: req.user,
   });
 });
+
+router.put("/profile", authMiddleware, updateUserProfile);
 
 export default router;

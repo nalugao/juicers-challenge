@@ -1,6 +1,8 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { getMyPatientProfile, savePatientProfile, updateUserProfile } from '../services/api'
 import Topbar from './Topbar'
 import '../style/dadosDaConta.css'
+
 
 const COMPOSTOS = [
     'Testosterona Enantato', 'Testosterona Cipionato', 'Trembolona',
@@ -132,6 +134,46 @@ export default function DadosDaConta({ embedded = false }) {
     const [toast, setToast] = useState({ show: false, msg: '', warn: false })
     const [saving, setSaving] = useState(false)
 
+    useEffect(() => {
+        async function carregarDoBanco() {
+            try {
+                const data = await getMyPatientProfile()
+                const patient = data.patient
+
+                const nomeCompleto = patient.userId?.name || ''
+                const partesNome = nomeCompleto.split(' ')
+
+                const dadosBanco = {
+                    ...INITIAL,
+                    nome: partesNome[0] || '',
+                    sobrenome: partesNome.slice(1).join(' '),
+                    idade: patient.age || '',
+                    sexo: patient.biologicalSex === 'male' ? 'Masculino' : 'Feminino',
+                    peso: patient.weight || '',
+                    altura: patient.height ? patient.height * 100 : '',
+                    cicloAtivo: patient.cycleStatus || 'sim',
+                    dosagem: patient.weeklyDosage || '',
+                    tempoUso: patient.cycleTime || '',
+                    fezeExames: patient.examStatus || 'recentes',
+                    dataUltimoExame: patient.lastExamDate || '',
+                    compostos: patient.substances || [],
+                    condicoes: patient.healthConditions || [],
+                    ultimaAtualizacao: patient.updatedAt
+                        ? new Date(patient.updatedAt).toLocaleDateString('pt-BR')
+                        : '',
+                }
+
+                setForm(dadosBanco)
+                setSaved(dadosBanco)
+                localStorage.setItem('dadosContaCicloRisco', JSON.stringify(dadosBanco))
+            } catch {
+                // se não tiver perfil ainda, mantém localStorage
+            }
+        }
+
+        carregarDoBanco()
+    }, [])
+
     const dirty = JSON.stringify(form) !== JSON.stringify(saved)
 
     const update = (key, val) => setForm(p => ({ ...p, [key]: val }))
@@ -142,19 +184,62 @@ export default function DadosDaConta({ embedded = false }) {
     }
 
     const handleSave = async () => {
-        setSaving(true)
-        await new Promise(r => setTimeout(r, 900))
-        const dadosAtualizados = {
-            ...form,
-            ultimaAtualizacao: new Date().toLocaleDateString('pt-BR', {
-                day: '2-digit', month: 'long', year: 'numeric',
-            }),
+        try {
+            setSaving(true)
+
+            const sexoMap = {
+                Masculino: 'male',
+                Feminino: 'female',
+            }
+
+            const nomeCompleto = `${form.nome || ''} ${form.sobrenome || ''}`.trim()
+
+            await updateUserProfile({
+                name: nomeCompleto,
+            })
+
+            await savePatientProfile({
+                age: Number(form.idade),
+                biologicalSex: sexoMap[form.sexo] || 'other',
+                weight: Number(form.peso),
+                height: Number(form.altura) / 100,
+                cycleStatus: form.cicloAtivo,
+                weeklyDosage: Number(form.dosagem),
+                cycleTime: form.tempoUso,
+                examStatus: form.fezeExames,
+                lastExamDate: form.dataUltimoExame,
+                substances: form.compostos,
+                healthConditions: form.condicoes,
+            })
+
+            const dadosAtualizados = {
+                ...form,
+                nome: form.nome,
+                sobrenome: form.sobrenome,
+                ultimaAtualizacao: new Date().toLocaleDateString('pt-BR', {
+                    day: '2-digit',
+                    month: 'long',
+                    year: 'numeric',
+                }),
+            }
+
+            localStorage.setItem('dadosContaCicloRisco', JSON.stringify(dadosAtualizados))
+            localStorage.setItem(
+                'usuarioLogadoJuicers',
+                JSON.stringify({
+                    ...JSON.parse(localStorage.getItem('usuarioLogadoJuicers') || '{}'),
+                    name: nomeCompleto,
+                })
+            )
+
+            setForm(dadosAtualizados)
+            setSaved(dadosAtualizados)
+            showToast('Dados atualizados com sucesso')
+        } catch (error) {
+            showToast(error.message || 'Erro ao salvar dados', true)
+        } finally {
+            setSaving(false)
         }
-        localStorage.setItem('dadosContaCicloRisco', JSON.stringify(dadosAtualizados))
-        setForm(dadosAtualizados)
-        setSaved(dadosAtualizados)
-        setSaving(false)
-        showToast('Dados atualizados com sucesso')
     }
 
     const handleDiscard = () => {

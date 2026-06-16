@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { savePatientProfile } from '../services/api'
 import '../style/onboarding.css'
 import logoIcon from '../assets/juicers.png'
 
@@ -26,6 +27,7 @@ export default function OnboardingForm({ nomeCompleto = '', emailUsuario = '', o
     const [etapa, setEtapa] = useState(1)
     const [erro, setErro] = useState('')
     const [errors, setErrors] = useState({})
+    const [salvando, setSalvando] = useState(false)
 
     const [form, setForm] = useState({
         nome: nomeSeparado.nome,
@@ -196,34 +198,66 @@ export default function OnboardingForm({ nomeCompleto = '', emailUsuario = '', o
         setEtapa(3)
     }
 
-    const finalizarOnboarding = () => {
+    const finalizarOnboarding = async () => {
         if (!validarEtapa3()) return
 
-        const dadosFormatados = {
-            nome: form.nome,
-            sobrenome: form.sobrenome,
-            idade: form.idade,
-            sexo: form.sexo,
-            peso: form.peso,
-            altura: form.altura,
-            cicloAtivo: form.cicloAtivo,
-            compostos: form.compostos,
-            dosagem: form.dosagem,
-            tempoUso: form.tempoUso,
-            fezeExames: form.fezeExames,
-            dataUltimoExame: form.dataUltimoExame,
-            condicoes: form.condicoes,
-            email: emailUsuario,
-            ultimaAtualizacao: new Date().toLocaleDateString('pt-BR', {
-                day: '2-digit',
-                month: 'long',
-                year: 'numeric',
-            }),
+        try {
+            setSalvando(true)
+            setErro('')
+
+            const sexoMap = {
+                Masculino: 'male',
+                Feminino: 'female',
+            }
+
+            const dadosParaBanco = {
+                birthDate: '',
+                age: Number(form.idade),
+                lastName: form.sobrenome,
+                biologicalSex: sexoMap[form.sexo] || 'other',
+                weight: Number(form.peso),
+                height: Number(form.altura) / 100,
+                cycleStatus: form.cicloAtivo,
+                weeklyDosage: Number(form.dosagem),
+                cycleTime: form.tempoUso,
+                examStatus: form.fezeExames,
+                lastExamDate: form.dataUltimoExame,
+                substances: form.compostos,
+                healthConditions: form.condicoes,
+            }
+
+            await savePatientProfile(dadosParaBanco)
+
+            const dadosFormatados = {
+                nome: form.nome,
+                sobrenome: form.sobrenome,
+                idade: form.idade,
+                sexo: form.sexo,
+                peso: form.peso,
+                altura: form.altura,
+                cicloAtivo: form.cicloAtivo,
+                compostos: form.compostos,
+                dosagem: form.dosagem,
+                tempoUso: form.tempoUso,
+                fezeExames: form.fezeExames,
+                dataUltimoExame: form.dataUltimoExame,
+                condicoes: form.condicoes,
+                email: emailUsuario,
+                ultimaAtualizacao: new Date().toLocaleDateString('pt-BR', {
+                    day: '2-digit',
+                    month: 'long',
+                    year: 'numeric',
+                }),
+            }
+
+            localStorage.setItem('dadosContaCicloRisco', JSON.stringify(dadosFormatados))
+
+            onFinish()
+        } catch (error) {
+            setErro(error.message, 'Erro ao salvar onboarding.')
+        } finally {
+            setSalvando(false)
         }
-
-        localStorage.setItem('dadosContaCicloRisco', JSON.stringify(dadosFormatados))
-
-        onFinish()
     }
 
     const progressos = {
@@ -248,26 +282,24 @@ export default function OnboardingForm({ nomeCompleto = '', emailUsuario = '', o
                         <div key={s.n}>
                             <div className={`ob-step ${etapa === s.n ? 'active' : ''}`}>
                                 <div
-                                    className={`ob-step-num ${
-                                        etapa > s.n
-                                            ? 'done'
-                                            : etapa === s.n
-                                                ? 'current'
-                                                : 'pending'
-                                    }`}
+                                    className={`ob-step-num ${etapa > s.n
+                                        ? 'done'
+                                        : etapa === s.n
+                                            ? 'current'
+                                            : 'pending'
+                                        }`}
                                 >
                                     {etapa > s.n ? '✓' : s.n}
                                 </div>
 
                                 <div>
                                     <div
-                                        className={`ob-step-label ${
-                                            etapa === s.n
-                                                ? 'active'
-                                                : etapa > s.n
-                                                    ? 'done'
-                                                    : ''
-                                        }`}
+                                        className={`ob-step-label ${etapa === s.n
+                                            ? 'active'
+                                            : etapa > s.n
+                                                ? 'done'
+                                                : ''
+                                            }`}
                                     >
                                         {s.label}
                                     </div>
@@ -680,8 +712,9 @@ export default function OnboardingForm({ nomeCompleto = '', emailUsuario = '', o
                                 <button
                                     className="ob-btn-next"
                                     onClick={finalizarOnboarding}
+                                    disabled={salvando}
                                 >
-                                    Acessar dashboard →
+                                    {salvando ? "Salvando..." : "Acessar Dashboard →"}
                                 </button>
                             </div>
                         </div>

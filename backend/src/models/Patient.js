@@ -45,10 +45,34 @@ const patientSchema = new mongoose.Schema(
       ref: "User",
       default: null,
     },
+
+    age: {
+      type: Number,
+    },
+
+    cycleStatus: {
+      type: String,
+    },
+
+    weeklyDosage: {
+      type: Number,
+    },
+
+    examStatus: {
+      type: String,
+    },
+
+    lastExamDate: {
+      type: String,
+    },
+
+    lastName: {
+      type: String,
+    }
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 export default mongoose.model("Patient", patientSchema);
