@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "./simulador.css";
+import "../style/simulador.css";
 
 function calculateRiskScore({ age, sex, frequency, months, route, stacking }) {
   let pontos = 0;

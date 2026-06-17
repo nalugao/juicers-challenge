@@ -7,8 +7,8 @@ const LEFT_LINKS = [
     { label: 'Início',           href: '#inicio'        },
     { label: 'Solução',          href: '#sol'           },
     { label: 'O que acompanhar', href: '#monitorar'     },
-    { label: 'Impacto',          href: '#mapa-corporal' },
-    { label: 'Simulador',        href: '#simulador'     },
+    { label: 'Impacto',          to: "/mapa-corporal" },
+    { label: 'Simulador',        to: "/simulador"     },
 ]
 
 const RIGHT_LINKS = [

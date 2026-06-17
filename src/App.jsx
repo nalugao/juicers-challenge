@@ -10,6 +10,8 @@ import MedicoLayout from './layout/MedicoLayout'
 /* páginas públicas */
 import Home from './pages/Home'
 import Login from './pages/Login'
+import MapaCorporal from './pages/MapaCorporal'
+import Simulador from './pages/Simulador'
 
 /* páginas do atleta */
 import Perfil from './pages/Perfil'
@@ -37,6 +39,8 @@ export default function App() {
                 {/* Rotas públicas com Navbar + Footer */}
                 <Route element={<><Navbar /><Outlet /><Footer /></>}>
                     <Route path="/" element={<Home />} />
+                    <Route path="/" element={<MapaCorporal />} />
+                    <Route path="/" element={<Simulador />} />
                 </Route>
 
                 {/* Login */}
