@@ -183,7 +183,7 @@ function ToggleGroup({ options, value, onChange }) {
           key={opt}
           type="button"
           className={`btn flex-fill fw-medium ${
-            value === opt ? "btn-danger" : "btn-outline-secondary"
+            value === opt ? "option-btn" : "btn-outline-secondary"
           }`}
           onClick={() => onChange(opt)}
         >
@@ -352,7 +352,7 @@ export default function Simulador() {
 
               {/* Botão de cálculo */}
               <button
-                className="btn btn-danger w-100 py-2 fw-semibold"
+                className="btn option-btn w-100 py-2 fw-semibold"
                 onClick={handleCalculate}
               >
                 Calcular Risco
