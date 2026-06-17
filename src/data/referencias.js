@@ -1,63 +1,318 @@
 const referencias = [
   {
     id: 1,
-    titulo: "Anabolic steroid misuse",
-    categoria: "Esteroides",
-    fonte: "National Institute on Drug Abuse",
-    ano: "2024",
+    titulo: "Esteroides anabolizantes e risco cardiovascular",
+    categoria: "Cardiovascular",
+    fonte: "Sociedade de Cardiologia do Rio Grande do Sul",
     descricao:
-      "Material institucional sobre uso indevido de esteroides anabolizantes, efeitos físicos, psicológicos e riscos associados.",
-    link: "https://nida.nih.gov/research-topics/anabolic-steroids"
+      "Material sobre possíveis impactos cardiovasculares associados ao uso de esteroides anabolizantes.",
+    link: "http://sociedades.cardiol.br/sbc-rs/revista/2006/09/Artigo_07_Esteroides_Anabolizantes.pdf"
   },
   {
     id: 2,
-    titulo: "Liver injury from anabolic steroids",
-    categoria: "Fígado",
-    fonte: "LiverTox — NCBI Bookshelf",
-    ano: "2020",
+    titulo: "Avaliação cardíaca por imagem em usuários de anabolizantes",
+    categoria: "Cardiovascular",
+    fonte: "ABC Imaging",
     descricao:
-      "Base médica sobre lesões hepáticas associadas ao uso de esteroides anabolizantes, incluindo alterações laboratoriais e toxicidade hepática.",
-    link: "https://www.ncbi.nlm.nih.gov/books/NBK548931/"
+      "Artigo sobre alterações cardíacas avaliadas por métodos de imagem em contexto de uso de esteroides anabolizantes.",
+    link: "https://www.abcimaging.org/wp-content/uploads/articles_xml/2675-312X-abcimg-37-01-e20230113/2675-312X-abcimg-37-01-e20230113.pdf"
   },
   {
     id: 3,
-    titulo: "Anabolic-androgenic steroids and cardiovascular risk",
+    titulo: "Manejo do risco cardiovascular em atletas usuários de AAS",
     categoria: "Cardiovascular",
-    fonte: "PubMed / National Library of Medicine",
-    ano: "Revisões científicas",
+    fonte: "American College of Cardiology",
     descricao:
-      "Referências sobre associação entre esteroides anabolizantes, dislipidemia, hipertensão, alterações cardíacas e risco cardiovascular.",
-    link: "https://pubmed.ncbi.nlm.nih.gov/"
+      "Discussão clínica sobre abordagem de risco cardiovascular em atletas que usam esteroides anabolizantes androgênicos.",
+    link: "https://www.acc.org/latest-in-cardiology/articles/2024/04/01/16/10/the-experts-approach-to-managing-cv-risk-among-athletes-using-anabolic-androgenic-steroids"
   },
   {
     id: 4,
-    titulo: "Anabolic steroids and male reproductive health",
-    categoria: "Hormonal",
-    fonte: "PubMed / National Library of Medicine",
-    ano: "Estudos clínicos",
+    titulo: "Anabolizantes e funcionalidade do colesterol HDL",
+    categoria: "Cardiovascular",
+    fonte: "Jornal da USP",
     descricao:
-      "Estudos sobre supressão do eixo hormonal, redução da fertilidade, alterações testiculares e recuperação após interrupção do uso.",
-    link: "https://pubmed.ncbi.nlm.nih.gov/"
+      "Reportagem científica sobre como anabolizantes podem comprometer a funcionalidade do colesterol bom.",
+    link: "https://jornal.usp.br/ciencias/ciencias-da-saude/ciencias-2811-anabolizantes-comprometem-funcionalidade-do-colesterol-bom/"
   },
   {
     id: 5,
-    titulo: "Psychiatric effects of anabolic steroids",
-    categoria: "Saúde mental",
-    fonte: "PubMed / National Library of Medicine",
-    ano: "Revisões científicas",
+    titulo: "Alterações cardiovasculares associadas ao uso de anabolizantes",
+    categoria: "Cardiovascular",
+    fonte: "Arquivos Brasileiros de Cardiologia",
     descricao:
-      "Referências sobre alterações de humor, irritabilidade, dependência, agressividade e possíveis efeitos psiquiátricos relacionados ao uso.",
-    link: "https://pubmed.ncbi.nlm.nih.gov/"
+      "Referência brasileira sobre efeitos cardiovasculares relacionados ao uso de esteroides anabolizantes.",
+    link: "https://abccardiol.org/wp-content/uploads/articles_xml/0066-782X-abc-122-09-e20250624/0066-782X-abc-122-09-e20250624.x74770.pdf"
   },
   {
     id: 6,
-    titulo: "Anabolic steroids: clinical and public health guidance",
-    categoria: "Saúde pública",
-    fonte: "NHS / MedlinePlus / Fontes institucionais",
-    ano: "Guias públicos",
+    titulo: "Risco cardiovascular e uso de substâncias para performance",
+    categoria: "Cardiovascular",
+    fonte: "Arquivos Brasileiros de Cardiologia",
     descricao:
-      "Materiais de orientação pública sobre riscos, sinais de alerta e necessidade de acompanhamento profissional.",
-    link: "https://medlineplus.gov/anabolicsteroids.html"
+      "Artigo relacionado ao risco cardiovascular em contexto de uso de substâncias voltadas a performance física.",
+    link: "https://abccardiol.org/wp-content/uploads/articles_xml/0066-782X-abc-122-09-e20250640/0066-782X-abc-122-09-e20250640.x66747.pdf"
+  },
+  {
+    id: 7,
+    titulo: "Revisão científica sobre efeitos cardiovasculares dos AAS",
+    categoria: "Cardiovascular",
+    fonte: "PubMed Central",
+    descricao:
+      "Estudo disponível no PubMed Central sobre impactos cardiovasculares relacionados a esteroides anabolizantes.",
+    link: "https://pmc.ncbi.nlm.nih.gov/articles/PMC8087567/"
+  },
+  {
+    id: 8,
+    titulo: "Esteroides anabolizantes e sistema cardiovascular",
+    categoria: "Cardiovascular",
+    fonte: "PubMed Central",
+    descricao:
+      "Referência científica sobre alterações cardíacas e vasculares associadas ao uso de anabolizantes.",
+    link: "https://pmc.ncbi.nlm.nih.gov/articles/PMC12917856/"
+  },
+  {
+    id: 9,
+    titulo: "Anabolizantes e eventos cardiovasculares",
+    categoria: "Cardiovascular",
+    fonte: "Journal of the American College of Cardiology",
+    descricao:
+      "Artigo científico publicado no JACC sobre possíveis eventos cardiovasculares associados ao uso de esteroides.",
+    link: "https://www.jacc.org/doi/10.1016/S0735-1097(00)01083-4"
+  },
+  {
+    id: 10,
+    titulo: "Uso de AAS e risco cardíaco em atletas",
+    categoria: "Cardiovascular",
+    fonte: "American Heart Association",
+    descricao:
+      "Artigo científico sobre risco cardiovascular, atletas e uso de esteroides anabolizantes.",
+    link: "https://www.ahajournals.org/doi/10.1161/CIRCULATIONAHA.124.071117"
+  },
+  {
+    id: 11,
+    titulo: "Anabolic androgenic steroid-induced liver injury",
+    categoria: "Fígado e metabolismo",
+    fonte: "NCBI Bookshelf / LiverTox",
+    descricao:
+      "Fonte médica sobre lesão hepática associada ao uso de esteroides anabolizantes androgênicos.",
+    link: "https://www.ncbi.nlm.nih.gov/books/NBK548931/"
+  },
+  {
+    id: 12,
+    titulo: "Atualização sobre lesão hepática induzida por anabolizantes",
+    categoria: "Fígado e metabolismo",
+    fonte: "PubMed Central",
+    descricao:
+      "Referência sobre hepatotoxicidade, alterações laboratoriais e lesão hepática relacionada ao uso de AAS.",
+    link: "https://pmc.ncbi.nlm.nih.gov/articles/PMC8766528/"
+  },
+  {
+    id: 13,
+    titulo: "Toxicidade hepática e metabólica dos anabolizantes",
+    categoria: "Fígado e metabolismo",
+    fonte: "PubMed Central",
+    descricao:
+      "Estudo sobre possíveis efeitos hepáticos e metabólicos associados ao uso de esteroides anabolizantes.",
+    link: "https://pmc.ncbi.nlm.nih.gov/articles/PMC9975287/"
+  },
+  {
+    id: 14,
+    titulo: "Marcadores hepáticos e uso de substâncias hormonais",
+    categoria: "Fígado e metabolismo",
+    fonte: "PubMed Central",
+    descricao:
+      "Referência útil para contextualizar acompanhamento laboratorial hepático em usuários de substâncias hormonais.",
+    link: "https://pmc.ncbi.nlm.nih.gov/articles/PMC10412093/"
+  },
+  {
+    id: 15,
+    titulo: "Toxicologia e efeitos sistêmicos dos anabolizantes",
+    categoria: "Fígado e metabolismo",
+    fonte: "ScienceDirect",
+    descricao:
+      "Artigo sobre efeitos tóxicos e sistêmicos relacionados ao uso de esteroides anabolizantes.",
+    link: "https://www.sciencedirect.com/science/article/pii/S0041008X25000146"
+  },
+  {
+    id: 16,
+    titulo: "Riscos urológicos do uso de anabolizantes",
+    categoria: "Hormonal e urológico",
+    fonte: "Portal da Urologia",
+    descricao:
+      "Material institucional sobre riscos urológicos associados ao uso de anabolizantes.",
+    link: "https://portaldaurologia.org.br/sua-saude/dicas/riscos-urologicos-do-uso-de-anabolizantes"
+  },
+  {
+    id: 17,
+    titulo: "Uso indiscriminado de testosterona",
+    categoria: "Hormonal e urológico",
+    fonte: "Portal da Urologia",
+    descricao:
+      "Orientação sobre riscos do uso de testosterona sem indicação médica adequada.",
+    link: "https://portaldaurologia.org.br/sua-saude/dicas/uso-indiscriminado-e-sem-indicacao-medica-de-testosterona"
+  },
+  {
+    id: 18,
+    titulo: "Testosterona, eixo hormonal e saúde reprodutiva",
+    categoria: "Hormonal e urológico",
+    fonte: "European Journal of Endocrinology",
+    descricao:
+      "Artigo relacionado a testosterona, endocrinologia e possíveis consequências hormonais do uso inadequado.",
+    link: "https://academic.oup.com/ejendo/article/189/6/601/7475314"
+  },
+  {
+    id: 19,
+    titulo: "Anabolizantes, fertilidade e função hormonal",
+    categoria: "Hormonal e urológico",
+    fonte: "PubMed Central",
+    descricao:
+      "Referência científica sobre alterações hormonais e reprodutivas associadas ao uso de esteroides.",
+    link: "https://pmc.ncbi.nlm.nih.gov/articles/PMC10497340/"
+  },
+  {
+    id: 20,
+    titulo: "Uso de AAS e saúde masculina",
+    categoria: "Hormonal e urológico",
+    fonte: "PubMed Central",
+    descricao:
+      "Estudo sobre impactos do uso de esteroides anabolizantes na saúde masculina e no eixo endócrino.",
+    link: "https://pmc.ncbi.nlm.nih.gov/articles/PMC10078442/"
+  },
+  {
+    id: 21,
+    titulo: "Body dysmorphic disorder e uso de anabolizantes",
+    categoria: "Saúde mental e comportamento",
+    fonte: "The Primary Care Companion for CNS Disorders",
+    descricao:
+      "Revisão sobre associação entre dismorfia corporal, uso induzido de anabolizantes e desfechos de saúde mental.",
+    link: "https://www.psychiatrist.com/pcc/association-body-dysmorphic-induced-anabolic-androgenic-steroid-use-mental-health-outcomes-systematic-review/"
+  },
+  {
+    id: 22,
+    titulo: "Anabolizantes e desfechos em saúde mental",
+    categoria: "Saúde mental e comportamento",
+    fonte: "ScienceDirect",
+    descricao:
+      "Artigo sobre possíveis relações entre uso de anabolizantes, comportamento e saúde mental.",
+    link: "https://www.sciencedirect.com/science/article/pii/S0955395924003207"
+  },
+  {
+    id: 23,
+    titulo: "Efeitos psiquiátricos dos esteroides anabolizantes",
+    categoria: "Saúde mental e comportamento",
+    fonte: "Biological Psychiatry",
+    descricao:
+      "Referência sobre efeitos neuropsiquiátricos e comportamentais associados ao uso de esteroides.",
+    link: "https://www.biologicalpsychiatryjournal.com/article/S0006-3223(16)32529-X/fulltext"
+  },
+  {
+    id: 24,
+    titulo: "Anabolizantes, agressividade e comportamento",
+    categoria: "Saúde mental e comportamento",
+    fonte: "ScienceDirect",
+    descricao:
+      "Estudo sobre comportamento, alterações de humor e possíveis efeitos psicológicos associados ao uso de AAS.",
+    link: "https://www.sciencedirect.com/science/article/pii/0091305795020829"
+  },
+  {
+    id: 25,
+    titulo: "Saúde mental e uso de substâncias para performance",
+    categoria: "Saúde mental e comportamento",
+    fonte: "PubMed Central",
+    descricao:
+      "Referência científica sobre aspectos psicológicos e comportamentais ligados ao uso de substâncias de performance.",
+    link: "https://pmc.ncbi.nlm.nih.gov/articles/PMC12705642/"
+  },
+  {
+    id: 26,
+    titulo: "Uso problemático de anabolizantes",
+    categoria: "Dependência e uso problemático",
+    fonte: "PubMed Central",
+    descricao:
+      "Estudo sobre padrões de uso problemático, dependência e riscos relacionados ao uso de esteroides anabolizantes.",
+    link: "https://pmc.ncbi.nlm.nih.gov/articles/PMC8211877/"
+  },
+  {
+    id: 27,
+    titulo: "Anabolizantes, dependência e comportamento de risco",
+    categoria: "Dependência e uso problemático",
+    fonte: "PubMed Central",
+    descricao:
+      "Referência sobre dependência, continuidade de uso e fatores associados ao uso de AAS.",
+    link: "https://pmc.ncbi.nlm.nih.gov/articles/PMC8233285/"
+  },
+  {
+    id: 28,
+    titulo: "Uso de anabolizantes e drogas associadas",
+    categoria: "Dependência e uso problemático",
+    fonte: "Drug and Alcohol Dependence / ScienceDirect",
+    descricao:
+      "Artigo sobre uso de substâncias, padrões de consumo e contexto de drogas relacionadas ao desempenho.",
+    link: "https://www.sciencedirect.com/science/article/pii/S0376871620300399"
+  },
+  {
+    id: 29,
+    titulo: "Substâncias de performance e dependência",
+    categoria: "Dependência e uso problemático",
+    fonte: "ScienceDirect",
+    descricao:
+      "Referência sobre padrões de consumo e riscos de dependência relacionados a substâncias de performance.",
+    link: "https://www.sciencedirect.com/science/article/pii/S0376871621000995"
+  },
+  {
+    id: 30,
+    titulo: "Uso de anabolizantes em esportes, saúde e sociedade",
+    categoria: "Saúde pública e educação",
+    fonte: "Medicine & Science in Sports & Exercise",
+    descricao:
+      "Posicionamento científico sobre uso de esteroides anabolizantes em esportes, saúde e contexto social.",
+    link: "https://journals.lww.com/acsm-msse/fulltext/2021/08000/anabolic_androgenic_steroid_use_in_sports,_health,.26.aspx"
+  },
+  {
+    id: 31,
+    titulo: "Uso de anabolizantes e saúde coletiva",
+    categoria: "Saúde pública e educação",
+    fonte: "SciELO",
+    descricao:
+      "Artigo em português sobre uso de anabolizantes e aspectos de saúde coletiva.",
+    link: "https://www.scielo.br/j/csp/a/Zsg5mPyZ5M5m4NdZKT8Bb6L/?lang=pt"
+  },
+  {
+    id: 32,
+    titulo: "Anabolizantes no contexto educacional e social",
+    categoria: "Saúde pública e educação",
+    fonte: "SciELO",
+    descricao:
+      "Referência nacional sobre anabolizantes, educação física, comportamento e contexto social.",
+    link: "https://www.scielo.br/j/refuem/a/Yp3sBLmsrV7phpZMtsbmCpj/?format=html&lang=pt"
+  },
+  {
+    id: 33,
+    titulo: "Bomba tô fora",
+    categoria: "Diretrizes e posicionamentos",
+    fonte: "Sociedade Brasileira de Endocrinologia e Metabologia",
+    descricao:
+      "Material educativo da SBEM sobre riscos do uso de anabolizantes.",
+    link: "https://s3.endocrino.org.br/bomba-to-fora-e-book-SBEM.pdf"
+  },
+  {
+    id: 34,
+    titulo: "Posicionamento da SBEM sobre anabolizantes",
+    categoria: "Diretrizes e posicionamentos",
+    fonte: "Sociedade Brasileira de Endocrinologia e Metabologia",
+    descricao:
+      "Documento institucional da SBEM sobre uso de anabolizantes e riscos associados.",
+    link: "https://www.endocrino.org.br/wp-content/uploads/2022/09/Posicionamento-da-SBEM-Anabolizantes.docx.pdf"
+  },
+  {
+    id: 35,
+    titulo: "Acompanhamento clínico e redução de danos",
+    categoria: "Diretrizes e posicionamentos",
+    fonte: "Cleveland Clinic Journal of Medicine",
+    descricao:
+      "Referência clínica útil para discussão sobre acompanhamento, riscos e orientação profissional.",
+    link: "https://www.ccjm.org/content/ccjom/74/5/341.full.pdf"
   }
 ];
 

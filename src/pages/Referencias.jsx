@@ -3,13 +3,15 @@ import referencias from "../data/referencias";
 import "../style/referencias.css";
 
 const filtros = [
-  "Todos",
-  "Esteroides",
-  "Cardiovascular",
-  "Fígado",
-  "Hormonal",
-  "Saúde mental",
-  "Saúde pública"
+  { label: "Todos", value: "Todos" },
+  { label: "Esteroides", value: "Esteroides" },
+  { label: "Cardiovascular", value: "Cardiovascular" },
+  { label: "Fígado", value: "Fígado e metabolismo" },
+  { label: "Hormonal", value: "Hormonal e urológico" },
+  { label: "Saúde mental", value: "Saúde mental e comportamento" },
+  { label: "Dependência", value: "Dependência e uso problemático" },
+  { label: "Saúde pública", value: "Saúde pública e educação" },
+  { label: "Diretrizes", value: "Diretrizes e posicionamentos" }
 ];
 
 export default function Referencias() {
@@ -17,21 +19,22 @@ export default function Referencias() {
   const [filtroAtivo, setFiltroAtivo] = useState("Todos");
 
   const referenciasFiltradas = useMemo(() => {
-    return referencias.filter((ref) => {
-      const textoBusca = busca.toLowerCase().trim();
+  return referencias.filter((ref) => {
+    const textoBusca = busca.toLowerCase().trim();
 
-      const combinaBusca =
-        ref.titulo.toLowerCase().includes(textoBusca) ||
-        ref.categoria.toLowerCase().includes(textoBusca) ||
-        ref.fonte.toLowerCase().includes(textoBusca) ||
-        ref.descricao.toLowerCase().includes(textoBusca);
+    const combinaBusca =
+      textoBusca === "" ||
+      ref.titulo.toLowerCase().includes(textoBusca) ||
+      ref.categoria.toLowerCase().includes(textoBusca) ||
+      ref.fonte.toLowerCase().includes(textoBusca) ||
+      ref.descricao.toLowerCase().includes(textoBusca);
 
-      const combinaFiltro =
-        filtroAtivo === "Todos" || ref.categoria === filtroAtivo;
+    const combinaFiltro =
+      filtroAtivo === "Todos" || ref.categoria === filtroAtivo;
 
-      return combinaBusca && combinaFiltro;
-    });
-  }, [busca, filtroAtivo]);
+    return combinaBusca && combinaFiltro;
+  });
+}, [busca, filtroAtivo]);
 
   return (
     <main className="referencias-page">
@@ -62,16 +65,16 @@ export default function Referencias() {
 
           <div className="filters" aria-label="Filtros de referências">
             {filtros.map((filtro) => (
-              <button
-                key={filtro}
+                <button
+                key={filtro.value}
                 type="button"
-                className={`filter ${filtroAtivo === filtro ? "active" : ""}`}
-                onClick={() => setFiltroAtivo(filtro)}
-              >
-                {filtro}
-              </button>
+                className={`filter ${filtroAtivo === filtro.value ? "active" : ""}`}
+                onClick={() => setFiltroAtivo(filtro.value)}
+                >
+                {filtro.label}
+                </button>
             ))}
-          </div>
+           </div>
 
           <p className="ref-count">
             <b>{referenciasFiltradas.length}</b>{" "}
