@@ -9,6 +9,7 @@ const LEFT_LINKS = [
     { label: 'O que acompanhar', href: '/#monitorar' },
     { label: 'Impacto', to: '/mapa-corporal' },
     { label: 'Simulador', to: '/simulador' },
+    { label: "Referências", to: "/referencias" }
 ]
 
 const RIGHT_LINKS = [

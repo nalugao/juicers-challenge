@@ -12,6 +12,7 @@ import Home from './pages/Home'
 import Login from './pages/Login'
 import MapaCorporal from './pages/MapaCorporal'
 import Simulador from './pages/Simulador'
+import Referencias from "./pages/Referencias";
 
 /* páginas do atleta */
 import Perfil from './pages/Perfil'
@@ -41,6 +42,7 @@ export default function App() {
                     <Route path="/" element={<Home />} />
                     <Route path="/mapa-corporal" element={<MapaCorporal />} />
                     <Route path="/simulador" element={<Simulador />} />
+                    <Route path="/referencias" element={<Referencias />} />
                 </Route>
 
                 {/* Login */}
