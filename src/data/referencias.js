@@ -35,42 +35,7 @@ const referencias = [
       "Reportagem científica sobre como anabolizantes podem comprometer a funcionalidade do colesterol bom.",
     link: "https://jornal.usp.br/ciencias/ciencias-da-saude/ciencias-2811-anabolizantes-comprometem-funcionalidade-do-colesterol-bom/"
   },
-  {
-    id: 5,
-    titulo: "Alterações cardiovasculares associadas ao uso de anabolizantes",
-    categoria: "Cardiovascular",
-    fonte: "Arquivos Brasileiros de Cardiologia",
-    descricao:
-      "Referência brasileira sobre efeitos cardiovasculares relacionados ao uso de esteroides anabolizantes.",
-    link: "https://abccardiol.org/wp-content/uploads/articles_xml/0066-782X-abc-122-09-e20250624/0066-782X-abc-122-09-e20250624.x74770.pdf"
-  },
-  {
-    id: 6,
-    titulo: "Risco cardiovascular e uso de substâncias para performance",
-    categoria: "Cardiovascular",
-    fonte: "Arquivos Brasileiros de Cardiologia",
-    descricao:
-      "Artigo relacionado ao risco cardiovascular em contexto de uso de substâncias voltadas a performance física.",
-    link: "https://abccardiol.org/wp-content/uploads/articles_xml/0066-782X-abc-122-09-e20250640/0066-782X-abc-122-09-e20250640.x66747.pdf"
-  },
-  {
-    id: 7,
-    titulo: "Revisão científica sobre efeitos cardiovasculares dos AAS",
-    categoria: "Cardiovascular",
-    fonte: "PubMed Central",
-    descricao:
-      "Estudo disponível no PubMed Central sobre impactos cardiovasculares relacionados a esteroides anabolizantes.",
-    link: "https://pmc.ncbi.nlm.nih.gov/articles/PMC8087567/"
-  },
-  {
-    id: 8,
-    titulo: "Esteroides anabolizantes e sistema cardiovascular",
-    categoria: "Cardiovascular",
-    fonte: "PubMed Central",
-    descricao:
-      "Referência científica sobre alterações cardíacas e vasculares associadas ao uso de anabolizantes.",
-    link: "https://pmc.ncbi.nlm.nih.gov/articles/PMC12917856/"
-  },
+
   {
     id: 9,
     titulo: "Anabolizantes e eventos cardiovasculares",
@@ -82,38 +47,29 @@ const referencias = [
   },
   {
     id: 10,
-    titulo: "Uso de AAS e risco cardíaco em atletas",
+    titulo: "Anabolizantes e saúde arterial em fisiculturistas",
     categoria: "Cardiovascular",
     fonte: "American Heart Association",
     descricao:
-      "Artigo científico sobre risco cardiovascular, atletas e uso de esteroides anabolizantes.",
+      "Estudo sobre estrutura arterial, função vascular e função cardíaca em fisiculturistas homens usuários de esteroides anabolizantes androgênicos.",
     link: "https://www.ahajournals.org/doi/10.1161/CIRCULATIONAHA.124.071117"
   },
   {
-    id: 11,
-    titulo: "Anabolic androgenic steroid-induced liver injury",
-    categoria: "Fígado e metabolismo",
-    fonte: "NCBI Bookshelf / LiverTox",
-    descricao:
-      "Fonte médica sobre lesão hepática associada ao uso de esteroides anabolizantes androgênicos.",
-    link: "https://www.ncbi.nlm.nih.gov/books/NBK548931/"
-  },
-  {
     id: 12,
-    titulo: "Atualização sobre lesão hepática induzida por anabolizantes",
+    titulo: "Diferentes formas de lesão hepática por anabolizantes",
     categoria: "Fígado e metabolismo",
     fonte: "PubMed Central",
     descricao:
-      "Referência sobre hepatotoxicidade, alterações laboratoriais e lesão hepática relacionada ao uso de AAS.",
+      "Relato de casos sobre lesões hepáticas associadas ao uso de esteroides anabolizantes",
     link: "https://pmc.ncbi.nlm.nih.gov/articles/PMC8766528/"
   },
   {
     id: 13,
-    titulo: "Toxicidade hepática e metabólica dos anabolizantes",
+    titulo: "Câncer hepático associado ao uso de anabolizantes",
     categoria: "Fígado e metabolismo",
     fonte: "PubMed Central",
     descricao:
-      "Estudo sobre possíveis efeitos hepáticos e metabólicos associados ao uso de esteroides anabolizantes.",
+      "Relato de casos sobre desenvolvimento de câncer hepático e de vias biliares em contexto de uso de esteroides anabolizantes.",
     link: "https://pmc.ncbi.nlm.nih.gov/articles/PMC9975287/"
   },
   {

@@ -4,7 +4,6 @@ import "../style/referencias.css";
 
 const filtros = [
   { label: "Todos", value: "Todos" },
-  { label: "Esteroides", value: "Esteroides" },
   { label: "Cardiovascular", value: "Cardiovascular" },
   { label: "Fígado", value: "Fígado e metabolismo" },
   { label: "Hormonal", value: "Hormonal e urológico" },
