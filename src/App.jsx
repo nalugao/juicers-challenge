@@ -39,8 +39,8 @@ export default function App() {
                 {/* Rotas públicas com Navbar + Footer */}
                 <Route element={<><Navbar /><Outlet /><Footer /></>}>
                     <Route path="/" element={<Home />} />
-                    <Route path="/" element={<MapaCorporal />} />
-                    <Route path="/" element={<Simulador />} />
+                    <Route path="/mapa-corporal" element={<MapaCorporal />} />
+                    <Route path="/simulador" element={<Simulador />} />
                 </Route>
 
                 {/* Login */}
