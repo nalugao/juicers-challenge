@@ -1,650 +1,174 @@
-function ultimo(array) {
-  return array[array.length - 1]
-}
+/* Juicers — dados mockados (módulo ES). */
 
-function anterior(array) {
-  return array[array.length - 2]
-}
+// Datas dos 4 exames (mais antigo -> mais recente)
+export const examDates = ['12 set 2025', '10 dez 2025', '18 mar 2026', '05 jun 2026'];
 
-function calcularDelta(atual, passado) {
-  if (!passado || passado === 0) return '0% vs. anterior'
+// [categoria, nome, unidade, referência, [v1,v2,v3,v4], status, display?]
+// status: 'ok' | 'atencao' | 'risco'
+const ROWS = [
+  // HEPÁTICO
+  ['Hepático', 'ALT / TGP', 'U/L', '7–56', [30, 38, 49, 58], 'atencao'],
+  ['Hepático', 'AST / TGO', 'U/L', '10–40', [28, 33, 39, 42], 'atencao'],
+  ['Hepático', 'GGT', 'U/L', '8–61', [22, 27, 31, 35], 'ok'],
+  ['Hepático', 'Fosfatase Alcalina', 'U/L', '40–129', [78, 84, 90, 96], 'ok'],
+  ['Hepático', 'Bilirrubina Total', 'mg/dL', '0.3–1.2', [0.7, 0.8, 0.9, 1.0], 'ok'],
+  ['Hepático', 'Albumina', 'g/dL', '3.5–5.2', [4.6, 4.5, 4.5, 4.4], 'ok'],
+  // LIPÍDICO
+  ['Lipídico', 'LDL', 'mg/dL', '< 100', [118, 132, 145, 160], 'atencao'],
+  ['Lipídico', 'HDL', 'mg/dL', '> 40', [46, 43, 40, 38], 'atencao'],
+  ['Lipídico', 'Triglicerídeos', 'mg/dL', '< 150', [128, 145, 158, 172], 'atencao'],
+  ['Lipídico', 'Colesterol Total', 'mg/dL', '< 190', [186, 198, 210, 225], 'atencao'],
+  // HORMONAL
+  ['Hormonal', 'Testosterona Total', 'ng/dL', '264–916', [880, 1180, 1410, 1580], 'atencao'],
+  ['Hormonal', 'Testosterona Livre', 'pg/mL', '8.7–25.1', [22, 28, 33, 38], 'atencao'],
+  ['Hormonal', 'LH', 'mUI/mL', '1.7–8.6', [1.2, 0.6, 0.3, 0.2], 'risco'],
+  ['Hormonal', 'FSH', 'mUI/mL', '1.5–12.4', [1.1, 0.6, 0.3, 0.2], 'risco'],
+  ['Hormonal', 'Estradiol', 'pg/mL', '11–44', [34, 47, 57, 66], 'atencao'],
+  ['Hormonal', 'SHBG', 'nmol/L', '18.3–54.1', [28, 22, 18, 15], 'atencao'],
+  ['Hormonal', 'Prolactina', 'ng/mL', '4–15.2', [10, 12, 13, 14], 'ok'],
+  ['Hormonal', 'Cortisol', 'µg/dL', '6.2–19.4', [14, 15, 16, 17], 'ok'],
+  ['Hormonal', 'TSH', 'µUI/mL', '0.27–4.2', [2.1, 2.3, 2.4, 2.5], 'ok'],
+  // HEMATOLÓGICO
+  ['Hematológico', 'Hematócrito', '%', '38.8–50', [48, 51, 53, 55], 'risco'],
+  ['Hematológico', 'Hemoglobina', 'g/dL', '13.5–17.5', [16.2, 17.1, 17.8, 18.4], 'risco'],
+  ['Hematológico', 'Plaquetas', 'mil/µL', '150–450', [240, 250, 245, 255], 'ok'],
+  ['Hematológico', 'VCM', 'fL', '80–100', [88, 89, 90, 91], 'ok'],
+  // RENAL
+  ['Renal', 'Creatinina', 'mg/dL', '0.7–1.3', [1.1, 1.2, 1.3, 1.35], 'atencao'],
+  ['Renal', 'Ureia', 'mg/dL', '16.6–48.5', [38, 42, 45, 48], 'ok'],
+  ['Renal', 'Ácido Úrico', 'mg/dL', '3.4–7.0', [6.2, 6.6, 6.9, 7.2], 'atencao'],
+  ['Renal', 'TFG estimada', 'mL/min', '> 90', [98, 92, 88, 85], 'atencao'],
+  // METABÓLICO
+  ['Metabólico', 'Glicemia jejum', 'mg/dL', '70–99', [88, 92, 95, 97], 'ok'],
+  ['Metabólico', 'HbA1c', '%', '< 5.7', [5.2, 5.3, 5.4, 5.5], 'ok'],
+  ['Metabólico', 'Insulina', 'µUI/mL', '2.6–24.9', [8, 10, 12, 14], 'ok'],
+  // CARDIOVASCULAR
+  ['Cardiovascular', 'Pressão Arterial', 'mmHg', '< 130/85', [128, 132, 136, 140], 'atencao', '140/90'],
+  ['Cardiovascular', 'FC repouso', 'bpm', '60–100', [64, 66, 68, 70], 'ok'],
+  ['Cardiovascular', 'PSA', 'ng/mL', '< 4.0', [0.8, 0.9, 1.0, 1.1], 'ok'],
+];
 
-  const diff = ((atual - passado) / passado) * 100
-  const sinal = diff >= 0 ? '+' : ''
+export const markers = ROWS.map((r, i) => ({
+  id: 'm' + i,
+  cat: r[0],
+  name: r[1],
+  unit: r[2],
+  ref: r[3],
+  values: r[4],
+  status: r[5],
+  display: r[6] != null ? r[6] : null,
+}));
 
-  return `${sinal}${diff.toFixed(0)}% vs. mar`
-}
+const CAT_ORDER = ['Hepático', 'Lipídico', 'Hormonal', 'Hematológico', 'Renal', 'Metabólico', 'Cardiovascular'];
+export const categories = CAT_ORDER.map((c) => ({
+  name: c,
+  markers: markers.filter((m) => m.cat === c),
+}));
 
-const perfil = {
-  nome: 'Natalia Lugao',
-  idade: 26,
-  sexo: 'feminino',
-  tempoUso: '12 meses',
-  dosagem: '500mg/sem',
-  esteroides: ['Testosterona Enantato', 'Trembolona', 'Oxandrolona'],
-  nivelRisco: 'alto',
-  ultimoExame: '12 abr 2025',
-}
+const byName = (n) => markers.find((m) => m.name === n);
+const lastVal = (m) => (m.display != null ? m.display : m.values[m.values.length - 1]);
 
-const chartData = {
-  meses: ['Jan', 'Fev', 'Mar', 'Abr'],
+// Faixa de resumo (4 cards)
+export const summary = ['Testosterona Total', 'LDL', 'AST / TGO', 'HDL'].map((n) => {
+  const m = byName(n);
+  return { name: m.name, value: lastVal(m), unit: m.unit, status: m.status };
+});
+summary[0].name = 'Testosterona';
+summary[2].name = 'TGO / TGP';
 
-  cardiovascular: {
-    exames: [
-      {
-        data: 'Jan',
-        hdl: 48,
-        ldl: 92,
-        naoHdl: 118,
-        vldl: 22,
-        triglicerides: 110,
-        pcrUs: 0.8,
-        apoA1: 145,
-        apoB: 88,
-        homocisteina: 9.4,
-        ntProBnp: 80,
-        lpa: 22,
-        pressaoSistolica: 118,
-        pressaoDiastolica: 76,
-      },
-      {
-        data: 'Fev',
-        hdl: 38,
-        ldl: 128,
-        naoHdl: 158,
-        vldl: 30,
-        triglicerides: 148,
-        pcrUs: 1.9,
-        apoA1: 132,
-        apoB: 112,
-        homocisteina: 11.2,
-        ntProBnp: 96,
-        lpa: 25,
-        pressaoSistolica: 124,
-        pressaoDiastolica: 82,
-      },
-      {
-        data: 'Mar',
-        hdl: 31,
-        ldl: 168,
-        naoHdl: 196,
-        vldl: 38,
-        triglicerides: 190,
-        pcrUs: 3.4,
-        apoA1: 110,
-        apoB: 138,
-        homocisteina: 14.6,
-        ntProBnp: 132,
-        lpa: 28,
-        pressaoSistolica: 136,
-        pressaoDiastolica: 88,
-      },
-      {
-        data: 'Abr',
-        hdl: 25,
-        ldl: 196,
-        naoHdl: 235,
-        vldl: 46,
-        triglicerides: 230,
-        pcrUs: 4.8,
-        apoA1: 92,
-        apoB: 162,
-        homocisteina: 16.1,
-        ntProBnp: 158,
-        lpa: 33,
-        pressaoSistolica: 145,
-        pressaoDiastolica: 94,
-      },
-    ],
-  },
+// Alertas ativos do atleta
+export const alerts = [
+  { level: 'risco', title: 'Risco alto', desc: 'Hemograma completo + Perfil lipídico fora do alvo' },
+  { level: 'atencao', title: 'LDL elevado', desc: 'LDL em 160 mg/dL no último exame' },
+  { level: 'atencao', title: 'HDL abaixo do ideal', desc: 'HDL em 38 mg/dL' },
+  { level: 'atencao', title: 'Atenção hepática', desc: 'TGO 42, TGP 58 e GGT 35' },
+];
 
-  endocrino: {
-    exames: [
-      {
-        data: 'Jan',
-        glicose: 86,
-        hemoglobinaGlicada: 5.1,
-        testosteronaTotal: 720,
-        testosteronaLivre: 520,
-        lh: 6.1,
-        fsh: 5.2,
-        estradiol: 32,
-        prolactina: 10,
-        shbg: 38,
-      },
-      {
-        data: 'Fev',
-        glicose: 94,
-        hemoglobinaGlicada: 5.4,
-        testosteronaTotal: 1100,
-        testosteronaLivre: 820,
-        lh: 2.2,
-        fsh: 2.1,
-        estradiol: 51,
-        prolactina: 16,
-        shbg: 24,
-      },
-      {
-        data: 'Mar',
-        glicose: 103,
-        hemoglobinaGlicada: 6.2,
-        testosteronaTotal: 1450,
-        testosteronaLivre: 980,
-        lh: 0.4,
-        fsh: 0.6,
-        estradiol: 72,
-        prolactina: 22,
-        shbg: 12,
-      },
-      {
-        data: 'Abr',
-        glicose: 112,
-        hemoglobinaGlicada: 6.5,
-        testosteronaTotal: 1800,
-        testosteronaLivre: 1220,
-        lh: 0.2,
-        fsh: 0.3,
-        estradiol: 88,
-        prolactina: 28,
-        shbg: 9,
-      },
-    ],
-  },
+export const athlete = {
+  name: 'Caue',
+  fullName: 'Caue Oliveira',
+  age: 40,
+  sexo: 'Masculino',
+  peso: 92,
+  altura: 178,
+  cicloStatus: 'ativo',
+  cicloTempo: '6–12 meses',
+  dose: 400,
+  lastExam: '05 jun 2026',
+  compounds: ['Testosterona Enantato', 'Trembolona', 'Boldenona', 'Oxandrolona'],
+  condicoes: ['Colesterol elevado'],
+  examFreq: 'trimestral',
+};
 
-  hematologico: {
-    exames: [
-      {
-        data: 'Jan',
-        hemoglobina: 15.2,
-        hematocrito: 45.1,
-        vcm: 88,
-        hcm: 29.8,
-        chcm: 33.5,
-        rdwCv: 13.1,
-        rdwSd: 41,
-        eritroblastos: 0,
-        leucocitos: 6.8,
-        neutrofilos: 58,
-        eosinofilos: 3,
-        basofilos: 0.5,
-        linfocitos: 31,
-        monocitos: 7,
-        plaquetas: 260,
-        vmp: 10.4,
-      },
-      {
-        data: 'Fev',
-        hemoglobina: 16.4,
-        hematocrito: 49.2,
-        vcm: 89,
-        hcm: 30.1,
-        chcm: 34,
-        rdwCv: 13.6,
-        rdwSd: 42,
-        eritroblastos: 0,
-        leucocitos: 7.4,
-        neutrofilos: 61,
-        eosinofilos: 4,
-        basofilos: 0.8,
-        linfocitos: 28,
-        monocitos: 7,
-        plaquetas: 238,
-        vmp: 10.9,
-      },
-      {
-        data: 'Mar',
-        hemoglobina: 17.9,
-        hematocrito: 53.8,
-        vcm: 91,
-        hcm: 30.4,
-        chcm: 34.2,
-        rdwCv: 14.2,
-        rdwSd: 44,
-        eritroblastos: 0,
-        leucocitos: 10.8,
-        neutrofilos: 72,
-        eosinofilos: 5,
-        basofilos: 1.1,
-        linfocitos: 20,
-        monocitos: 9,
-        plaquetas: 418,
-        vmp: 12.4,
-      },
-      {
-        data: 'Abr',
-        hemoglobina: 18.6,
-        hematocrito: 56.2,
-        vcm: 94,
-        hcm: 31,
-        chcm: 35.1,
-        rdwCv: 15.8,
-        rdwSd: 49,
-        eritroblastos: 0,
-        leucocitos: 12.4,
-        neutrofilos: 78,
-        eosinofilos: 9,
-        basofilos: 1.8,
-        linfocitos: 17,
-        monocitos: 14,
-        plaquetas: 450,
-        vmp: 13.4,
-      },
-    ],
-  },
+// Pacientes do médico (ordenados por prioridade de risco)
+export const patients = [
+  { id: 'p1', name: 'Caue Oliveira', initials: 'CO', age: 40, compounds: ['Test. Enantato', 'Trembolona', 'Boldenona'], lastExam: '05 jun 2026', status: 'risco', alerts: 4 },
+  { id: 'p3', name: 'Diego Martins', initials: 'DM', age: 27, compounds: ['Test. Enantato', 'Stanozolol'], lastExam: '02 jun 2026', status: 'risco', alerts: 3 },
+  { id: 'p2', name: 'Bruno Santos', initials: 'BS', age: 33, compounds: ['Test. Cipionato', 'Nandrolona'], lastExam: '28 mai 2026', status: 'atencao', alerts: 2 },
+  { id: 'p5', name: 'Rafael Lima', initials: 'RL', age: 30, compounds: ['Trembolona', 'Test. Propionato'], lastExam: '30 mai 2026', status: 'atencao', alerts: 2 },
+  { id: 'p6', name: 'Lucas Ferreira', initials: 'LF', age: 38, compounds: ['Oxandrolona'], lastExam: '20 mai 2026', status: 'atencao', alerts: 1 },
+  { id: 'p4', name: 'Felipe Costa', initials: 'FC', age: 45, compounds: ['Boldenona', 'Masteron'], lastExam: '15 mai 2026', status: 'estavel', alerts: 0 },
+];
 
-  hepatico: {
-    exames: [
-      {
-        data: 'Jan',
-        alt: 38,
-        ast: 29,
-        ggt: 22,
-        alp: 78,
-        bilirrubinaTotal: 0.8,
-        albumina: 4.5,
-      },
-      {
-        data: 'Fev',
-        alt: 52,
-        ast: 48,
-        ggt: 31,
-        alp: 88,
-        bilirrubinaTotal: 1.0,
-        albumina: 4.3,
-      },
-      {
-        data: 'Mar',
-        alt: 76,
-        ast: 69,
-        ggt: 42,
-        alp: 94,
-        bilirrubinaTotal: 1.1,
-        albumina: 4.1,
-      },
-      {
-        data: 'Abr',
-        alt: 96,
-        ast: 88,
-        ggt: 78,
-        alp: 130,
-        bilirrubinaTotal: 1.5,
-        albumina: 3.3,
-      },
-    ],
-  },
+// Histórico de exames importados (atleta)
+export const examHistory = [
+  { date: '05 jun 2026', lab: 'Laboratório Fleury', markers: 32, status: 'risco' },
+  { date: '18 mar 2026', lab: 'Laboratório Fleury', markers: 32, status: 'atencao' },
+  { date: '10 dez 2025', lab: 'Hermes Pardini', markers: 30, status: 'atencao' },
+  { date: '12 set 2025', lab: 'Hermes Pardini', markers: 28, status: 'ok' },
+];
 
-  renal: {
-    exames: [
-      {
-        data: 'Jan',
-        cistatinaC: 0.82,
-        creatinina: 0.96,
-        ureia: 32,
-        microalbuminuriaCreatinina: 18,
-        proteinuriaCreatinina: 0.12,
-      },
-      {
-        data: 'Fev',
-        cistatinaC: 1.05,
-        creatinina: 1.14,
-        ureia: 41,
-        microalbuminuriaCreatinina: 28,
-        proteinuriaCreatinina: 0.18,
-      },
-      {
-        data: 'Mar',
-        cistatinaC: 1.28,
-        creatinina: 1.36,
-        ureia: 57,
-        microalbuminuriaCreatinina: 74,
-        proteinuriaCreatinina: 0.26,
-      },
-      {
-        data: 'Abr',
-        cistatinaC: 1.48,
-        creatinina: 1.58,
-        ureia: 68,
-        microalbuminuriaCreatinina: 325,
-        proteinuriaCreatinina: 0.38,
-      },
-    ],
-  },
-}
+export const suggestedExams = [
+  'Hemograma completo (controle de hematócrito)',
+  'Perfil lipídico completo',
+  'Painel hepático (TGO, TGP, GGT)',
+  'Estradiol sérico',
+  'PSA total e livre',
+  'Ecocardiograma + aferição de PA',
+];
 
-function gerarMetricas(chartData) {
-  const examesCardio = chartData.cardiovascular.exames
-  const cardioAtual = ultimo(examesCardio)
-  const cardioAnterior = anterior(examesCardio)
+export const medico = {
+  nome: 'Ana',
+  sobrenome: 'Souza',
+  especialidade: 'Endocrinologia',
+  crm: 'CRM-SP 123456',
+  rqe: 'RQE 45678',
+  email: 'ana.souza@vitalis.com.br',
+  telefone: '(11) 98888-1234',
+  instituicao: 'Clínica Vitalis',
+};
 
-  const examesEndocrinos = chartData.endocrino.exames
-  const endocrinoAtual = ultimo(examesEndocrinos)
-  const endocrinoAnterior = anterior(examesEndocrinos)
+export const compoundsCatalog = [
+  'Testosterona Enantato', 'Testosterona Cipionato', 'Trembolona', 'Oxandrolona',
+  'Nandrolona', 'Boldenona', 'Stanozolol', 'Masteron',
+];
 
-  const examesHepaticos = chartData.hepatico.exames
-  const hepaticoAtual = ultimo(examesHepaticos)
-  const hepaticoAnterior = anterior(examesHepaticos)
+export const conditionsCatalog = [
+  'Hipertensão', 'Colesterol elevado', 'Problemas hepáticos',
+  'Histórico cardíaco familiar', 'Nenhuma das anteriores',
+];
 
-  return [
-    {
-      id: 'testosterona',
-      label: 'Testosterona',
-      valor: endocrinoAtual.testosteronaTotal.toLocaleString('pt-BR'),
-      unidade: 'ng/dL',
-      delta: calcularDelta(
-        endocrinoAtual.testosteronaTotal,
-        endocrinoAnterior.testosteronaTotal
-      ),
-      deltaDir:
-        endocrinoAtual.testosteronaTotal > endocrinoAnterior.testosteronaTotal
-          ? 'up'
-          : 'down',
-      cor: '#c084fc',
-    },
-    {
-      id: 'ldl',
-      label: 'LDL',
-      valor: String(cardioAtual.ldl),
-      unidade: 'mg/dL',
-      delta: `${calcularDelta(cardioAtual.ldl, cardioAnterior.ldl)} · limite 130`,
-      deltaDir: cardioAtual.ldl > cardioAnterior.ldl ? 'up' : 'down',
-      cor: '#c0392b',
-    },
-    {
-      id: 'tgo',
-      label: 'TGO / TGP',
-      valor: `${hepaticoAtual.ast} / ${hepaticoAtual.alt}`,
-      unidade: 'U/L',
-      delta: `${calcularDelta(
-        hepaticoAtual.ast,
-        hepaticoAnterior.ast
-      )} · limite 40`,
-      deltaDir: hepaticoAtual.ast > hepaticoAnterior.ast ? 'up' : 'down',
-      cor: '#d97706',
-    },
-    {
-      id: 'hdl',
-      label: 'HDL',
-      valor: String(cardioAtual.hdl),
-      unidade: 'mg/dL',
-      delta: `${calcularDelta(cardioAtual.hdl, cardioAnterior.hdl)} · ideal >40`,
-      deltaDir: cardioAtual.hdl > cardioAnterior.hdl ? 'up' : 'down',
-      cor: '#27ae60',
-    },
-  ]
-}
-
-function gerarAlertas(chartData, perfil) {
-  const alertas = []
-
-  const ultimoCardio = ultimo(chartData.cardiovascular.exames)
-  const ultimoHepatico = ultimo(chartData.hepatico.exames)
-  const ultimoEndocrino = ultimo(chartData.endocrino.exames)
-  const ultimoHematologico = ultimo(chartData.hematologico.exames)
-  const ultimoRenal = ultimo(chartData.renal.exames)
-
-  const adulto = perfil.idade >= 20
-  const masculino = perfil.sexo === 'masculino'
-
-  const hdlMin = adulto ? 40 : 45
-  const ldlAlto = 160
-  const ldlMuitoAlto = 190
-
-  if (ultimoCardio.ldl >= ldlMuitoAlto || ultimoCardio.hdl < hdlMin) {
-    alertas.push({
-      id: 'cardio-ldl-hdl',
-      nivel: 'alto',
-      titulo: 'Risco cardiovascular',
-      descricao: `LDL em ${ultimoCardio.ldl} mg/dL e HDL em ${ultimoCardio.hdl} mg/dL.`,
-    })
-  } else if (ultimoCardio.ldl >= ldlAlto) {
-    alertas.push({
-      id: 'cardio-ldl',
-      nivel: 'atencao',
-      titulo: 'Atenção cardiovascular',
-      descricao: `LDL em ${ultimoCardio.ldl} mg/dL, acima da faixa ideal.`,
-    })
-  }
-
-  if (ultimoCardio.pcrUs > 3) {
-    alertas.push({
-      id: 'cardio-pcr',
-      nivel: 'atencao',
-      titulo: 'Inflamação vascular',
-      descricao: `PCR-us em ${ultimoCardio.pcrUs} mg/L, indicando maior risco inflamatório.`,
-    })
-  }
-
-  if (
-    ultimoCardio.pressaoSistolica >= 140 ||
-    ultimoCardio.pressaoDiastolica >= 90
-  ) {
-    alertas.push({
-      id: 'cardio-pressao',
-      nivel: 'alto',
-      titulo: 'Pressão arterial elevada',
-      descricao: `${ultimoCardio.pressaoSistolica}/${ultimoCardio.pressaoDiastolica} mmHg no último registro.`,
-    })
-  }
-
-  const altMax = masculino ? 45 : 34
-  const astMax = 34
-  const ggtMax = masculino ? 64 : 36
-
-  const transaminasesAltas =
-    ultimoHepatico.alt > altMax || ultimoHepatico.ast > astMax
-
-  const ggtAlta = ultimoHepatico.ggt > ggtMax
-
-  if (transaminasesAltas && ggtAlta) {
-    alertas.push({
-      id: 'hepatico-ggt',
-      nivel: 'alto',
-      titulo: 'Sobrecarga hepática',
-      descricao: `ALT ${ultimoHepatico.alt} U/L, AST ${ultimoHepatico.ast} U/L e GGT ${ultimoHepatico.ggt} U/L.`,
-    })
-  } else if (transaminasesAltas) {
-    alertas.push({
-      id: 'hepatico-transaminases',
-      nivel: 'atencao',
-      titulo: 'Transaminases elevadas',
-      descricao: 'ALT/TGP ou AST/TGO elevados com GGT ainda dentro do limite.',
-    })
-  }
-
-  const testosteronaTotalMax = masculino
-    ? perfil.idade > 50
-      ? 674
-      : 803
-    : 50
-
-  const testosteronaLivreMax = masculino ? 640 : 37
-
-  if (
-    ultimoEndocrino.testosteronaTotal > testosteronaTotalMax ||
-    ultimoEndocrino.testosteronaLivre > testosteronaLivreMax
-  ) {
-    alertas.push({
-      id: 'endocrino-testosterona',
-      nivel: 'atencao',
-      titulo: 'Testosterona elevada',
-      descricao: `Testosterona total em ${ultimoEndocrino.testosteronaTotal} ng/dL.`,
-    })
-  }
-
-  const lhMin = masculino ? 0.6 : 1.8
-  const fshMin = masculino ? 0.9 : 3.0
-
-  if (ultimoEndocrino.lh < lhMin && ultimoEndocrino.fsh < fshMin) {
-    alertas.push({
-      id: 'endocrino-eixo',
-      nivel: 'atencao',
-      titulo: 'Supressão hormonal',
-      descricao: `LH ${ultimoEndocrino.lh} IU/L e FSH ${ultimoEndocrino.fsh} IU/L abaixo da referência.`,
-    })
-  }
-
-  if (
-    ultimoEndocrino.glicose > 99 ||
-    ultimoEndocrino.hemoglobinaGlicada > 6.0
-  ) {
-    alertas.push({
-      id: 'endocrino-metabolico',
-      nivel: 'atencao',
-      titulo: 'Atenção metabólica',
-      descricao: `Glicose ${ultimoEndocrino.glicose} mg/dL e HbA1c ${ultimoEndocrino.hemoglobinaGlicada}%.`,
-    })
-  }
-
-  if (ultimoHematologico.hematocrito > 52.4) {
-    alertas.push({
-      id: 'hematologico-hematocrito',
-      nivel: ultimoHematologico.hematocrito >= 55 ? 'alto' : 'atencao',
-      titulo: 'Policitemia secundária',
-      descricao: `Hematócrito em ${ultimoHematologico.hematocrito}%, aumentando risco de sangue viscoso.`,
-    })
-  }
-
-  if (ultimoHematologico.plaquetas > 425) {
-    alertas.push({
-      id: 'hematologico-plaquetas',
-      nivel: 'atencao',
-      titulo: 'Plaquetas elevadas',
-      descricao: `Plaquetas em ${ultimoHematologico.plaquetas} mil/mm³.`,
-    })
-  }
-
-  const creatininaMax = masculino ? 1.25 : 1.11
-  const cistatinaMax = perfil.idade > 50
-    ? masculino ? 1.53 : 1.38
-    : masculino ? 1.22 : 1.07
-
-  if (
-    ultimoRenal.microalbuminuriaCreatinina >= 300 ||
-    ultimoRenal.creatinina > creatininaMax ||
-    ultimoRenal.cistatinaC > cistatinaMax
-  ) {
-    alertas.push({
-      id: 'renal-risco',
-      nivel: 'alto',
-      titulo: 'Risco renal',
-      descricao: `Creatinina ${ultimoRenal.creatinina} mg/dL e microalbuminúria ${ultimoRenal.microalbuminuriaCreatinina} mg/g.`,
-    })
-  } else if (ultimoRenal.microalbuminuriaCreatinina >= 30) {
-    alertas.push({
-      id: 'renal-estresse',
-      nivel: 'atencao',
-      titulo: 'Estresse renal',
-      descricao: `Microalbuminúria em ${ultimoRenal.microalbuminuriaCreatinina} mg/g.`,
-    })
-  }
-
-  if (!alertas.length) {
-    alertas.push({
-      id: 'normal',
-      nivel: 'normal',
-      titulo: 'Nenhum alerta ativo',
-      descricao: 'Os principais marcadores estão dentro das faixas esperadas.',
-    })
-  }
-
-  return alertas
-}
-
+/* ----------------------------------------------------------------------------
+   MOCK_DATA — formato esperado pelo seu PerfilAtleta.jsx (fallback do dashboard
+   do atleta quando a API ainda não respondeu). Mantém compatibilidade com o
+   código que usa `const { perfil } = MOCK_DATA`.
+   ---------------------------------------------------------------------------- */
 export const MOCK_DATA = {
-  perfil,
+  perfil: {
+    nome: athlete.fullName,            // 'Caue Oliveira'
+    idade: athlete.age,                // 40
+    sexo: 'masculino',
+    tempoUso: athlete.cicloTempo,      // '6–12 meses'
+    dosagem: athlete.dose + 'mg/sem',  // '400mg/sem'
+    esteroides: athlete.compounds.slice(),
+    cicloAtivo: 'sim',
+    ultimoExame: athlete.lastExam,     // '05 jun 2026'
+  },
+};
 
-  metricas: gerarMetricas(chartData),
+const JuicersData = {
+  examDates, markers, categories, summary, alerts, athlete, medico,
+  patients, examHistory, suggestedExams, compoundsCatalog, conditionsCatalog,
+};
 
-  alertas: gerarAlertas(chartData, perfil),
-
-  exames: [
-    {
-      id: 1,
-      nome: 'Hemograma completo',
-      data: '12 abr',
-      tipo: 'sangue',
-      cor: '#60a5fa',
-      resultado: 'alterado',
-    },
-    {
-      id: 2,
-      nome: 'Perfil lipídico',
-      data: '12 abr',
-      tipo: 'sangue',
-      cor: '#60a5fa',
-      resultado: 'alterado',
-    },
-    {
-      id: 3,
-      nome: 'Painel hormonal',
-      data: '10 mar',
-      tipo: 'hormonal',
-      cor: '#c084fc',
-      resultado: 'alterado',
-    },
-    {
-      id: 4,
-      nome: 'TGO / TGP',
-      data: '10 mar',
-      tipo: 'hepático',
-      cor: '#fb923c',
-      resultado: 'alterado',
-    },
-    {
-      id: 5,
-      nome: 'Creatinina',
-      data: '15 fev',
-      tipo: 'renal',
-      cor: '#34d399',
-      resultado: 'normal',
-    },
-    {
-      id: 6,
-      nome: 'Ecocardiograma',
-      data: '20 jan',
-      tipo: 'cardíaco',
-      cor: '#f472b6',
-      resultado: 'pendente',
-    },
-  ],
-
-  insights: [
-    {
-      id: 1,
-      num: '01',
-      texto: 'LDL cresceu',
-      destaque: '+113%',
-      resto: 'em 4 meses — progressão importante durante o acompanhamento',
-    },
-    {
-      id: 2,
-      num: '02',
-      texto: 'HDL caiu',
-      destaque: '48%',
-      resto: 'desde janeiro — padrão desfavorável para risco cardiovascular',
-    },
-    {
-      id: 3,
-      num: '03',
-      texto: 'Enzimas hepáticas',
-      destaque: 'subiram',
-      resto: 'com GGT elevada — possível sobrecarga hepática',
-    },
-    {
-      id: 4,
-      num: '04',
-      texto: 'Hematócrito acima de',
-      destaque: '55%',
-      resto: '— pode indicar sangue mais viscoso e maior risco trombótico',
-    },
-    {
-      id: 5,
-      num: '05',
-      texto: 'LH e FSH',
-      destaque: 'suprimidos',
-      resto: '— padrão compatível com supressão do eixo hormonal',
-    },
-  ],
-
-  chartData,
-}
+export default JuicersData;

@@ -1,4 +1,4 @@
-import "../../style/SecaoProjeto.css";
+import "../../../style/SecaoProjeto.css";
 
 export default function SecaoSobre() {
   return (

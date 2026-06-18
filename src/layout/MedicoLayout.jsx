@@ -1,14 +1,17 @@
 import { Outlet } from 'react-router-dom'
-import SidebarMedico from '../components/SidebarMedico'
+import Sidebar from '../components/Sidebar'
+import { ClinicalProvider } from '../context/ClinicalContext'
 import '../style/medicoLayout.css'
 
 export default function MedicoLayout() {
     return (
-        <div className="medico-layout">
-            <SidebarMedico />
-            <div className="medico-layout-main">
-                <Outlet />
+        <ClinicalProvider>
+            <div className="medico-layout">
+                <Sidebar variant="medico" />
+                <div className="medico-layout-main">
+                    <Outlet />
+                </div>
             </div>
-        </div>
+        </ClinicalProvider>
     )
 }

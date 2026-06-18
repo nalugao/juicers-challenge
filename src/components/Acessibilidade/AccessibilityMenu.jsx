@@ -1,5 +1,5 @@
 import { useState } from "react";
-import AudioReader from "../LeitorDeAudio/AudioReader";
+import AudioReader from "./LeitorDeAudio/AudioReader";
 import Acessibilidade from "../../assets/Acessibilidade.png";
 
 const AccessibilityMenu = () => {
@@ -33,7 +33,7 @@ const AccessibilityMenu = () => {
   };
 
   const items = [
-    { label: "VLibras",        icon: "👋", color: "#3a86ff", onClick: abrirVLibras },
+    { label: "VLibras", icon: "👋", color: "#3a86ff", onClick: abrirVLibras },
     { label: "Leitor de Tela", icon: "🔊", color: "#06d6a0", onClick: () => { setAudioAtivo(true); setIsOpen(false); } },
     { label: "Acessibilidade", icon: "👤", color: "#f77f00", onClick: abrirUserWay },
   ];
