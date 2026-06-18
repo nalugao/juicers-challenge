@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { savePatientProfile } from '../services/api'
+import { acceptDoctorInvite, savePatientProfile } from '../services/api'
 import '../style/onboarding.css'
 import logoIcon from '../assets/juicers.png'
 
@@ -21,7 +21,13 @@ function separarNome(nomeCompleto) {
     return { nome, sobrenome }
 }
 
-export default function OnboardingForm({ nomeCompleto = '', emailUsuario = '', onBack, onFinish }) {
+export default function OnboardingForm({
+    nomeCompleto = '',
+    emailUsuario = '',
+    conviteToken = '',
+    onBack,
+    onFinish,
+}) {
     const nomeSeparado = separarNome(nomeCompleto)
 
     const [etapa, setEtapa] = useState(1)
@@ -47,25 +53,13 @@ export default function OnboardingForm({ nomeCompleto = '', emailUsuario = '', o
 
     const update = (key, val) => {
         setErro('')
-
-        setErrors(prev => ({
-            ...prev,
-            [key]: '',
-        }))
-
-        setForm(p => ({
-            ...p,
-            [key]: val,
-        }))
+        setErrors(prev => ({ ...prev, [key]: '' }))
+        setForm(p => ({ ...p, [key]: val }))
     }
 
     const toggleArray = (key, val) => {
         setErro('')
-
-        setErrors(prev => ({
-            ...prev,
-            [key]: '',
-        }))
+        setErrors(prev => ({ ...prev, [key]: '' }))
 
         setForm(p => ({
             ...p,
@@ -78,13 +72,8 @@ export default function OnboardingForm({ nomeCompleto = '', emailUsuario = '', o
     const validarEtapa1 = () => {
         const novosErros = {}
 
-        if (!form.nome.trim()) {
-            novosErros.nome = 'Preencha o nome.'
-        }
-
-        if (!form.sobrenome.trim()) {
-            novosErros.sobrenome = 'Preencha o sobrenome.'
-        }
+        if (!form.nome.trim()) novosErros.nome = 'Preencha o nome.'
+        if (!form.sobrenome.trim()) novosErros.sobrenome = 'Preencha o sobrenome.'
 
         if (!form.idade) {
             novosErros.idade = 'Preencha a idade.'
@@ -92,9 +81,7 @@ export default function OnboardingForm({ nomeCompleto = '', emailUsuario = '', o
             novosErros.idade = 'Informe uma idade válida.'
         }
 
-        if (!form.sexo) {
-            novosErros.sexo = 'Selecione o sexo biológico.'
-        }
+        if (!form.sexo) novosErros.sexo = 'Selecione o sexo biológico.'
 
         if (!form.peso) {
             novosErros.peso = 'Preencha o peso.'
@@ -184,7 +171,6 @@ export default function OnboardingForm({ nomeCompleto = '', emailUsuario = '', o
 
     const irParaEtapa2 = () => {
         if (!validarEtapa1()) return
-
         setErro('')
         setErrors({})
         setEtapa(2)
@@ -192,7 +178,6 @@ export default function OnboardingForm({ nomeCompleto = '', emailUsuario = '', o
 
     const irParaEtapa3 = () => {
         if (!validarEtapa2()) return
-
         setErro('')
         setErrors({})
         setEtapa(3)
@@ -218,7 +203,7 @@ export default function OnboardingForm({ nomeCompleto = '', emailUsuario = '', o
                 weight: Number(form.peso),
                 height: Number(form.altura) / 100,
                 cycleStatus: form.cicloAtivo,
-                weeklyDosage: Number(form.dosagem),
+                weeklyDosage: Number(form.dosagem || 0),
                 cycleTime: form.tempoUso,
                 examStatus: form.fezeExames,
                 lastExamDate: form.dataUltimoExame,
@@ -227,6 +212,10 @@ export default function OnboardingForm({ nomeCompleto = '', emailUsuario = '', o
             }
 
             await savePatientProfile(dadosParaBanco)
+
+            if (conviteToken) {
+                await acceptDoctorInvite(conviteToken)
+            }
 
             const dadosFormatados = {
                 nome: form.nome,
@@ -254,7 +243,7 @@ export default function OnboardingForm({ nomeCompleto = '', emailUsuario = '', o
 
             onFinish()
         } catch (error) {
-            setErro(error.message, 'Erro ao salvar onboarding.')
+            setErro(error.message || 'Erro ao salvar onboarding.')
         } finally {
             setSalvando(false)
         }
@@ -460,17 +449,11 @@ export default function OnboardingForm({ nomeCompleto = '', emailUsuario = '', o
                             </div>
 
                             <div className="ob-btn-row">
-                                <button
-                                    className="ob-btn-back"
-                                    onClick={onBack}
-                                >
+                                <button className="ob-btn-back" onClick={onBack}>
                                     ← Voltar ao cadastro
                                 </button>
 
-                                <button
-                                    className="ob-btn-next"
-                                    onClick={irParaEtapa2}
-                                >
+                                <button className="ob-btn-next" onClick={irParaEtapa2}>
                                     Continuar →
                                 </button>
                             </div>
@@ -590,17 +573,11 @@ export default function OnboardingForm({ nomeCompleto = '', emailUsuario = '', o
                             )}
 
                             <div className="ob-btn-row">
-                                <button
-                                    className="ob-btn-back"
-                                    onClick={irParaEtapa1}
-                                >
+                                <button className="ob-btn-back" onClick={irParaEtapa1}>
                                     ← Voltar
                                 </button>
 
-                                <button
-                                    className="ob-btn-next"
-                                    onClick={irParaEtapa3}
-                                >
+                                <button className="ob-btn-next" onClick={irParaEtapa3}>
                                     Continuar →
                                 </button>
                             </div>
@@ -702,10 +679,7 @@ export default function OnboardingForm({ nomeCompleto = '', emailUsuario = '', o
                             </div>
 
                             <div className="ob-btn-row">
-                                <button
-                                    className="ob-btn-back"
-                                    onClick={irParaEtapa2}
-                                >
+                                <button className="ob-btn-back" onClick={irParaEtapa2}>
                                     ← Voltar
                                 </button>
 
@@ -714,7 +688,7 @@ export default function OnboardingForm({ nomeCompleto = '', emailUsuario = '', o
                                     onClick={finalizarOnboarding}
                                     disabled={salvando}
                                 >
-                                    {salvando ? "Salvando..." : "Acessar Dashboard →"}
+                                    {salvando ? 'Salvando...' : 'Acessar Dashboard →'}
                                 </button>
                             </div>
                         </div>

@@ -1,13 +1,14 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import '../style/login.css'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import logoIcon from '../assets/juicers.png'
 import OnboardingForm from '../components/OnboardingForm'
-import { loginUser, registerUser } from '../services/api'
+import { acceptDoctorInvite, loginUser, registerUser } from '../services/api'
 import { useAuth } from '../context/AuthContext'
 
 export default function Login() {
     const navigate = useNavigate()
+    const { token: conviteToken } = useParams()
     const { loginComToken, loginMock } = useAuth()
 
     const [role, setRole] = useState('atleta')
@@ -22,6 +23,14 @@ export default function Login() {
     const [confirmarSenha, setConfirmarSenha] = useState('')
 
     const destinoMock = role === 'medico' ? '/medico' : '/perfil'
+
+    useEffect(() => {
+        if (conviteToken) {
+            setRole('atleta')
+            setModoCadastro(true)
+            setMostrarOnboarding(false)
+        }
+    }, [conviteToken])
 
     function limparCampos() {
         setNomeCadastro('')
@@ -59,6 +68,7 @@ export default function Login() {
     }
 
     function getRoleApi() {
+        if (conviteToken) return 'patient'
         return role === 'medico' ? 'doctor' : 'patient'
     }
 
@@ -183,6 +193,18 @@ export default function Login() {
                 getRoleFront(data.user.role)
             )
 
+            if (conviteToken && data.user.role === 'patient') {
+                try {
+                    await acceptDoctorInvite(conviteToken)
+                    navigate('/perfil')
+                    return
+                } catch {
+                    setMostrarOnboarding(true)
+                    setModoCadastro(false)
+                    return
+                }
+            }
+
             redirecionarPorTipo(data.user)
         } catch (error) {
             alert(error.message)
@@ -196,6 +218,7 @@ export default function Login() {
             <OnboardingForm
                 nomeCompleto={nomeCadastro}
                 emailUsuario={email}
+                conviteToken={conviteToken}
                 onBack={() => {
                     setMostrarOnboarding(false)
                     setModoCadastro(true)
@@ -232,6 +255,7 @@ export default function Login() {
                             type="button"
                             className={`login_role_btn${role === 'atleta' ? ' login_role_btn--active login_role_btn--atleta' : ''}`}
                             onClick={() => {
+                                if (conviteToken) return
                                 setRole('atleta')
                                 setErroLogin(false)
                             }}
@@ -243,31 +267,27 @@ export default function Login() {
                             Atleta
                         </button>
 
-                        <button
-                            type="button"
-                            className={`login_role_btn${role === 'medico' ? ' login_role_btn--active login_role_btn--medico' : ''}`}
-                            onClick={() => {
-                                setRole('medico')
-                                setErroLogin(false)
-                            }}
-                        >
-                            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.4">
-                                <rect x="2" y="2" width="12" height="12" rx="2" />
-                                <path d="M8 5.5V10.5M5.5 8H10.5" />
-                            </svg>
-                            Médico
-                        </button>
+                        {!conviteToken && (
+                            <button
+                                type="button"
+                                className={`login_role_btn${role === 'medico' ? ' login_role_btn--active login_role_btn--medico' : ''}`}
+                                onClick={() => {
+                                    setRole('medico')
+                                    setErroLogin(false)
+                                }}
+                            >
+                                <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.4">
+                                    <rect x="2" y="2" width="12" height="12" rx="2" />
+                                    <path d="M8 5.5V10.5M5.5 8H10.5" />
+                                </svg>
+                                Médico
+                            </button>
+                        )}
                     </div>
 
                     {erroLogin && (
                         <div className="login_offline_banner">
-                            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
-                                <circle cx="8" cy="8" r="6" />
-                                <path d="M8 5v4M8 11v.5" strokeLinecap="round" />
-                            </svg>
-
                             Credenciais não encontradas. Use as contas de teste:
-
                             <span className="login_offline_hint">
                                 atleta@juicers.com · medico@juicers.com · senha: 123456
                             </span>
@@ -338,9 +358,11 @@ export default function Login() {
                         <>
                             <p className="login_card_title">Criar conta</p>
                             <p className="login_card_sub">
-                                {role === 'medico'
-                                    ? 'Crie sua conta para gerenciar seus atletas.'
-                                    : 'Preencha seus dados para começar.'}
+                                {conviteToken
+                                    ? 'Crie sua conta para aceitar o convite do médico.'
+                                    : role === 'medico'
+                                        ? 'Crie sua conta para gerenciar seus atletas.'
+                                        : 'Preencha seus dados para começar.'}
                             </p>
 
                             <div className="login_selected_role">

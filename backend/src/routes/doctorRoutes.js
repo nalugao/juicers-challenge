@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   createDoctorInvite,
   getMyDoctorPatients,
+  getMyDoctorPatientById,
   getInviteByToken,
   acceptInvite,
 } from "../controllers/doctorController.js";
@@ -12,6 +13,8 @@ const router = Router();
 router.post("/invites", authMiddleware, createDoctorInvite);
 
 router.get("/patients", authMiddleware, getMyDoctorPatients);
+
+router.get("/patients/:id", authMiddleware, getMyDoctorPatientById);
 
 router.get("/invites/:token", getInviteByToken);
 

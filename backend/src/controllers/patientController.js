@@ -38,11 +38,19 @@ export const createOrUpdatePatient = async (req, res) => {
         healthConditions,
       },
       {
-        new: true,
+        returnDocument: "after",
         upsert: true,
         runValidators: true,
-      },
-    );
+      }
+    )
+      .populate("userId", "name email role")
+      .populate({
+        path: "doctorId",
+        populate: {
+          path: "userId",
+          select: "name email role",
+        },
+      });
 
     return res.status(200).json({
       message: "Dados do paciente salvos com sucesso",
@@ -59,10 +67,15 @@ export const getMyPatientProfile = async (req, res) => {
   try {
     const userId = req.user.id;
 
-    const patient = await Patient.findOne({ userId }).populate(
-      "userId",
-      "name email role",
-    );
+    const patient = await Patient.findOne({ userId })
+      .populate("userId", "name email role")
+      .populate({
+        path: "doctorId",
+        populate: {
+          path: "userId",
+          select: "name email role",
+        },
+      });
 
     if (!patient) {
       return res.status(404).json({

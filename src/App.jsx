@@ -44,6 +44,7 @@ export default function App() {
 
                     {/* Login */}
                     <Route path="/login" element={<Login />} />
+                    <Route path="/cadastro/:token" element={<Login />} />
 
                     {/* Área do atleta */}
                     <Route path="/perfil" element={

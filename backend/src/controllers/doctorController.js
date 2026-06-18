@@ -95,6 +95,46 @@ export const getMyDoctorPatients = async (req, res) => {
   }
 };
 
+export const getMyDoctorPatientById = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { id } = req.params;
+
+    if (req.user.role !== "doctor") {
+      return res.status(403).json({
+        message: "Apenas médicos podem acessar este paciente",
+      });
+    }
+
+    const doctor = await Doctor.findOne({ userId });
+
+    if (!doctor) {
+      return res.status(404).json({
+        message: "Perfil de médico não encontrado",
+      });
+    }
+
+    const patient = await Patient.findOne({
+      _id: id,
+      doctorId: doctor._id,
+    }).populate("userId", "name email role");
+
+    if (!patient) {
+      return res.status(404).json({
+        message: "Paciente não encontrado ou não vinculado a este médico",
+      });
+    }
+
+    return res.status(200).json({
+      patient,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
 export const getInviteByToken = async (req, res) => {
   try {
     const { token } = req.params;
