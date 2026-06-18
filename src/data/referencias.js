@@ -47,11 +47,11 @@ const referencias = [
   },
   {
     id: 10,
-    titulo: "Anabolizantes e saúde arterial em fisiculturistas",
+    titulo: "Anabolizantes e doenças cardiovasculares",
     categoria: "Cardiovascular",
     fonte: "American Heart Association",
     descricao:
-      "Estudo sobre estrutura arterial, função vascular e função cardíaca em fisiculturistas homens usuários de esteroides anabolizantes androgênicos.",
+       "Estudo sobre maior risco cardiovascular em usuários de anabolizantes.",
     link: "https://www.ahajournals.org/doi/10.1161/CIRCULATIONAHA.124.071117"
   },
   {
@@ -60,7 +60,7 @@ const referencias = [
     categoria: "Fígado e metabolismo",
     fonte: "PubMed Central",
     descricao:
-      "Relato de casos sobre lesões hepáticas associadas ao uso de esteroides anabolizantes",
+      "Relato de casos sobre diferentes lesões hepáticas associadas ao uso de anabolizantes.",
     link: "https://pmc.ncbi.nlm.nih.gov/articles/PMC8766528/"
   },
   {
@@ -69,25 +69,24 @@ const referencias = [
     categoria: "Fígado e metabolismo",
     fonte: "PubMed Central",
     descricao:
-      "Relato de casos sobre desenvolvimento de câncer hepático e de vias biliares em contexto de uso de esteroides anabolizantes.",
+      "Relato de casos sobre câncer hepático e de vias biliares associado ao uso de anabolizantes e testosterona.",
     link: "https://pmc.ncbi.nlm.nih.gov/articles/PMC9975287/"
   },
   {
-    id: 14,
-    titulo: "Marcadores hepáticos e uso de substâncias hormonais",
-    categoria: "Fígado e metabolismo",
-    fonte: "PubMed Central",
+    id:14,
+    titulo: "Anabolizantes e cardiomiopatia",
+    categoria: "Cardiovascular",
+    fonte: "Frontiers in Cardiovascular Medicine",   
     descricao:
-      "Referência útil para contextualizar acompanhamento laboratorial hepático em usuários de substâncias hormonais.",
-    link: "https://pmc.ncbi.nlm.nih.gov/articles/PMC10412093/"
+      "Revisão sobre lesão cardíaca e insuficiência cardíaca associadas ao uso de anabolizantes."
   },
   {
     id: 15,
-    titulo: "Toxicologia e efeitos sistêmicos dos anabolizantes",
-    categoria: "Fígado e metabolismo",
+    titulo: "Anabolizantes, efeitos cardiorrenais e metabólicos",
+    categoria: "Efeitos sistêmicos",
     fonte: "ScienceDirect",
     descricao:
-      "Artigo sobre efeitos tóxicos e sistêmicos relacionados ao uso de esteroides anabolizantes.",
+      "Artigo sobre danos cardiovasculares, renais e metabólicos associados ao uso de anabolizantes.",
     link: "https://www.sciencedirect.com/science/article/pii/S0041008X25000146"
   },
   {
@@ -96,7 +95,7 @@ const referencias = [
     categoria: "Hormonal e urológico",
     fonte: "Portal da Urologia",
     descricao:
-      "Material institucional sobre riscos urológicos associados ao uso de anabolizantes.",
+      "Orientação sobre a relação entre anabolizantes, disfunção erétil, infertilidade e atrofia testicular.",
     link: "https://portaldaurologia.org.br/sua-saude/dicas/riscos-urologicos-do-uso-de-anabolizantes"
   },
   {
@@ -105,142 +104,124 @@ const referencias = [
     categoria: "Hormonal e urológico",
     fonte: "Portal da Urologia",
     descricao:
-      "Orientação sobre riscos do uso de testosterona sem indicação médica adequada.",
+      "Orientação da Sociedade Brasileira de Urologia sobre riscos do uso de testosterona sem prescrição médica.",
     link: "https://portaldaurologia.org.br/sua-saude/dicas/uso-indiscriminado-e-sem-indicacao-medica-de-testosterona"
   },
   {
     id: 18,
-    titulo: "Testosterona, eixo hormonal e saúde reprodutiva",
+    titulo: "Anabolizantes, hipogonadismo e recuperação hormonal",
     categoria: "Hormonal e urológico",
     fonte: "European Journal of Endocrinology",
     descricao:
-      "Artigo relacionado a testosterona, endocrinologia e possíveis consequências hormonais do uso inadequado.",
+      "Estudo sobre recuperação hormonal após parar anabolizantes e fatores associados à normalização de testosterona, LH e FSH.",
     link: "https://academic.oup.com/ejendo/article/189/6/601/7475314"
   },
   {
     id: 19,
-    titulo: "Anabolizantes, fertilidade e função hormonal",
+    titulo: "Anabolizantes e ginecomastia",
     categoria: "Hormonal e urológico",
     fonte: "PubMed Central",
     descricao:
-      "Referência científica sobre alterações hormonais e reprodutivas associadas ao uso de esteroides.",
+      "Estudo sobre ginecomastia associada a anabolizantes, prevalência subestimada e tratamento.",
     link: "https://pmc.ncbi.nlm.nih.gov/articles/PMC10497340/"
   },
   {
     id: 20,
-    titulo: "Uso de AAS e saúde masculina",
+    titulo: "Abuso de Anabolizantes e saúde reprodutiva masculina",
     categoria: "Hormonal e urológico",
     fonte: "PubMed Central",
     descricao:
-      "Estudo sobre impactos do uso de esteroides anabolizantes na saúde masculina e no eixo endócrino.",
+      "Estudo sobre abuso de Anabolizantes, fertilidade, função sexual e recuperação hormonal.",
     link: "https://pmc.ncbi.nlm.nih.gov/articles/PMC10078442/"
   },
   {
-    id: 21,
-    titulo: "Body dysmorphic disorder e uso de anabolizantes",
-    categoria: "Saúde mental e comportamento",
-    fonte: "The Primary Care Companion for CNS Disorders",
-    descricao:
-      "Revisão sobre associação entre dismorfia corporal, uso induzido de anabolizantes e desfechos de saúde mental.",
-    link: "https://www.psychiatrist.com/pcc/association-body-dysmorphic-induced-anabolic-androgenic-steroid-use-mental-health-outcomes-systematic-review/"
-  },
-  {
-    id: 22,
-    titulo: "Anabolizantes e desfechos em saúde mental",
-    categoria: "Saúde mental e comportamento",
-    fonte: "ScienceDirect",
-    descricao:
-      "Artigo sobre possíveis relações entre uso de anabolizantes, comportamento e saúde mental.",
-    link: "https://www.sciencedirect.com/science/article/pii/S0955395924003207"
-  },
-  {
     id: 23,
-    titulo: "Efeitos psiquiátricos dos esteroides anabolizantes",
+    titulo: "Anabolizantes e estrutura cerebral",
     categoria: "Saúde mental e comportamento",
     fonte: "Biological Psychiatry",
     descricao:
-      "Referência sobre efeitos neuropsiquiátricos e comportamentais associados ao uso de esteroides.",
+      "Estudo de neuroimagem sobre alterações no volume cerebral e na espessura cortical em usuários de longo prazo de AAS.",
     link: "https://www.biologicalpsychiatryjournal.com/article/S0006-3223(16)32529-X/fulltext"
   },
   {
-    id: 24,
-    titulo: "Anabolizantes, agressividade e comportamento",
-    categoria: "Saúde mental e comportamento",
-    fonte: "ScienceDirect",
-    descricao:
-      "Estudo sobre comportamento, alterações de humor e possíveis efeitos psicológicos associados ao uso de AAS.",
-    link: "https://www.sciencedirect.com/science/article/pii/0091305795020829"
-  },
-  {
     id: 25,
-    titulo: "Saúde mental e uso de substâncias para performance",
+    titulo: "Anabolizantes, saúde mental e função social",
     categoria: "Saúde mental e comportamento",
     fonte: "PubMed Central",
     descricao:
-      "Referência científica sobre aspectos psicológicos e comportamentais ligados ao uso de substâncias de performance.",
+      "Estudo sobre impactos emocionais, cognitivos e sociais do uso prolongado de substâncias para performance, com foco em anabolizantes.",
     link: "https://pmc.ncbi.nlm.nih.gov/articles/PMC12705642/"
   },
   {
+    id: 35,
+    titulo: "Abuso de anabolizantes e efeitos psiquiátricos",
+    categoria: "Saúde mental e comportamento",
+    fonte: "Cleveland Clinic Journal of Medicine",
+    descricao:
+      "Revisão sobre efeitos psiquiátricos e físicos do abuso de esteroides anabolizantes.",
+    link: "https://www.ccjm.org/content/ccjom/74/5/341.full.pdf"
+  },
+  {
     id: 26,
-    titulo: "Uso problemático de anabolizantes",
-    categoria: "Dependência e uso problemático",
+    titulo: "Anabolizantes e sofrimento psicológico",
+    categoria: "Saúde mental e comportamento",
     fonte: "PubMed Central",
     descricao:
-      "Estudo sobre padrões de uso problemático, dependência e riscos relacionados ao uso de esteroides anabolizantes.",
+      "Estudo sobre agressividade, sofrimento psicológico e diferenças entre homens e mulheres usuários de anabolizantes.",
     link: "https://pmc.ncbi.nlm.nih.gov/articles/PMC8211877/"
   },
   {
     id: 27,
-    titulo: "Anabolizantes, dependência e comportamento de risco",
-    categoria: "Dependência e uso problemático",
+    titulo: "Anabolizantes e agressividade",
+    categoria: "Saúde mental e comportamento",
     fonte: "PubMed Central",
     descricao:
-      "Referência sobre dependência, continuidade de uso e fatores associados ao uso de AAS.",
+      "Revisão sistemática e meta-análise sobre o efeito dos anabolizantes na agressividade autorrelatada em homens saudáveis.",
     link: "https://pmc.ncbi.nlm.nih.gov/articles/PMC8233285/"
   },
   {
     id: 28,
-    titulo: "Uso de anabolizantes e drogas associadas",
+    titulo: "Dependência de Anabolizantes e disfunção executiva",
     categoria: "Dependência e uso problemático",
     fonte: "Drug and Alcohol Dependence / ScienceDirect",
     descricao:
-      "Artigo sobre uso de substâncias, padrões de consumo e contexto de drogas relacionadas ao desempenho.",
+      "Estudo sobre dependência de anabolizantes, disfunção executiva, cognição e sofrimento psicológico.",
     link: "https://www.sciencedirect.com/science/article/pii/S0376871620300399"
   },
   {
     id: 29,
-    titulo: "Substâncias de performance e dependência",
+    titulo: "Anabolizantes, dependência e comportamento agressivo",
     categoria: "Dependência e uso problemático",
     fonte: "ScienceDirect",
     descricao:
-      "Referência sobre padrões de consumo e riscos de dependência relacionados a substâncias de performance.",
+      "Estudo sobre dependência de anabolizantes, agressividade, violência interpessoal e traços antissociais.",
     link: "https://www.sciencedirect.com/science/article/pii/S0376871621000995"
   },
   {
     id: 30,
     titulo: "Uso de anabolizantes em esportes, saúde e sociedade",
-    categoria: "Saúde pública e educação",
+    categoria: "Diretrizes e posicionamentos",
     fonte: "Medicine & Science in Sports & Exercise",
     descricao:
-      "Posicionamento científico sobre uso de esteroides anabolizantes em esportes, saúde e contexto social.",
+      "Consenso científico sobre uso de anabolizantes, abordando desempenho esportivo, efeitos adversos e aspectos éticos.",
     link: "https://journals.lww.com/acsm-msse/fulltext/2021/08000/anabolic_androgenic_steroid_use_in_sports,_health,.26.aspx"
   },
   {
     id: 31,
-    titulo: "Uso de anabolizantes e saúde coletiva",
+    titulo: "Imagem corporal e uso de anabolizantes",
     categoria: "Saúde pública e educação",
     fonte: "SciELO",
     descricao:
-      "Artigo em português sobre uso de anabolizantes e aspectos de saúde coletiva.",
+      "Estudo sobre como culto ao corpo, padrões estéticos, pressão social e busca rápida por resultados favorecem o uso de anabolizantes em academias.",
     link: "https://www.scielo.br/j/csp/a/Zsg5mPyZ5M5m4NdZKT8Bb6L/?lang=pt"
   },
   {
     id: 32,
-    titulo: "Anabolizantes no contexto educacional e social",
-    categoria: "Saúde pública e educação",
+    titulo: "Anabolizantes e efeitos adversos no organismo",
+    categoria: "Efeitos gerais",
     fonte: "SciELO",
     descricao:
-      "Referência nacional sobre anabolizantes, educação física, comportamento e contexto social.",
+      "Revisão crítico-científica sobre efeitos adversos do uso não terapêutico e abusivo de esteroides anabolizantes.",
     link: "https://www.scielo.br/j/refuem/a/Yp3sBLmsrV7phpZMtsbmCpj/?format=html&lang=pt"
   },
   {
@@ -261,15 +242,6 @@ const referencias = [
       "Documento institucional da SBEM sobre uso de anabolizantes e riscos associados.",
     link: "https://www.endocrino.org.br/wp-content/uploads/2022/09/Posicionamento-da-SBEM-Anabolizantes.docx.pdf"
   },
-  {
-    id: 35,
-    titulo: "Acompanhamento clínico e redução de danos",
-    categoria: "Diretrizes e posicionamentos",
-    fonte: "Cleveland Clinic Journal of Medicine",
-    descricao:
-      "Referência clínica útil para discussão sobre acompanhamento, riscos e orientação profissional.",
-    link: "https://www.ccjm.org/content/ccjom/74/5/341.full.pdf"
-  }
 ];
 
 export default referencias;
