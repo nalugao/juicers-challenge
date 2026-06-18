@@ -1,12 +1,8 @@
-<<<<<<<< HEAD:src/components/home/mapaCorporal/MapaCorporal.jsx
-import HumanBody from "../HumanBody"
-import TituloSubtitulo from "../../TituloSubtitulo"
-import './MapaCorporal.css'
-========
-import HumanBody from "../components/HumanBody"
+
+import HumanBody from "../components/home/HumanBody"
 import TituloSubtitulo from "../components/TituloSubtitulo"
 import '../style/MapaCorporal.css'
->>>>>>>> feature/novas-paginas:src/pages/MapaCorporal.jsx
+
 
 export default function MapaCorporal() {
     return (

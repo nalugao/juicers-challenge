@@ -39,8 +39,6 @@ export default function Home() {
             <SecaoInicio />
             <ComoFunciona />
             <OQueAcompanhar />
-            <MapaCorporal />
-            <Simulador />
             <Publicos />
             <OQueNaoFaz />
             <SecaoSobre />
