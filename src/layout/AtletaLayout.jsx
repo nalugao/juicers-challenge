@@ -1,11 +1,11 @@
 import { Outlet } from 'react-router-dom'
-import SidebarAtleta from '../components/SidebarAtleta'
+import Sidebar from '../components/Sidebar'
 import '../style/atletaLayout.css'
 
 export default function AtletaLayout() {
     return (
         <div className="atleta-layout">
-            <SidebarAtleta />
+            <Sidebar variant="atleta" />
             <div className="atleta-layout-main">
                 <Outlet />
             </div>

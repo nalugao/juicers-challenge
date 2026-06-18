@@ -4,7 +4,7 @@ import { AuthProvider } from './context/AuthContext'
 import ProtectedRoute from './components/ProtectedRoute'
 
 /* layouts */
-import PerfilLayout from './layout/PerfilLayout'
+import AtletaLayout from './layout/AtletaLayout'
 import MedicoLayout from './layout/MedicoLayout'
 
 /* páginas públicas */
@@ -12,9 +12,10 @@ import Home from './pages/Home'
 import Login from './pages/Login'
 
 /* páginas do atleta */
-import Perfil from './pages/Perfil'
-import DadosConta from './components/DadosConta'
+import PerfilAtleta from './pages/PerfilAtleta'
+import DadosConta from './components/DadosContaAtleta'
 import HistoricoExames from './components/HistoricoExames'
+import Acompanhamento from './pages/Acompanhamento'
 
 /* páginas do médico */
 import MeusAtletas from './pages/MeusAtletas'
@@ -25,52 +26,56 @@ import DadosContaMedico from './components/DadosContaMedico'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import AccessibilityMenu from './components/Acessibilidade/AccessibilityMenu'
-import LeitorDeAudio from './components/LeitorDeAudio/AudioReader'
+import LeitorDeAudio from './components/Acessibilidade/LeitorDeAudio/AudioReader'
+import { ClinicalProvider } from './context/ClinicalContext'
 
 export default function App() {
     const [mostrarLeitor, setMostrarLeitor] = useState(false)
 
     return (
         <AuthProvider>
-            <Routes>
+            <ClinicalProvider>
+                <Routes>
 
                 {/* Rotas públicas com Navbar + Footer */}
                 <Route element={<><Navbar /><Outlet /><Footer /></>}>
                     <Route path="/" element={<Home />} />
                 </Route>
 
-                {/* Login */}
-                <Route path="/login" element={<Login />} />
+                    {/* Login */}
+                    <Route path="/login" element={<Login />} />
 
-                {/* Área do atleta */}
-                <Route path="/perfil" element={
-                    <ProtectedRoute role="atleta">
-                        <PerfilLayout />
-                    </ProtectedRoute>
-                }>
-                    <Route index element={<Perfil />} />
-                    <Route path="historico-exames" element={<HistoricoExames />} />
-                    <Route path="dados-da-conta" element={<DadosConta embedded />} />
-                </Route>
+                    {/* Área do atleta */}
+                    <Route path="/perfil" element={
+                        <ProtectedRoute role="atleta">
+                            <AtletaLayout />
+                        </ProtectedRoute>
+                    }>
+                        <Route index element={<PerfilAtleta />} />
+                        <Route path="historico-exames" element={<HistoricoExames />} />
+                        <Route path="acompanhamento" element={<Acompanhamento />} />   {/* NOVO */}
+                        <Route path="dados-da-conta" element={<DadosConta embedded />} />
+                    </Route>
 
-                {/* Área do médico */}
-                <Route path="/medico" element={
-                    <ProtectedRoute role="medico">
-                        <MedicoLayout />
-                    </ProtectedRoute>
-                }>
-                    <Route index element={<MeusAtletas />} />
-                    <Route path="atleta/:id" element={<PerfilAtletaMedico />} />
-                    <Route path="dados-da-conta" element={<DadosContaMedico />} />
-                </Route>
+                    {/* Área do médico */}
+                    <Route path="/medico" element={
+                        <ProtectedRoute role="medico">
+                            <MedicoLayout />
+                        </ProtectedRoute>
+                    }>
+                        <Route index element={<MeusAtletas />} />
+                        <Route path="atleta/:id" element={<PerfilAtletaMedico />} />
+                        <Route path="dados-da-conta" element={<DadosContaMedico />} />
+                    </Route>
 
-                {/* Fallback */}
-                <Route path="*" element={<Navigate to="/login" replace />} />
+                    {/* Fallback */}
+                    <Route path="*" element={<Navigate to="/login" replace />} />
 
-            </Routes>
+                </Routes>
 
-            <AccessibilityMenu onOpenAudioReader={() => setMostrarLeitor(true)} />
-            {mostrarLeitor && <LeitorDeAudio onClose={() => setMostrarLeitor(false)} />}
+                <AccessibilityMenu onOpenAudioReader={() => setMostrarLeitor(true)} />
+                {mostrarLeitor && <LeitorDeAudio onClose={() => setMostrarLeitor(false)} />}
+            </ClinicalProvider>
         </AuthProvider>
     )
 }

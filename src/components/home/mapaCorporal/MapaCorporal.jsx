@@ -1,5 +1,5 @@
 import HumanBody from "../HumanBody"
-import TituloSubtitulo from "../TituloSubtitulo"
+import TituloSubtitulo from "../../TituloSubtitulo"
 import './MapaCorporal.css'
 
 export default function MapaCorporal() {

@@ -1,6 +1,6 @@
-import TituloSubtitulo from "../TituloSubtitulo";
+import TituloSubtitulo from "../../TituloSubtitulo";
 import "./painel.css";
-import Navbar from "../Navbar";
+import Navbar from "../../Navbar";
 
 /* ---------------------------------------------------
    CardInfo: substitui CardGraphPainel nesta seção.

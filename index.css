@@ -14,3 +14,195 @@
     --cor-texto-suave: #ded9d9;
     --cor-borda: #1f1f1f;
 }
+
+
+/* ============================================================
+   Juicers — estilos globais (CSS puro, sem frameworks)
+   Layout/cores ficam em estilos inline nos componentes;
+   aqui ficam só resets, fontes, scrollbar, keyframes e os
+   estados (:hover / :focus) que estilo inline não cobre.
+   ============================================================ */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: #0d0d0d;
+}
+
+body {
+  font-family: 'Manrope', system-ui, -apple-system, sans-serif;
+  color: #f0f0f0;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  height: 100vh;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: #2a2a2a;
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #383838;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #5a5a5a;
+}
+
+/* ---------- Animações ---------- */
+@keyframes jc-fade {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes jc-modal {
+  from { opacity: 0; transform: translateY(14px) scale(0.985); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes jc-spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes jc-toast {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.jc-fade { animation: jc-fade 0.25s ease; }
+.jc-fade-fast { animation: jc-fade 0.2s ease; }
+.jc-fade-slow { animation: jc-fade 0.35s ease; }
+.jc-spin { animation: jc-spin 0.8s linear infinite; }
+.jc-modal-anim { animation: jc-modal 0.22s ease; }
+.jc-toast-anim { animation: jc-toast 0.2s ease; }
+
+/* ---------- Estados de hover / focus ---------- */
+
+/* Cartões de seleção de perfil */
+.jc-select-card {
+  transition: border-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+}
+.jc-select-card.athlete:hover {
+  border-color: #e6a817 !important;
+  transform: translateY(-4px);
+  box-shadow: 0 22px 46px -24px rgba(230, 168, 23, 0.55);
+}
+.jc-select-card.doctor:hover {
+  border-color: #2fd6be !important;
+  transform: translateY(-4px);
+  box-shadow: 0 22px 46px -24px rgba(47, 214, 190, 0.5);
+}
+
+/* Itens de navegação da sidebar */
+.jc-nav-item {
+  transition: background 0.15s ease;
+}
+.jc-logout:hover {
+  background: rgba(255, 255, 255, 0.03);
+  color: #d0d0d0 !important;
+}
+
+/* Cartão de marcador */
+.jc-marker-card {
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+.jc-marker-card:hover {
+  border-color: #3a3a3a !important;
+  transform: translateY(-2px);
+}
+
+/* Botões */
+.jc-btn-teal,
+.jc-btn-amber {
+  transition: filter 0.15s ease;
+}
+.jc-btn-teal:hover,
+.jc-btn-amber:hover {
+  filter: brightness(1.08);
+}
+.jc-btn-ghost {
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+.jc-btn-ghost.amber:hover {
+  border-color: #e6a817;
+  color: #e6a817;
+}
+.jc-btn-ghost.teal:hover {
+  border-color: #2fd6be;
+  color: #2fd6be;
+}
+.jc-btn-soft-teal {
+  transition: background 0.15s ease;
+}
+.jc-btn-soft-teal:hover {
+  background: rgba(47, 214, 190, 0.2);
+}
+.jc-close {
+  transition: background 0.15s ease;
+}
+.jc-close:hover {
+  background: #2a2a2a;
+  color: #f0f0f0 !important;
+}
+
+/* Linha de paciente */
+.jc-patient-row {
+  transition: border-color 0.15s ease;
+}
+.jc-patient-row:hover {
+  border-color: #2fd6be !important;
+}
+
+/* Inputs / textarea */
+.jc-input,
+.jc-textarea {
+  transition: border-color 0.15s ease;
+}
+.jc-input.amber:focus,
+.jc-textarea.amber:focus {
+  border-color: #e6a817;
+}
+.jc-input.teal:focus,
+.jc-textarea.teal:focus {
+  border-color: #2fd6be;
+}
+
+/* Chips de filtro */
+.jc-chip {
+  transition: all 0.15s ease;
+}
+
+/* ============================================================
+   RESPONSIVIDADE
+   (media queries sobrepõem os estilos inline via !important)
+   ============================================================ */
+
+/* Empilha a sidebar de alertas abaixo da grade de marcadores */
+@media (max-width: 1000px) {
+  .jc-content { flex-direction: column !important; }
+  .jc-alerts { width: 100% !important; position: static !important; }
+}
+
+/* Tablet: resumo em 2 colunas, stats do médico em 1 coluna */
+@media (max-width: 760px) {
+  .jc-summary { grid-template-columns: repeat(2, 1fr) !important; }
+  .jc-stats { grid-template-columns: 1fr !important; }
+}
+
+/* Celular: tudo em 1 coluna; linha de paciente quebra em blocos */
+@media (max-width: 560px) {
+  .jc-summary { grid-template-columns: 1fr !important; }
+  .jc-patient-row { flex-wrap: wrap !important; gap: 12px !important; }
+}

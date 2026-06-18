@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { getMyPatientProfile, savePatientProfile, updateUserProfile } from '../services/api'
-import Topbar from './Topbar'
-import '../style/dadosDaConta.css'
+import '../style/dadosContaMedico.css'
+import '../style/dadosContaAtleta.css'
 
 
 const COMPOSTOS = [
@@ -126,7 +126,7 @@ function Toast({ msg, show, warn }) {
     )
 }
 
-export default function DadosDaConta({ embedded = false }) {
+export default function DadosContaAtleta({ embedded = false }) {
     const dadosIniciais = carregarDadosConta()
 
     const [form, setForm] = useState(dadosIniciais)
@@ -258,8 +258,6 @@ export default function DadosDaConta({ embedded = false }) {
 
     return (
         <div className={`dc-wrap${embedded ? ' dc-wrap--embedded' : ''}`}>
-
-            {!embedded && <Topbar />}
 
             <div className="dc-page">
 
