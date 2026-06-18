@@ -9,6 +9,12 @@ const patientSchema = new mongoose.Schema(
       unique: true,
     },
 
+    doctorId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Doctor",
+      default: null,
+    },
+
     birthDate: {
       type: String,
     },
@@ -40,12 +46,6 @@ const patientSchema = new mongoose.Schema(
       default: [],
     },
 
-    doctorId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      default: null,
-    },
-
     age: {
       type: Number,
     },
@@ -68,11 +68,11 @@ const patientSchema = new mongoose.Schema(
 
     lastName: {
       type: String,
-    }
+    },
   },
   {
     timestamps: true,
-  },
+  }
 );
 
 export default mongoose.model("Patient", patientSchema);

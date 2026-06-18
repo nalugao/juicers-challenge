@@ -10,7 +10,12 @@ export async function registerUser({ name, email, password, role = 'patient' }) 
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name, email, password, role }),
+        body: JSON.stringify({
+            name,
+            email,
+            password,
+            role,
+        }),
     })
 
     const data = await response.json()
@@ -28,7 +33,10 @@ export async function loginUser({ email, password }) {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({
+            email,
+            password,
+        }),
     })
 
     const data = await response.json()
@@ -61,6 +69,25 @@ export async function savePatientProfile(patientData) {
     return data
 }
 
+export async function getMyPatientProfile() {
+    const token = getToken()
+
+    const response = await fetch(`${API_URL}/patients/me`, {
+        method: 'GET',
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    })
+
+    const data = await response.json()
+
+    if (!response.ok) {
+        throw new Error(data.message || 'Erro ao buscar perfil do paciente.')
+    }
+
+    return data
+}
+
 export async function updateUserProfile(userData) {
     const token = getToken()
 
@@ -77,6 +104,25 @@ export async function updateUserProfile(userData) {
 
     if (!response.ok) {
         throw new Error(data.message || 'Erro ao atualizar usuário.')
+    }
+
+    return data
+}
+
+export async function getMyExams() {
+    const token = getToken()
+
+    const response = await fetch(`${API_URL}/exams`, {
+        method: 'GET',
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    })
+
+    const data = await response.json()
+
+    if (!response.ok) {
+        throw new Error(data.message || 'Erro ao buscar exames.')
     }
 
     return data
@@ -117,44 +163,6 @@ export async function deleteExam(id) {
 
     if (!response.ok) {
         throw new Error(data.message || 'Erro ao deletar exame.')
-    }
-
-    return data
-}
-
-export async function getMyPatientProfile() {
-    const token = localStorage.getItem('tokenJuicers')
-
-    const response = await fetch(`${API_URL}/patients/me`, {
-        method: 'GET',
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    })
-
-    const data = await response.json()
-
-    if (!response.ok) {
-        throw new Error(data.message || 'Erro ao buscar perfil do paciente.')
-    }
-
-    return data
-}
-
-export async function getMyExams() {
-    const token = localStorage.getItem('tokenJuicers')
-
-    const response = await fetch(`${API_URL}/exams`, {
-        method: 'GET',
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    })
-
-    const data = await response.json()
-
-    if (!response.ok) {
-        throw new Error(data.message || 'Erro ao buscar exames.')
     }
 
     return data

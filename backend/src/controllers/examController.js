@@ -123,7 +123,7 @@ export const updateExam = async (req, res) => {
         source,
       },
       {
-        new: true,
+        returnDocument: "after",
         runValidators: true,
       }
     );

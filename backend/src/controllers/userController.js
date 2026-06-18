@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
+import Doctor from "../models/Doctor.js";
 
 export const createUser = async (req, res) => {
   try {
@@ -26,8 +27,14 @@ export const createUser = async (req, res) => {
       name,
       email,
       password: hashedPassword,
-      role,
+      role: role || "patient",
     });
+
+    if (user.role === "doctor") {
+      await Doctor.create({
+        userId: user._id,
+      });
+    }
 
     return res.status(201).json({
       message: "Usuário criado com sucesso",
@@ -79,7 +86,7 @@ export const loginUser = async (req, res) => {
       process.env.JWT_SECRET,
       {
         expiresIn: "7d",
-      },
+      }
     );
 
     return res.status(200).json({
@@ -113,7 +120,10 @@ export const updateUserProfile = async (req, res) => {
     const user = await User.findByIdAndUpdate(
       userId,
       { name },
-      { new: true, runValidators: true },
+      {
+        returnDocument: "after",
+        runValidators: true,
+      }
     ).select("-password");
 
     if (!user) {
