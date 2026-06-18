@@ -6,11 +6,12 @@ const filtros = [
   { label: "Todos", value: "Todos" },
   { label: "Cardiovascular", value: "Cardiovascular" },
   { label: "Fígado", value: "Fígado e metabolismo" },
+  { label: "Efeitos sistêmicos", value: "Efeitos sistêmicos" },
   { label: "Hormonal", value: "Hormonal e urológico" },
   { label: "Saúde mental", value: "Saúde mental e comportamento" },
   { label: "Dependência", value: "Dependência e uso problemático" },
-  { label: "Saúde pública", value: "Saúde pública e educação" },
-  { label: "Diretrizes", value: "Diretrizes e posicionamentos" }
+  { label: "Diretrizes", value: "Diretrizes e posicionamentos" },
+  { label: "Saúde pública", value: "Saúde pública e educação" }
 ];
 
 export default function Referencias() {

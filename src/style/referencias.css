@@ -193,17 +193,14 @@
 
 .filter:hover {
   border-color: var(--ref-mint-border);
-
   color: var(--ref-white);
-
+  background: var(--ref-panel);
   transform: translateY(-0.08rem);
 }
 
 .filter.active {
   background: var(--ref-mint);
-
   border-color: var(--ref-mint);
-
   color: #03130d;
 }
 
