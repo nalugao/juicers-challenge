@@ -5,8 +5,10 @@ import "../style/home.css";
 import SecaoInicio from "../components/SecaoInicio/SecaoInicio";
 import ComoFunciona from "../components/comoFunciona/ComoFunciona";
 import OQueAcompanhar from "../components/oQueAcompanhar/OQueAcompanhar";
-import MapaCorporal from "../components/home/mapaCorporal/MapaCorporal";
-import Simulador from "../components/home/simulador/Simulador";
+
+import MapaCorporal from "./MapaCorporal";
+import Simulador from "./Simulador";
+
 import Publicos from "../components/publicos/Publicos";
 import OQueNaoFaz from "../components/oQueNaoFaz/OQueNaoFaz";
 import SecaoSobre from "../components/home/sobreProjeto/SecaoSobre";
@@ -30,6 +32,7 @@ export default function Home() {
         return () => io.disconnect();
     }, []);
 
+
     return (
         <div className="juicer">
             <Navbar />
@@ -45,4 +48,5 @@ export default function Home() {
             {/* <Footer /> */}
         </div>
     );
+
 }

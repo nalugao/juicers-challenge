@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "./simulador.css";
+import "../style/simulador.css";
 
 function calculateRiskScore({ age, sex, frequency, months, route, stacking }) {
   let pontos = 0;
@@ -183,7 +183,7 @@ function ToggleGroup({ options, value, onChange }) {
           key={opt}
           type="button"
           className={`btn flex-fill fw-medium ${
-            value === opt ? "btn-danger" : "btn-outline-secondary"
+            value === opt ? "option-btn" : "btn-outline-secondary"
           }`}
           onClick={() => onChange(opt)}
         >
@@ -245,7 +245,7 @@ export default function Simulador() {
   const profile = result !== null ? getRiskProfile(result) : null;
 
   return (
-    <section id="simulador" className="sim-wrapper py-5" data-bs-theme="dark">
+    <section id="simulador" className="sim-wrapper sim-page-spacing" data-bs-theme="dark">
       <div className="container">
         <div className="row justify-content-center">
           <div className="col-12 col-md-9 col-lg-7 col-xl-6">
@@ -352,7 +352,7 @@ export default function Simulador() {
 
               {/* Botão de cálculo */}
               <button
-                className="btn btn-danger w-100 py-2 fw-semibold"
+                className="btn option-btn w-100 py-2 fw-semibold"
                 onClick={handleCalculate}
               >
                 Calcular Risco

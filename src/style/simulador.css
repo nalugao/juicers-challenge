@@ -3,6 +3,22 @@
   min-height: 100vh;
 }
 
+.option-btn{
+  background-color: #227364;
+  color: #fff;
+}
+
+.option-btn:hover {
+  background-color: #2DA690;
+  color: #fff;
+}
+
+.sim-page-spacing {
+  padding-top: clamp(4rem, 8vw, 6rem);
+  padding-inline: clamp(1rem, 4vw, 2rem);
+  padding-bottom: clamp(3rem, 8vw, 5rem);
+}
+
 /* ── Card principal ─ */
 .sim-card {
   background-color: #1a1a1a;
