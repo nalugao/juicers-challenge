@@ -3,6 +3,7 @@ import Navbar from "../components/Navbar";
 import "../style/juicer-tokens.css";
 import "../style/home.css";
 import SecaoInicio from "../components/SecaoInicio/SecaoInicio";
+import EntendaProjeto from "../components/entendaProjeto/EntendaProjeto";
 import ComoFunciona from "../components/comoFunciona/ComoFunciona";
 import OQueAcompanhar from "../components/oQueAcompanhar/OQueAcompanhar";
 
@@ -47,4 +48,23 @@ export default function Home() {
         </div>
     );
 
+<<<<<<< HEAD
+=======
+return (
+    <div className="juicer">
+      <Navbar />
+    <SecaoInicio />
+    <EntendaProjeto />
+    <SecaoSobre />
+    <ComoFunciona />
+    <OQueAcompanhar />
+    <MapaCorporal />
+    <Simulador />
+    <Publicos />
+    <OQueNaoFaz />
+    <CTAFinal />
+      {/* <Footer /> */}
+    </div>
+);
+>>>>>>> feat/pagina-inicial.att
 }

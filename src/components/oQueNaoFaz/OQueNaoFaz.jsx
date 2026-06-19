@@ -1,30 +1,62 @@
+import { useTranslation } from "../../context/LanguageContext";
 import "../../style/OQueNaoFaz.css";
 
 const X = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M18 6 6 18M6 6l12 12" /></svg>
 );
 
+const T = {
+  pt: {
+    eyebrow: "Transparência",
+    h2Pre: "O que a Juicers ",
+    h2Not: "não",
+    h2Post: " faz",
+    pPre: "Acompanhar não é prescrever. A Juicers existe para dar clareza e reduzir danos — sempre incentivando a orientação profissional. ",
+    pGreen: "Educação em saúde, do começo ao fim.",
+    items: [
+      "Não prescreve ciclos",
+      "Não sugere doses ou substâncias",
+      "Não incentiva o uso de anabolizantes",
+      "Não substitui consulta, diagnóstico ou tratamento médico",
+    ],
+  },
+  en: {
+    eyebrow: "Transparency",
+    h2Pre: "What Juicers ",
+    h2Not: "doesn't",
+    h2Post: " do",
+    pPre: "Tracking is not prescribing. Juicers exists to bring clarity and reduce harm — always encouraging professional guidance. ",
+    pGreen: "Health education, from start to finish.",
+    items: [
+      "Doesn't prescribe cycles",
+      "Doesn't suggest doses or substances",
+      "Doesn't encourage the use of anabolic steroids",
+      "Doesn't replace a medical consultation, diagnosis or treatment",
+    ],
+  },
+};
+
 export default function OQueNaoFaz() {
+  const t = useTranslation(T, "OQueNaoFaz.T");
+
   return (
     <section id="naofaz" className="section">
       <div className="wrap">
         <div className="notdo reveal">
           <div>
-            <span className="eyebrow">Transparência</span>
+            <span className="eyebrow">{t.eyebrow}</span>
             <h2 style={{ marginTop: 12 }}>
-              O que a Juicers <span style={{ color: "var(--j-red)" }}>não</span> faz
+              {t.h2Pre}<span style={{ color: "var(--j-red)" }}>{t.h2Not}</span>{t.h2Post}
             </h2>
             <p>
-              Acompanhar não é prescrever. A Juicers existe para dar clareza e reduzir danos —
-              sempre incentivando a orientação profissional.{" "}
-              <span className="green">Educação em saúde, do começo ao fim.</span>
+              {t.pPre}
+              <span className="green">{t.pGreen}</span>
             </p>
           </div>
           <ul>
-            <li><X /> Não prescreve ciclos</li>
-            <li><X /> Não sugere doses ou substâncias</li>
-            <li><X /> Não incentiva o uso de anabolizantes</li>
-            <li><X /> Não substitui consulta, diagnóstico ou tratamento médico</li>
+            {t.items.map((item) => (
+              <li key={item}><X /> {item}</li>
+            ))}
           </ul>
         </div>
       </div>

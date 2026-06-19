@@ -1,88 +1,53 @@
-.juicer .aud{
+.juicer .aud-grid{
     display:grid;
-    grid-template-columns:.78fr 1.22fr;
-    gap:0;
-    margin-top:50px;
+    grid-template-columns:repeat(3,1fr);
+    gap:20px;
+    margin-top:50px
+}
+
+.juicer .aud-card{
     background:linear-gradient(180deg,var(--j-raised),var(--j-surface));
-    border:1px solid var(--j-hairline);border-radius:20px;
-    overflow:hidden
-}
-
-.juicer .aud-tabs{
-    border-right:1px solid var(--j-hairline);
-    padding:14px
-}
-
-.juicer .aud-tab{
-    width:100%;
-    text-align:left;
-    background:transparent;
-    border:1px solid transparent;
-    border-radius:13px;
-    padding:18px;
-    cursor:pointer;
-    transition:.18s;
-    display:block;
-    color:inherit
-}
-
-.juicer .aud-tab:hover{
-    background:var(--j-raised)
-}
-
-.juicer .aud-tab.on{
-    background:var(--j-raised);
-    border-color:var(--j-hairline)
-}
-
-.juicer .aud-tab .tt{
-    font-family:'Space Grotesk';
-    font-weight:600;
-    font-size:1.05rem;
+    border:1px solid var(--j-hairline);
+    border-radius:20px;
+    padding:30px 26px;
     display:flex;
-    align-items:center;
-    gap:10px
+    flex-direction:column;
+    transition:.2s
 }
 
-.juicer .aud-tab .tt .tnum{
+.juicer .aud-card:hover{
+    border-color:var(--j-teal-dim);
+    transform:translateY(-3px)
+}
+
+.juicer .aud-num{
     font-family:'IBM Plex Mono';
     font-size:.72rem;
-    color:var(--j-teal)
+    color:var(--j-teal);
+    margin-bottom:12px
 }
 
-.juicer .aud-tab .tdesc{
-    font-size:.82rem;
-    color:var(--j-mid);
-    margin-top:6px;
-    opacity:.7
-}
-.juicer .aud-tab.on .tdesc{
-    opacity:1
-}
-.juicer .aud-panel{
-    padding:34px 38px
-}
-.juicer .aud-panel .ap-role{
+.juicer .aud-card .ap-role{
     color:var(--j-teal);
     font-family:'IBM Plex Mono';
     font-size:.72rem;
     letter-spacing:.08em;
     text-transform:uppercase
 }
-.juicer .aud-panel h3{
-    font-size:1.5rem;
+.juicer .aud-card h3{
+    font-size:1.3rem;
     margin:10px 0 14px
 }
-.juicer .aud-panel p{
+.juicer .aud-card p{
     color:var(--j-mid);
-    max-width:52ch;
     margin-bottom:22px
 }
 
 .juicer .aud-feats{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:12px
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    margin-top:auto
 }
 .juicer .aud-feat{
     background:var(--j-ink);
@@ -108,10 +73,6 @@
     color:var(--j-mid);
     margin:0
 }
-.juicer .aud-panel-anim{
-    animation:jfade .35s ease
-}
 
-@keyframes jfade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-@media (max-width:980px){ .juicer .aud{grid-template-columns:1fr} }
-@media (max-width:620px){ .juicer .aud-feats{grid-template-columns:1fr} }
+@media (max-width:980px){ .juicer .aud-grid{grid-template-columns:1fr 1fr} }
+@media (max-width:640px){ .juicer .aud-grid{grid-template-columns:1fr} }

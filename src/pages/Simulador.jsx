@@ -1,5 +1,10 @@
 import { useState } from "react";
+<<<<<<< HEAD:src/pages/Simulador.jsx
 import "../style/simulador.css";
+=======
+import { useTranslation } from "../../context/LanguageContext";
+import "./simulador.css";
+>>>>>>> feat/pagina-inicial.att:src/components/simulador/Simulador.jsx
 
 function calculateRiskScore({ age, sex, frequency, months, route, stacking }) {
   let pontos = 0;
@@ -10,9 +15,9 @@ function calculateRiskScore({ age, sex, frequency, months, route, stacking }) {
     pontos += 15;
   }
 
-  if (frequency === "Ocasional") {
+  if (frequency === "occasional") {
     pontos += 10;
-  } else if (frequency === "Frequente") {
+  } else if (frequency === "frequent") {
     pontos += 25;
   } else {
     pontos += 40;
@@ -26,15 +31,15 @@ function calculateRiskScore({ age, sex, frequency, months, route, stacking }) {
     pontos += 35;
   }
 
-  if (sex === "Feminino") {
+  if (sex === "F") {
     pontos += 10;
   }
 
-  if (route === "Oral") {
+  if (route === "oral") {
     pontos += 10;
   }
 
-  if (route === "Ambos") {
+  if (route === "both") {
     pontos += 20;
   }
 
@@ -48,146 +53,233 @@ function calculateRiskScore({ age, sex, frequency, months, route, stacking }) {
 
   return pontos;
 }
-// Define o nível de risco e a cor
+
 function getRiskProfile(score) {
-  if (score <= 20) return { label: "Baixo", hex: "#22c55e" };
-  if (score <= 40) return { label: "Moderado", hex: "#eab308" };
-  if (score <= 60) return { label: "Alto", hex: "#f97316" };
-  if (score <= 80) return { label: "Muito Alto", hex: "#ef4444" };
-  return { label: "Crítico", hex: "#dc2626" };
+  if (score <= 20) return { key: "low", hex: "#22c55e" };
+  if (score <= 40) return { key: "moderate", hex: "#eab308" };
+  if (score <= 60) return { key: "high", hex: "#f97316" };
+  if (score <= 80) return { key: "veryHigh", hex: "#ef4444" };
+  return { key: "critical", hex: "#dc2626" };
 }
 
-function getContextualMessages({
-  age,
-  sex,
-  frequency,
-  months,
-  route,
-  stacking,
-  score,
-}) {
+function getContextualMessages({ age, sex, frequency, months, route, stacking, score }) {
   const msgs = [];
 
   if (age <= 18) {
-    msgs.push({
-      severity: "danger",
-      title: "Adolescente em desenvolvimento",
-      text: "Antes dos 18 anos o eixo Hipotálamo-Hipófise-Testicular (HPT) ainda está em formação. O uso nessa fase pode causar fechamento prematuro das placas de crescimento e supressão hormonal permanente — comprometendo a produção natural de testosterona pelo resto da vida.",
-    });
+    msgs.push({ severity: "danger", key: "minor" });
   }
 
   if (age > 18 && age <= 25) {
-    msgs.push({
-      severity: "warning",
-      title: "Sistema endócrino ainda em maturação",
-      text: "Entre 18 e 25 anos a produção natural de testosterona ainda está se estabelecendo. O uso de anabolizantes nessa janela pode suprimir o pico hormonal natural da juventude de forma irreversível, mesmo que o eixo HPT já seja considerado funcionalmente maduro.",
-    });
+    msgs.push({ severity: "warning", key: "youngAdult" });
   }
 
-  if (sex === "Feminino") {
-    msgs.push({
-      severity: "danger",
-      title: "Risco elevado para o sexo feminino",
-      text: "Mulheres são muito mais sensíveis a doses menores do que homens. O uso pode causar virilização — engrossamento permanente da voz, hipertrofia do clitóris e hirsutismo — além de interrupção do ciclo menstrual. Muitos desses efeitos não regridem com a interrupção do uso.",
-    });
+  if (sex === "F") {
+    msgs.push({ severity: "danger", key: "femaleRisk" });
 
-    if (frequency === "Intenso") {
-      msgs.push({
-        severity: "danger",
-        title: "Virilização irreversível — uso intenso",
-        text: "Com uso intenso em mulheres, as chances de virilização permanente são muito elevadas. Alterações como mudança de voz e hipertrofia clitoriana não regridem mesmo após anos sem uso, pois resultam de mudanças estruturais nos tecidos.",
-      });
+    if (frequency === "intense") {
+      msgs.push({ severity: "danger", key: "femaleIntense" });
     }
 
     if (stacking) {
-      msgs.push({
-        severity: "danger",
-        title: "Combinação especialmente perigosa para mulheres",
-        text: "O uso de múltiplos compostos em mulheres multiplica o risco de virilização e distúrbios hormonais graves. Cada composto adicional eleva exponencialmente a chance de efeitos androgenizantes permanentes.",
-      });
+      msgs.push({ severity: "danger", key: "femaleStacking" });
     }
   }
 
-  if (route === "Oral") {
-    msgs.push({
-      severity: "warning",
-      title: "Hepatotoxicidade — compostos orais",
-      text: "Anabolizantes orais são modificados quimicamente (17-alfa alquilados) para resistir ao metabolismo hepático, causando acúmulo de toxinas no fígado. O uso prolongado pode levar a peliose hepática, colestase e, em casos graves, carcinoma hepatocelular. Monitoramento de ALT, AST e bilirrubinas é essencial.",
-    });
+  if (route === "oral") {
+    msgs.push({ severity: "warning", key: "oralHepatotox" });
   }
 
-  if (route === "Ambos") {
-    msgs.push({
-      severity: "danger",
-      title: "Toxicidade hepática composta",
-      text: "Combinar compostos orais e injetáveis potencializa o estresse hepático de forma aditiva. Os 17-alfa alquilados orais já sobrecarregam o fígado individualmente — associados a injetáveis que passam pelo mesmo ciclo metabólico, o risco de lesão hepática grave é consideravelmente elevado.",
-    });
+  if (route === "both") {
+    msgs.push({ severity: "danger", key: "bothHepatotox" });
   }
 
   if (stacking) {
-    msgs.push({
-      severity: "danger",
-      title: "Polifarmácia — múltiplos compostos",
-      text: "O uso simultâneo de mais de um anabolizante (stacking) potencializa a supressão do eixo HPT, aumenta o risco cardiovascular com queda de HDL e elevação de LDL, e dificulta identificar qual composto está causando efeitos adversos. A recuperação hormonal pós-ciclo é significativamente mais lenta.",
-    });
+    msgs.push({ severity: "danger", key: "stackingPoly" });
   }
 
   if (months >= 24) {
-    msgs.push({
-      severity: "warning",
-      title: "Risco de dependência hormonal (TRT)",
-      text: "Após 2 anos ou mais de uso contínuo, a recuperação natural do eixo HPT pode nunca ser completa. Muitos usuários de longo prazo desenvolvem dependência de Terapia de Reposição Hormonal (TRT) permanente, pois o organismo perde a capacidade de produzir testosterona endógena.",
-    });
+    msgs.push({ severity: "warning", key: "trtDependency" });
   }
 
-  if (months >= 12 && (route === "Oral" || route === "Ambos")) {
-    msgs.push({
-      severity: "warning",
-      title: "Lesão hepática cumulativa",
-      text: "Mais de 12 meses de uso de compostos orais aumenta significativamente o risco de lesão hepática cumulativa. A fibrose e alterações histológicas no tecido hepático podem não apresentar sintomas evidentes até estágios avançados da doença.",
-    });
+  if (months >= 12 && (route === "oral" || route === "both")) {
+    msgs.push({ severity: "warning", key: "cumulativeLiver" });
   }
 
-  if (frequency !== "Ocasional" && months >= 6) {
-    msgs.push({
-      severity: "info",
-      title: "Risco cardiovascular",
-      text: "O uso regular de anabolizantes causa dislipidemia (queda do HDL e elevação do LDL), hipertrofia ventricular esquerda e aumento da pressão arterial. Esses fatores combinados elevam o risco de infarto e AVC mesmo em pessoas jovens e aparentemente saudáveis.",
-    });
+  if (frequency !== "occasional" && months >= 6) {
+    msgs.push({ severity: "info", key: "cardio" });
   }
 
   if (score >= 80) {
-    msgs.push({
-      severity: "danger",
-      title: "Perfil de risco crítico — busque ajuda",
-      text: "A combinação de fatores inseridos representa um perfil de risco muito elevado. Danos cardiovasculares, hepáticos e hormonais nesse contexto costumam ser permanentes. Se você está nessa situação, buscar acompanhamento médico especializado com endocrinologista ou cardiologista é urgente.",
-    });
+    msgs.push({ severity: "danger", key: "critical" });
   }
 
   return msgs;
 }
 
-function formatDuration(months) {
-  if (months < 12) return `${months} ${months === 1 ? "mês" : "meses"}`;
-  const years = Math.floor(months / 12);
-  const rem = months % 12;
-  if (rem === 0) return `${years} ${years === 1 ? "ano" : "anos"}`;
-  return `${years}a ${rem}m`;
-}
+const T = {
+  pt: {
+    sexOptions: [{ key: "M", label: "Masculino" }, { key: "F", label: "Feminino" }],
+    frequencyOptions: [{ key: "occasional", label: "Ocasional" }, { key: "frequent", label: "Frequente" }, { key: "intense", label: "Intenso" }],
+    routeOptions: [{ key: "injectable", label: "Injetável" }, { key: "oral", label: "Oral" }, { key: "both", label: "Ambos" }],
+    stackingOptions: [{ key: false, label: "Não" }, { key: true, label: "Sim" }],
+    riskLabels: { low: "Baixo", moderate: "Moderado", high: "Alto", veryHigh: "Muito Alto", critical: "Crítico" },
+    durationMonth: "mês", durationMonths: "meses", durationYear: "ano", durationYears: "anos",
+    title: "Simulador de Risco",
+    subtitle: "Estime seu perfil de risco com base no seu histórico de uso.",
+    ageLabel: "Idade:",
+    sexLabel: "Sexo biológico",
+    frequencyLabel: "Frequência de uso",
+    durationLabel: "Duração:",
+    durationTickMin: "1 mês",
+    durationTickMax: "5 anos",
+    routeLabel: "Via de administração",
+    stackingLabel: "Usa mais de um composto?",
+    calculate: "Calcular Risco",
+    riskPrefix: "Risco",
+    scoreNote: "Score calculado com base em todos os fatores clínicos combinados",
+    factorsFound: (n) => `${n} fator${n > 1 ? "es" : ""} de risco identificado${n > 1 ? "s" : ""}`,
+    messages: {
+      minor: {
+        title: "Adolescente em desenvolvimento",
+        text: "Antes dos 18 anos o eixo Hipotálamo-Hipófise-Testicular (HPT) ainda está em formação. O uso nessa fase pode causar fechamento prematuro das placas de crescimento e supressão hormonal permanente — comprometendo a produção natural de testosterona pelo resto da vida.",
+      },
+      youngAdult: {
+        title: "Sistema endócrino ainda em maturação",
+        text: "Entre 18 e 25 anos a produção natural de testosterona ainda está se estabelecendo. O uso de anabolizantes nessa janela pode suprimir o pico hormonal natural da juventude de forma irreversível, mesmo que o eixo HPT já seja considerado funcionalmente maduro.",
+      },
+      femaleRisk: {
+        title: "Risco elevado para o sexo feminino",
+        text: "Mulheres são muito mais sensíveis a doses menores do que homens. O uso pode causar virilização — engrossamento permanente da voz, hipertrofia do clitóris e hirsutismo — além de interrupção do ciclo menstrual. Muitos desses efeitos não regridem com a interrupção do uso.",
+      },
+      femaleIntense: {
+        title: "Virilização irreversível — uso intenso",
+        text: "Com uso intenso em mulheres, as chances de virilização permanente são muito elevadas. Alterações como mudança de voz e hipertrofia clitoriana não regridem mesmo após anos sem uso, pois resultam de mudanças estruturais nos tecidos.",
+      },
+      femaleStacking: {
+        title: "Combinação especialmente perigosa para mulheres",
+        text: "O uso de múltiplos compostos em mulheres multiplica o risco de virilização e distúrbios hormonais graves. Cada composto adicional eleva exponencialmente a chance de efeitos androgenizantes permanentes.",
+      },
+      oralHepatotox: {
+        title: "Hepatotoxicidade — compostos orais",
+        text: "Anabolizantes orais são modificados quimicamente (17-alfa alquilados) para resistir ao metabolismo hepático, causando acúmulo de toxinas no fígado. O uso prolongado pode levar a peliose hepática, colestase e, em casos graves, carcinoma hepatocelular. Monitoramento de ALT, AST e bilirrubinas é essencial.",
+      },
+      bothHepatotox: {
+        title: "Toxicidade hepática composta",
+        text: "Combinar compostos orais e injetáveis potencializa o estresse hepático de forma aditiva. Os 17-alfa alquilados orais já sobrecarregam o fígado individualmente — associados a injetáveis que passam pelo mesmo ciclo metabólico, o risco de lesão hepática grave é consideravelmente elevado.",
+      },
+      stackingPoly: {
+        title: "Polifarmácia — múltiplos compostos",
+        text: "O uso simultâneo de mais de um anabolizante (stacking) potencializa a supressão do eixo HPT, aumenta o risco cardiovascular com queda de HDL e elevação de LDL, e dificulta identificar qual composto está causando efeitos adversos. A recuperação hormonal pós-ciclo é significativamente mais lenta.",
+      },
+      trtDependency: {
+        title: "Risco de dependência hormonal (TRT)",
+        text: "Após 2 anos ou mais de uso contínuo, a recuperação natural do eixo HPT pode nunca ser completa. Muitos usuários de longo prazo desenvolvem dependência de Terapia de Reposição Hormonal (TRT) permanente, pois o organismo perde a capacidade de produzir testosterona endógena.",
+      },
+      cumulativeLiver: {
+        title: "Lesão hepática cumulativa",
+        text: "Mais de 12 meses de uso de compostos orais aumenta significativamente o risco de lesão hepática cumulativa. A fibrose e alterações histológicas no tecido hepático podem não apresentar sintomas evidentes até estágios avançados da doença.",
+      },
+      cardio: {
+        title: "Risco cardiovascular",
+        text: "O uso regular de anabolizantes causa dislipidemia (queda do HDL e elevação do LDL), hipertrofia ventricular esquerda e aumento da pressão arterial. Esses fatores combinados elevam o risco de infarto e AVC mesmo em pessoas jovens e aparentemente saudáveis.",
+      },
+      critical: {
+        title: "Perfil de risco crítico — busque ajuda",
+        text: "A combinação de fatores inseridos representa um perfil de risco muito elevado. Danos cardiovasculares, hepáticos e hormonais nesse contexto costumam ser permanentes. Se você está nessa situação, buscar acompanhamento médico especializado com endocrinologista ou cardiologista é urgente.",
+      },
+    },
+  },
+  en: {
+    sexOptions: [{ key: "M", label: "Male" }, { key: "F", label: "Female" }],
+    frequencyOptions: [{ key: "occasional", label: "Occasional" }, { key: "frequent", label: "Frequent" }, { key: "intense", label: "Intense" }],
+    routeOptions: [{ key: "injectable", label: "Injectable" }, { key: "oral", label: "Oral" }, { key: "both", label: "Both" }],
+    stackingOptions: [{ key: false, label: "No" }, { key: true, label: "Yes" }],
+    riskLabels: { low: "Low", moderate: "Moderate", high: "High", veryHigh: "Very High", critical: "Critical" },
+    durationMonth: "month", durationMonths: "months", durationYear: "year", durationYears: "years",
+    title: "Risk Simulator",
+    subtitle: "Estimate your risk profile based on your usage history.",
+    ageLabel: "Age:",
+    sexLabel: "Biological sex",
+    frequencyLabel: "Frequency of use",
+    durationLabel: "Duration:",
+    durationTickMin: "1 month",
+    durationTickMax: "5 years",
+    routeLabel: "Route of administration",
+    stackingLabel: "Using more than one compound?",
+    calculate: "Calculate Risk",
+    riskPrefix: "Risk",
+    scoreNote: "Score calculated based on all combined clinical factors",
+    factorsFound: (n) => `${n} risk factor${n > 1 ? "s" : ""} identified`,
+    messages: {
+      minor: {
+        title: "Adolescent in development",
+        text: "Before age 18 the Hypothalamic-Pituitary-Testicular (HPT) axis is still forming. Use during this phase can cause premature closure of growth plates and permanent hormonal suppression — compromising natural testosterone production for the rest of life.",
+      },
+      youngAdult: {
+        title: "Endocrine system still maturing",
+        text: "Between 18 and 25 years old, natural testosterone production is still settling. Using anabolic steroids in this window can irreversibly suppress the natural hormonal peak of youth, even if the HPT axis is already considered functionally mature.",
+      },
+      femaleRisk: {
+        title: "Elevated risk for females",
+        text: "Women are far more sensitive to lower doses than men. Use can cause virilization — permanent voice deepening, clitoral hypertrophy and hirsutism — as well as menstrual cycle disruption. Many of these effects do not reverse after stopping use.",
+      },
+      femaleIntense: {
+        title: "Irreversible virilization — intense use",
+        text: "With intense use in women, the chances of permanent virilization are very high. Changes such as voice deepening and clitoral hypertrophy don't reverse even years after stopping, since they result from structural tissue changes.",
+      },
+      femaleStacking: {
+        title: "Especially dangerous combination for women",
+        text: "Using multiple compounds in women multiplies the risk of virilization and severe hormonal disorders. Each additional compound exponentially raises the chance of permanent androgenic effects.",
+      },
+      oralHepatotox: {
+        title: "Hepatotoxicity — oral compounds",
+        text: "Oral steroids are chemically modified (17-alpha alkylated) to resist liver metabolism, causing toxin buildup in the liver. Prolonged use can lead to hepatic peliosis, cholestasis and, in severe cases, hepatocellular carcinoma. Monitoring ALT, AST and bilirubin is essential.",
+      },
+      bothHepatotox: {
+        title: "Compound liver toxicity",
+        text: "Combining oral and injectable compounds adds up liver stress. 17-alpha alkylated orals already overload the liver on their own — paired with injectables that go through the same metabolic cycle, the risk of severe liver injury is considerably elevated.",
+      },
+      stackingPoly: {
+        title: "Polypharmacy — multiple compounds",
+        text: "Using more than one anabolic steroid at once (stacking) intensifies HPT axis suppression, increases cardiovascular risk with falling HDL and rising LDL, and makes it harder to identify which compound is causing adverse effects. Post-cycle hormonal recovery is significantly slower.",
+      },
+      trtDependency: {
+        title: "Risk of hormonal dependency (TRT)",
+        text: "After 2 years or more of continuous use, natural HPT axis recovery may never be complete. Many long-term users develop permanent dependency on Testosterone Replacement Therapy (TRT), as the body loses the ability to produce endogenous testosterone.",
+      },
+      cumulativeLiver: {
+        title: "Cumulative liver damage",
+        text: "More than 12 months of oral compound use significantly increases the risk of cumulative liver damage. Fibrosis and histological changes in liver tissue may show no clear symptoms until advanced stages of disease.",
+      },
+      cardio: {
+        title: "Cardiovascular risk",
+        text: "Regular anabolic steroid use causes dyslipidemia (falling HDL and rising LDL), left ventricular hypertrophy and increased blood pressure. These combined factors raise the risk of heart attack and stroke even in young, seemingly healthy people.",
+      },
+      critical: {
+        title: "Critical risk profile — seek help",
+        text: "The combination of entered factors represents a very high risk profile. Cardiovascular, liver and hormonal damage in this context tends to be permanent. If this is your situation, seeking specialized medical care from an endocrinologist or cardiologist is urgent.",
+      },
+    },
+  },
+};
 
 function ToggleGroup({ options, value, onChange }) {
   return (
     <div className="d-flex gap-2">
       {options.map((opt) => (
         <button
-          key={opt}
+          key={String(opt.key)}
           type="button"
           className={`btn flex-fill fw-medium ${
+<<<<<<< HEAD:src/pages/Simulador.jsx
             value === opt ? "option-btn" : "btn-outline-secondary"
+=======
+            value === opt.key ? "btn-danger" : "btn-outline-secondary"
+>>>>>>> feat/pagina-inicial.att:src/components/simulador/Simulador.jsx
           }`}
-          onClick={() => onChange(opt)}
+          onClick={() => onChange(opt.key)}
         >
-          {opt}
+          {opt.label}
         </button>
       ))}
     </div>
@@ -209,34 +301,31 @@ function MessageCard({ severity, title, text }) {
 }
 
 export default function Simulador() {
- 
+  const t = useTranslation(T, "Simulador.T");
+
   const [age, setAge] = useState(25);
-  const [sex, setSex] = useState("Masculino");
-  const [frequency, setFrequency] = useState("Ocasional");
+  const [sex, setSex] = useState("M");
+  const [frequency, setFrequency] = useState("occasional");
   const [duration, setDuration] = useState(6);
-  const [route, setRoute] = useState("Injetável");
+  const [route, setRoute] = useState("injectable");
   const [stacking, setStacking] = useState(false);
 
+  const [result, setResult] = useState(null);
+  const [messages, setMessages] = useState([]);
 
-  const [result, setResult] = useState(null); 
-  const [messages, setMessages] = useState([]); 
+  function formatDuration(months) {
+    if (months < 12) return `${months} ${months === 1 ? t.durationMonth : t.durationMonths}`;
+    const years = Math.floor(months / 12);
+    const rem = months % 12;
+    if (rem === 0) return `${years} ${years === 1 ? t.durationYear : t.durationYears}`;
+    return `${years}${t.durationYear[0]} ${rem}${t.durationMonth[0]}`;
+  }
 
   function handleCalculate() {
-    const params = {
-      age,
-      sex,
-      frequency,
-      months: duration,
-      route,
-      stacking,
-    };
+    const params = { age, sex, frequency, months: duration, route, stacking };
 
     const score = calculateRiskScore(params);
-
-    const msgs = getContextualMessages({
-      ...params,
-      score,
-    });
+    const msgs = getContextualMessages({ ...params, score });
 
     setResult(score);
     setMessages(msgs);
@@ -251,10 +340,10 @@ export default function Simulador() {
           <div className="col-12 col-md-9 col-lg-7 col-xl-6">
             {/* Cabeçalho */}
             <h2 className="text-center text-white fw-bold mb-2">
-              Simulador de Risco
+              {t.title}
             </h2>
             <p className="text-center text-secondary small mb-4">
-              Estime seu perfil de risco com base no seu histórico de uso.
+              {t.subtitle}
             </p>
 
             {/* Card do formulário */}
@@ -262,7 +351,7 @@ export default function Simulador() {
               {/* Idade */}
               <div className="mb-4">
                 <label className="form-label text-secondary small mb-1">
-                  Idade: <strong className="text-white">{age}</strong>
+                  {t.ageLabel} <strong className="text-white">{age}</strong>
                 </label>
                 <input
                   type="range"
@@ -282,31 +371,23 @@ export default function Simulador() {
               {/* Sexo biológico */}
               <div className="mb-4">
                 <label className="form-label text-secondary small mb-2">
-                  Sexo biológico
+                  {t.sexLabel}
                 </label>
-                <ToggleGroup
-                  options={["Masculino", "Feminino"]}
-                  value={sex}
-                  onChange={setSex}
-                />
+                <ToggleGroup options={t.sexOptions} value={sex} onChange={setSex} />
               </div>
 
               {/* Frequência de uso */}
               <div className="mb-4">
                 <label className="form-label text-secondary small mb-2">
-                  Frequência de uso
+                  {t.frequencyLabel}
                 </label>
-                <ToggleGroup
-                  options={["Ocasional", "Frequente", "Intenso"]}
-                  value={frequency}
-                  onChange={setFrequency}
-                />
+                <ToggleGroup options={t.frequencyOptions} value={frequency} onChange={setFrequency} />
               </div>
 
               {/* Duração */}
               <div className="mb-4">
                 <label className="form-label text-secondary small mb-1">
-                  Duração:{" "}
+                  {t.durationLabel}{" "}
                   <strong className="text-white">
                     {formatDuration(duration)}
                   </strong>
@@ -321,33 +402,25 @@ export default function Simulador() {
                   onChange={(e) => setDuration(Number(e.target.value))}
                 />
                 <div className="d-flex justify-content-between sim-ticks">
-                  <span>1 mês</span>
-                  <span>5 anos</span>
+                  <span>{t.durationTickMin}</span>
+                  <span>{t.durationTickMax}</span>
                 </div>
               </div>
 
               {/* Via de administração */}
               <div className="mb-4">
                 <label className="form-label text-secondary small mb-2">
-                  Via de administração
+                  {t.routeLabel}
                 </label>
-                <ToggleGroup
-                  options={["Injetável", "Oral", "Ambos"]}
-                  value={route}
-                  onChange={setRoute}
-                />
+                <ToggleGroup options={t.routeOptions} value={route} onChange={setRoute} />
               </div>
 
               {/* Usa mais de um composto */}
               <div className="mb-4">
                 <label className="form-label text-secondary small mb-2">
-                  Usa mais de um composto?
+                  {t.stackingLabel}
                 </label>
-                <ToggleGroup
-                  options={["Não", "Sim"]}
-                  value={stacking ? "Sim" : "Não"}
-                  onChange={(v) => setStacking(v === "Sim")}
-                />
+                <ToggleGroup options={t.stackingOptions} value={stacking} onChange={setStacking} />
               </div>
 
               {/* Botão de cálculo */}
@@ -355,7 +428,7 @@ export default function Simulador() {
                 className="btn option-btn w-100 py-2 fw-semibold"
                 onClick={handleCalculate}
               >
-                Calcular Risco
+                {t.calculate}
               </button>
 
               {/* Bloco de resultado — só aparece após o cálculo */}
@@ -376,7 +449,7 @@ export default function Simulador() {
                       className="fw-semibold mt-1"
                       style={{ color: profile.hex }}
                     >
-                      Risco {profile.label}
+                      {t.riskPrefix} {t.riskLabels[profile.key]}
                     </div>
                     <div className="progress sim-progress mt-3">
                       <div
@@ -389,8 +462,7 @@ export default function Simulador() {
                       />
                     </div>
                     <small className="text-muted d-block mt-2">
-                      Score calculado com base em todos os fatores clínicos
-                      combinados
+                      {t.scoreNote}
                     </small>
                   </div>
 
@@ -398,11 +470,10 @@ export default function Simulador() {
                   {messages.length > 0 && (
                     <>
                       <p className="sim-msg-header">
-                        {messages.length} fator{messages.length > 1 ? "es" : ""}{" "}
-                        de risco identificado{messages.length > 1 ? "s" : ""}
+                        {t.factorsFound(messages.length)}
                       </p>
                       {messages.map((msg, i) => (
-                        <MessageCard key={i} {...msg} />
+                        <MessageCard key={i} severity={msg.severity} {...t.messages[msg.key]} />
                       ))}
                     </>
                   )}
