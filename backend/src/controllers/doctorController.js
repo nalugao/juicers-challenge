@@ -1,7 +1,20 @@
 import crypto from "crypto";
+import { createRequire } from "module";
 import Doctor from "../models/Doctor.js";
 import Patient from "../models/Patient.js";
+import Exam from "../models/Exam.js";
 import DoctorInvite from "../models/DoctorInvite.js";
+import { parseExamPdfText } from "../utils/examPdfParser.js";
+import ClinicalNote from "../models/ClinicalNote.js";
+import RequestedExam from "../models/RequestedExam.js";
+
+const require = createRequire(import.meta.url);
+const pdfParseModule = require("pdf-parse");
+
+const pdfParse =
+  typeof pdfParseModule === "function"
+    ? pdfParseModule
+    : pdfParseModule.default;
 
 export const createDoctorInvite = async (req, res) => {
   try {
@@ -135,6 +148,121 @@ export const getMyDoctorPatientById = async (req, res) => {
   }
 };
 
+export const getMyDoctorPatientExams = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { id } = req.params;
+
+    if (req.user.role !== "doctor") {
+      return res.status(403).json({
+        message: "Apenas médicos podem acessar exames de pacientes",
+      });
+    }
+
+    const doctor = await Doctor.findOne({ userId });
+
+    if (!doctor) {
+      return res.status(404).json({
+        message: "Perfil de médico não encontrado",
+      });
+    }
+
+    const patient = await Patient.findOne({
+      _id: id,
+      doctorId: doctor._id,
+    });
+
+    if (!patient) {
+      return res.status(404).json({
+        message: "Paciente não encontrado ou não vinculado a este médico",
+      });
+    }
+
+    const exams = await Exam.find({ patientId: patient._id }).sort({
+      examDate: 1,
+    });
+
+    return res.status(200).json({
+      exams,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
+export const uploadPatientExamPdf = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { id } = req.params;
+
+    if (req.user.role !== "doctor") {
+      return res.status(403).json({
+        message: "Apenas médicos podem importar exames de pacientes",
+      });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({
+        message: "Nenhum arquivo PDF enviado",
+      });
+    }
+
+    const doctor = await Doctor.findOne({ userId });
+
+    if (!doctor) {
+      return res.status(404).json({
+        message: "Perfil de médico não encontrado",
+      });
+    }
+
+    const patient = await Patient.findOne({
+      _id: id,
+      doctorId: doctor._id,
+    });
+
+    if (!patient) {
+      return res.status(404).json({
+        message: "Paciente não encontrado ou não vinculado a este médico",
+      });
+    }
+
+    const pdfData = await pdfParse(req.file.buffer);
+    const parsedExam = parseExamPdfText(pdfData.text);
+
+    if (!parsedExam.markers || Object.keys(parsedExam.markers).length === 0) {
+      return res.status(400).json({
+        message: "Não foi possível identificar marcadores no PDF",
+      });
+    }
+
+    const exam = await Exam.create({
+      patientId: patient._id,
+      examDate: parsedExam.examDate,
+      markers: parsedExam.markers,
+      riskLevel: parsedExam.riskLevel,
+      alerts: parsedExam.alerts,
+      source: "pdf",
+      originalFileName: req.file.originalname,
+    });
+
+    patient.lastExamDate = parsedExam.examDate;
+    patient.examStatus = "recentes";
+    await patient.save();
+
+    return res.status(201).json({
+      message: "PDF importado e exame criado com sucesso",
+      exam,
+      extractedMarkers: parsedExam.markers,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
 export const getInviteByToken = async (req, res) => {
   try {
     const { token } = req.params;
@@ -255,3 +383,327 @@ export const acceptInvite = async (req, res) => {
     });
   }
 };
+async function getDoctorAndPatient(req, patientId) {
+  const userId = req.user.id;
+
+  if (req.user.role !== "doctor") {
+    return {
+      error: {
+        status: 403,
+        message: "Apenas médicos podem acessar este recurso",
+      },
+    };
+  }
+
+  const doctor = await Doctor.findOne({ userId });
+
+  if (!doctor) {
+    return {
+      error: {
+        status: 404,
+        message: "Perfil de médico não encontrado",
+      },
+    };
+  }
+
+  const patient = await Patient.findOne({
+    _id: patientId,
+    doctorId: doctor._id,
+  });
+
+  if (!patient) {
+    return {
+      error: {
+        status: 404,
+        message: "Paciente não encontrado ou não vinculado a este médico",
+      },
+    };
+  }
+
+  return { doctor, patient };
+}
+
+export const deleteDoctorPatientExam = async (req, res) => {
+  try {
+    const { patientId, examId } = req.params;
+
+    const { doctor, patient, error } = await getDoctorAndPatient(req, patientId);
+
+    if (error) {
+      return res.status(error.status).json({ message: error.message });
+    }
+
+    const exam = await Exam.findOneAndDelete({
+      _id: examId,
+      patientId: patient._id,
+    });
+
+    if (!exam) {
+      return res.status(404).json({
+        message: "Exame não encontrado para este paciente",
+      });
+    }
+
+    const latestExam = await Exam.findOne({ patientId: patient._id }).sort({
+      examDate: -1,
+    });
+
+    patient.lastExamDate = latestExam?.examDate || "";
+    patient.examStatus = latestExam ? "recentes" : "nunca";
+    await patient.save();
+
+    return res.status(200).json({
+      message: "Exame deletado com sucesso",
+      examId,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
+export const getDoctorPatientFollowup = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const { doctor, patient, error } = await getDoctorAndPatient(req, id);
+
+    if (error) {
+      return res.status(error.status).json({ message: error.message });
+    }
+
+    const notes = await ClinicalNote.find({
+      doctorId: doctor._id,
+      patientId: patient._id,
+    }).sort({ createdAt: -1 });
+
+    const requestedExams = await RequestedExam.find({
+      doctorId: doctor._id,
+      patientId: patient._id,
+      isActive: true,
+    }).sort({ createdAt: -1 });
+
+    return res.status(200).json({
+      notes,
+      requestedExams,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
+export const createClinicalNote = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { text } = req.body;
+
+    if (!text || !text.trim()) {
+      return res.status(400).json({
+        message: "Texto da anotação é obrigatório",
+      });
+    }
+
+    const { doctor, patient, error } = await getDoctorAndPatient(req, id);
+
+    if (error) {
+      return res.status(error.status).json({ message: error.message });
+    }
+
+    const note = await ClinicalNote.create({
+      doctorId: doctor._id,
+      patientId: patient._id,
+      text,
+    });
+
+    return res.status(201).json({
+      message: "Anotação criada com sucesso",
+      note,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
+export const toggleRequestedExam = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { label } = req.body;
+
+    if (!label || !label.trim()) {
+      return res.status(400).json({
+        message: "Nome do exame solicitado é obrigatório",
+      });
+    }
+
+    const { doctor, patient, error } = await getDoctorAndPatient(req, id);
+
+    if (error) {
+      return res.status(error.status).json({ message: error.message });
+    }
+
+    let requestedExam = await RequestedExam.findOne({
+      doctorId: doctor._id,
+      patientId: patient._id,
+      label,
+    });
+
+    if (!requestedExam) {
+      requestedExam = await RequestedExam.create({
+        doctorId: doctor._id,
+        patientId: patient._id,
+        label,
+        isActive: true,
+      });
+    } else {
+      requestedExam.isActive = !requestedExam.isActive;
+      await requestedExam.save();
+    }
+
+    return res.status(200).json({
+      message: requestedExam.isActive
+        ? "Exame solicitado com sucesso"
+        : "Solicitação de exame removida",
+      requestedExam,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+export const getMyDoctorProfile = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    if (req.user.role !== "doctor") {
+      return res.status(403).json({
+        message: "Apenas médicos podem acessar este perfil",
+      });
+    }
+
+    const doctor = await Doctor.findOne({ userId }).populate(
+      "userId",
+      "name email role"
+    );
+
+    if (!doctor) {
+      return res.status(404).json({
+        message: "Perfil de médico não encontrado",
+      });
+    }
+
+    return res.status(200).json({
+      doctor,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
+export const updateMyDoctorProfile = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    if (req.user.role !== "doctor") {
+      return res.status(403).json({
+        message: "Apenas médicos podem atualizar este perfil",
+      });
+    }
+
+    const { crm, specialty } = req.body;
+
+    const doctor = await Doctor.findOneAndUpdate(
+      { userId },
+      {
+        crm,
+        specialty,
+      },
+      {
+        returnDocument: "after",
+        runValidators: true,
+      }
+    ).populate("userId", "name email role");
+
+    if (!doctor) {
+      return res.status(404).json({
+        message: "Perfil de médico não encontrado",
+      });
+    }
+
+    return res.status(200).json({
+      message: "Dados do médico atualizados com sucesso",
+      doctor,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+export const updateClinicalNote = async (req, res) => {
+  try {
+    const userId = req.user.id
+    const { noteId } = req.params
+    const { text } = req.body
+
+    if (req.user.role !== "doctor") {
+      return res.status(403).json({ message: "Apenas médicos podem editar anotações" })
+    }
+
+    if (!text?.trim()) {
+      return res.status(400).json({ message: "Texto da anotação é obrigatório" })
+    }
+
+    const doctor = await Doctor.findOne({ userId })
+    if (!doctor) return res.status(404).json({ message: "Perfil de médico não encontrado" })
+
+    const note = await ClinicalNote.findOneAndUpdate(
+      { _id: noteId, doctorId: doctor._id },
+      { text: text.trim() },
+      { returnDocument: "after", runValidators: true }
+    )
+
+    if (!note) return res.status(404).json({ message: "Anotação não encontrada" })
+
+    return res.status(200).json({
+      message: "Anotação atualizada com sucesso",
+      note,
+    })
+  } catch (error) {
+    return res.status(500).json({ message: error.message })
+  }
+}
+
+export const deleteClinicalNote = async (req, res) => {
+  try {
+    const userId = req.user.id
+    const { noteId } = req.params
+
+    if (req.user.role !== "doctor") {
+      return res.status(403).json({ message: "Apenas médicos podem excluir anotações" })
+    }
+
+    const doctor = await Doctor.findOne({ userId })
+    if (!doctor) return res.status(404).json({ message: "Perfil de médico não encontrado" })
+
+    const note = await ClinicalNote.findOneAndDelete({
+      _id: noteId,
+      doctorId: doctor._id,
+    })
+
+    if (!note) return res.status(404).json({ message: "Anotação não encontrada" })
+
+    return res.status(200).json({
+      message: "Anotação excluída com sucesso",
+    })
+  } catch (error) {
+    return res.status(500).json({ message: error.message })
+  }
+}

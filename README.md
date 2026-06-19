@@ -54,15 +54,10 @@ src/
 │   ├── DadosConta.jsx       # Formulário de dados pessoais (persiste em localStorage)
 │   ├── HistoricoExames.jsx  # Listagem cronológica de exames
 │   └── OnboardingForm.jsx   # Formulário de onboarding inicial
-├── data/
-│   ├── mockData.js          # Dados simulados de exames, métricas e alertas
-│   └── time.js              # Dados dos membros do time
 └── style/                   # Arquivos CSS individuais por componente
 ```
 
 **Persistência:** os dados da conta do usuário são salvos no `localStorage` com a chave `dadosContaCicloRisco` e carregados dinamicamente na página de perfil.
-
-**Dados:** atualmente toda a camada de dados é mockada em `mockData.js`, que gera métricas e alertas dinamicamente a partir de séries históricas de exames laboratoriais (cardiovascular, endócrino, hepático, hematológico e renal).
 
 ---
 

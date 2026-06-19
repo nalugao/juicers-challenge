@@ -1,57 +1,77 @@
 import { useEffect, useState } from 'react'
 import AthleteFollowup from '../screens/AthleteFollowup.jsx'
-import { useClinical } from '../context/ClinicalContext.jsx'
-import { getMyPatientProfile } from '../services/api'
+import { getMyFollowup } from '../services/api'
+
+function formatDateBR(dateString) {
+    if (!dateString) return ''
+
+    const date = new Date(dateString)
+
+    if (Number.isNaN(date.getTime())) {
+        return dateString
+    }
+
+    return date
+        .toLocaleDateString('pt-BR', {
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric',
+        })
+        .replace('.', '')
+}
 
 export default function Acompanhamento() {
-    const { data, clinical } = useClinical()
-
     const [doctor, setDoctor] = useState(null)
+    const [requestedList, setRequestedList] = useState([])
+    const [notesHistory, setNotesHistory] = useState([])
     const [loadingDoctor, setLoadingDoctor] = useState(true)
 
-    const entry = clinical['p1'] || { notes: [], requested: {} }
-
-    const requestedList = data.suggestedExams
-        .filter((s) => entry.requested[s])
-        .map((s) => ({
-            label: s,
-            date: entry.requested[s],
-        }))
-
-    const notesHistory = (entry.notes || []).map((n) => ({
-        date: n.date,
-        text: n.text,
-    }))
-
     useEffect(() => {
-        async function carregarMedicoVinculado() {
+        async function carregarAcompanhamento() {
             try {
                 setLoadingDoctor(true)
 
-                const data = await getMyPatientProfile()
-                const doctorData = data?.patient?.doctorId
+                const data = await getMyFollowup()
 
-                if (!doctorData) {
+                if (!data.doctor) {
                     setDoctor(null)
+                    setRequestedList([])
+                    setNotesHistory([])
                     return
                 }
 
                 setDoctor({
-                    id: doctorData._id,
-                    name: doctorData.userId?.name || 'Médico responsável',
-                    email: doctorData.userId?.email || '',
-                    crm: doctorData.crm || '',
-                    specialty: doctorData.specialty || '',
+                    id: data.doctor._id,
+                    name: data.doctor.userId?.name || 'Médico responsável',
+                    email: data.doctor.userId?.email || '',
+                    crm: data.doctor.crm || '',
+                    specialty: data.doctor.specialty || '',
                 })
+
+                setRequestedList(
+                    (data.requestedExams || []).map((exam) => ({
+                        label: exam.label,
+                        date: formatDateBR(exam.createdAt),
+                    }))
+                )
+
+                setNotesHistory(
+                    (data.notes || []).map((note) => ({
+                        date: formatDateBR(note.createdAt),
+                        text: note.text,
+                    }))
+                )
             } catch (error) {
-                console.error('Erro ao carregar médico vinculado:', error)
+                console.error('Erro ao carregar acompanhamento médico:', error)
                 setDoctor(null)
+                setRequestedList([])
+                setNotesHistory([])
             } finally {
                 setLoadingDoctor(false)
             }
         }
 
-        carregarMedicoVinculado()
+        carregarAcompanhamento()
     }, [])
 
     return (

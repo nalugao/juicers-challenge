@@ -1,35 +1,58 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 
-/**
- * UploadZone — área de drag & drop estilizada (PDF).
- * accent: cor de acento (âmbar atleta / verde-água médico).
- * onUpload(filename): chamado quando um arquivo é solto/selecionado.
- */
-export default function UploadZone({ accent = '#e6a817', label = 'Importar exame (PDF)', onUpload }) {
-  const [drag, setDrag] = useState(false);
-  const [file, setFile] = useState(null);
+export default function UploadZone({
+  accent = '#e6a817',
+  label = 'Importar exame (PDF)',
+  onUpload,
+}) {
+  const [drag, setDrag] = useState(false)
+  const [fileName, setFileName] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [erro, setErro] = useState('')
+  const [success, setSuccess] = useState('')
 
-  const handleFile = (name) => {
-    const fname = name || 'exame_05jun2026.pdf';
-    setFile(fname);
-    if (onUpload) onUpload(fname);
-  };
+  const handleFile = async (file) => {
+    if (!file) return
+
+    if (file.type !== 'application/pdf') {
+      setErro('Selecione um arquivo PDF.')
+      return
+    }
+
+    try {
+      setLoading(true)
+      setErro('')
+      setSuccess('')
+      setFileName(file.name)
+
+      if (onUpload) {
+        await onUpload(file)
+      }
+
+      setSuccess('PDF importado com sucesso')
+    } catch (error) {
+      setErro(error.message || 'Erro ao importar PDF.')
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <div
       onDragOver={(e) => {
-        e.preventDefault();
-        if (!drag) setDrag(true);
+        e.preventDefault()
+        if (!drag) setDrag(true)
       }}
       onDragLeave={(e) => {
-        e.preventDefault();
-        setDrag(false);
+        e.preventDefault()
+        setDrag(false)
       }}
       onDrop={(e) => {
-        e.preventDefault();
-        setDrag(false);
-        const f = e.dataTransfer.files[0];
-        handleFile(f ? f.name : null);
+        e.preventDefault()
+        setDrag(false)
+
+        const file = e.dataTransfer.files[0]
+        handleFile(file)
       }}
       style={{
         border: `2px dashed ${drag ? accent : '#333'}`,
@@ -44,19 +67,36 @@ export default function UploadZone({ accent = '#e6a817', label = 'Importar exame
         transition: 'border-color .15s ease, background .15s ease',
       }}
     >
-      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke={accent} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" style={{ marginBottom: 2 }}>
+      <svg
+        width="30"
+        height="30"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke={accent}
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        style={{ marginBottom: 2 }}
+      >
         <path d="M12 16V4" />
         <path d="M8 8l4-4 4 4" />
         <path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3" />
       </svg>
-      <p style={{ margin: 0, fontSize: 14, fontWeight: 650, color: '#e8e8e8' }}>{label}</p>
-      <p style={{ margin: 0, fontSize: 12.5, color: '#7e7e7e' }}>Arraste o arquivo PDF aqui, ou</p>
+
+      <p style={{ margin: 0, fontSize: 14, fontWeight: 650, color: '#e8e8e8' }}>
+        {label}
+      </p>
+
+      <p style={{ margin: 0, fontSize: 12.5, color: '#7e7e7e' }}>
+        Arraste o arquivo PDF aqui, ou
+      </p>
+
       <label
         style={{
           marginTop: 4,
           display: 'inline-flex',
           alignItems: 'center',
-          cursor: 'pointer',
+          cursor: loading ? 'not-allowed' : 'pointer',
           fontSize: 12.5,
           fontWeight: 650,
           color: accent,
@@ -64,25 +104,46 @@ export default function UploadZone({ accent = '#e6a817', label = 'Importar exame
           background: 'transparent',
           borderRadius: 8,
           padding: '7px 16px',
+          opacity: loading ? 0.65 : 1,
         }}
       >
-        Selecionar arquivo
+        {loading ? 'Importando...' : 'Selecionar arquivo'}
+
         <input
           type="file"
           accept="application/pdf"
-          onChange={(e) => handleFile(e.target.files[0] ? e.target.files[0].name : null)}
+          disabled={loading}
+          onChange={(e) => handleFile(e.target.files[0])}
           style={{ display: 'none' }}
         />
       </label>
-      {file && (
-        <div style={{ marginTop: 8, display: 'flex', alignItems: 'center', gap: 7, fontSize: 12, color: '#3fb950' }}>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3fb950" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M20 6L9 17l-5-5" />
-          </svg>
-          <span style={{ color: '#cfcfcf' }}>{file}</span>
-          <span>importado</span>
+
+      {fileName && (
+        <div
+          style={{
+            marginTop: 8,
+            display: 'flex',
+            alignItems: 'center',
+            gap: 7,
+            fontSize: 12,
+            color: '#cfcfcf',
+          }}
+        >
+          <span>{fileName}</span>
+        </div>
+      )}
+
+      {success && (
+        <div style={{ fontSize: 12, color: '#3fb950', marginTop: 4 }}>
+          {success}
+        </div>
+      )}
+
+      {erro && (
+        <div style={{ fontSize: 12, color: '#f04747', marginTop: 4 }}>
+          {erro}
         </div>
       )}
     </div>
-  );
+  )
 }

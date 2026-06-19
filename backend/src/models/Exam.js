@@ -14,19 +14,8 @@ const examSchema = new mongoose.Schema(
     },
 
     markers: {
-      tgo: Number,
-      tgp: Number,
-      ggt: Number,
-      hdl: Number,
-      ldl: Number,
-      triglycerides: Number,
-      testosteroneTotal: Number,
-      testosteroneFree: Number,
-      creatinine: Number,
-      urea: Number,
-      glucose: Number,
-      hematocrit: Number,
-      hemoglobin: Number,
+      type: mongoose.Schema.Types.Mixed,
+      default: {},
     },
 
     riskLevel: {
@@ -44,6 +33,11 @@ const examSchema = new mongoose.Schema(
       type: String,
       enum: ["manual", "pdf"],
       default: "manual",
+    },
+
+    originalFileName: {
+      type: String,
+      default: "",
     },
   },
   {

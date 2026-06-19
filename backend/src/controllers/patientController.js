@@ -1,4 +1,7 @@
 import Patient from "../models/Patient.js";
+import Doctor from "../models/Doctor.js";
+import ClinicalNote from "../models/ClinicalNote.js";
+import RequestedExam from "../models/RequestedExam.js";
 
 export const createOrUpdatePatient = async (req, res) => {
   try {
@@ -107,6 +110,56 @@ export const deleteMyPatientProfile = async (req, res) => {
 
     return res.status(200).json({
       message: "Perfil de paciente deletado com sucesso",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+export const getMyFollowup = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const patient = await Patient.findOne({ userId }).populate({
+      path: "doctorId",
+      populate: {
+        path: "userId",
+        select: "name email role",
+      },
+    });
+
+    if (!patient) {
+      return res.status(404).json({
+        message: "Perfil de paciente não encontrado",
+      });
+    }
+
+    if (!patient.doctorId) {
+      return res.status(200).json({
+        doctor: null,
+        notes: [],
+        requestedExams: [],
+      });
+    }
+
+    const doctor = patient.doctorId;
+
+    const notes = await ClinicalNote.find({
+      doctorId: doctor._id,
+      patientId: patient._id,
+    }).sort({ createdAt: -1 });
+
+    const requestedExams = await RequestedExam.find({
+      doctorId: doctor._id,
+      patientId: patient._id,
+      isActive: true,
+    }).sort({ createdAt: -1 });
+
+    return res.status(200).json({
+      doctor,
+      notes,
+      requestedExams,
     });
   } catch (error) {
     return res.status(500).json({

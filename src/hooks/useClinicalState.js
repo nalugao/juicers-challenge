@@ -1,28 +1,248 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import dataMock, {
-    athlete,
-    medico as medicoSeed,
-    examHistory,
-    patients,
-} from '../data/mockData'
 import { getMyExams, getMyPatientProfile } from '../services/api'
 
-const TODAY = '16 jun 2026'
+const TODAY = new Date()
+    .toLocaleDateString('pt-BR', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+    })
+    .replace('.', '')
+
+const EMPTY_DATA = {
+    examDates: [],
+    markers: [],
+    categories: [],
+    summary: [],
+    alerts: [],
+    patients: [],
+    examHistory: [],
+    suggestedExams: [
+        'Hemograma completo (controle de hematócrito)',
+        'Perfil lipídico completo',
+        'Painel hepático (TGO, TGP, GGT)',
+        'Estradiol sérico',
+        'PSA total e livre',
+        'Ecocardiograma + aferição de PA',
+    ],
+}
+
+const EMPTY_ACCOUNT = {
+    nome: '',
+    sobrenome: '',
+    idade: '',
+    sexo: '',
+    peso: '',
+    altura: '',
+    cicloStatus: '',
+    dose: '',
+    cicloTempo: '',
+    compounds: [],
+    condicoes: [],
+    examFreq: '',
+    lastExam: '',
+}
+
+const EMPTY_MEDICO = {
+    nome: '',
+    crm: '',
+    specialty: '',
+}
 
 const CAT_ORDER = [
-    'Hepático',
-    'Lipídico',
-    'Hormonal',
-    'Hematológico',
-    'Renal',
-    'Metabólico',
     'Cardiovascular',
+    'Endócrino',
+    'Renal',
+    'Hematológico',
+    'Micronutrientes',
+]
+
+const MARKERS = [
+    {
+        category: 'Cardiovascular',
+        key: 'hdl',
+        id: 'hdl',
+        name: 'HDL',
+        unit: 'mg/dL',
+        ref: '> 40',
+        reverse: true,
+        attention: 40,
+        risk: 30,
+    },
+    {
+        category: 'Cardiovascular',
+        key: 'ldl',
+        id: 'ldl',
+        name: 'LDL',
+        unit: 'mg/dL',
+        ref: '< 100',
+        attention: 130,
+        risk: 190,
+    },
+    {
+        category: 'Cardiovascular',
+        key: 'nonHdl',
+        id: 'nonHdl',
+        name: 'Colesterol não-HDL',
+        unit: 'mg/dL',
+        ref: '< 130',
+        attention: 130,
+        risk: 160,
+    },
+    {
+        category: 'Cardiovascular',
+        key: 'vldl',
+        id: 'vldl',
+        name: 'VLDL',
+        unit: 'mg/dL',
+        ref: '< 30',
+        attention: 30,
+        risk: 40,
+    },
+    {
+        category: 'Cardiovascular',
+        key: 'triglycerides',
+        id: 'triglycerides',
+        name: 'Triglicerídeos',
+        unit: 'mg/dL',
+        ref: '< 150',
+        attention: 150,
+        risk: 200,
+    },
+    {
+        category: 'Endócrino',
+        key: 'glucose',
+        id: 'glucose',
+        name: 'Glicose',
+        unit: 'mg/dL',
+        ref: '70–99',
+        attention: 100,
+        risk: 126,
+    },
+    {
+        category: 'Endócrino',
+        key: 'hba1c',
+        id: 'hba1c',
+        name: 'Hemoglobina Glicada',
+        unit: '%',
+        ref: '4.1–6.0',
+        attention: 5.7,
+        risk: 6.5,
+    },
+    {
+        category: 'Renal',
+        key: 'creatinine',
+        id: 'creatinine',
+        name: 'Creatinina',
+        unit: 'mg/dL',
+        ref: '0.6–1.3',
+        attention: 1.3,
+        risk: 1.6,
+    },
+    {
+        category: 'Hematológico',
+        key: 'hemoglobin',
+        id: 'hemoglobin',
+        name: 'Hemoglobina',
+        unit: 'g/dL',
+        ref: '12.8–17.8',
+        attention: 17.8,
+        risk: 18.5,
+    },
+    {
+        category: 'Hematológico',
+        key: 'hematocrit',
+        id: 'hematocrit',
+        name: 'Hematócrito',
+        unit: '%',
+        ref: '37–52.4',
+        attention: 52.4,
+        risk: 55,
+    },
+    {
+        category: 'Hematológico',
+        key: 'erythrocytes',
+        id: 'erythrocytes',
+        name: 'Eritrócitos',
+        unit: 'milhões/mm³',
+        ref: '4.10–6.11',
+        attention: 6.11,
+        risk: 6.5,
+    },
+    {
+        category: 'Hematológico',
+        key: 'leukocytes',
+        id: 'leukocytes',
+        name: 'Leucócitos',
+        unit: 'mil/mm³',
+        ref: '4.12–11.11',
+        attention: 11.11,
+        risk: 13,
+    },
+    {
+        category: 'Hematológico',
+        key: 'platelets',
+        id: 'platelets',
+        name: 'Plaquetas',
+        unit: 'mil/mm³',
+        ref: '162–425',
+        attention: 425,
+        risk: 500,
+    },
+    {
+        category: 'Micronutrientes',
+        key: 'vitaminD',
+        id: 'vitaminD',
+        name: 'Vitamina D',
+        unit: 'ng/mL',
+        ref: '20–60',
+        reverse: true,
+        attention: 20,
+        risk: 10,
+    },
+    {
+        category: 'Micronutrientes',
+        key: 'vitaminB12',
+        id: 'vitaminB12',
+        name: 'Vitamina B12',
+        unit: 'pg/mL',
+        ref: '187–883',
+        reverse: true,
+        attention: 187,
+        risk: 130,
+    },
+    {
+        category: 'Micronutrientes',
+        key: 'ferritin',
+        id: 'ferritin',
+        name: 'Ferritina',
+        unit: 'ng/mL',
+        ref: '21.81–274.66',
+        attention: 275,
+        risk: 400,
+    },
+    {
+        category: 'Micronutrientes',
+        key: 'iron',
+        id: 'iron',
+        name: 'Ferro',
+        unit: 'µg/dL',
+        ref: '65–175',
+        attention: 175,
+        risk: 220,
+    },
 ]
 
 function formatarData(dataISO) {
     if (!dataISO) return '—'
 
-    return new Date(`${dataISO}T00:00:00`)
+    const date = new Date(dataISO)
+
+    if (Number.isNaN(date.getTime())) {
+        return dataISO
+    }
+
+    return date
         .toLocaleDateString('pt-BR', {
             day: '2-digit',
             month: 'short',
@@ -35,71 +255,27 @@ function getUltimoValor(values = []) {
     return values[values.length - 1]
 }
 
-function avaliarStatus(marker) {
-    const ultimo = getUltimoValor(marker.values)
-
-    if (ultimo == null) return 'ok'
-
-    switch (marker.name) {
-        case 'ALT / TGP':
-            return ultimo > 56 ? 'risco' : ultimo > 45 ? 'atencao' : 'ok'
-
-        case 'AST / TGO':
-            return ultimo > 40 ? 'atencao' : 'ok'
-
-        case 'GGT':
-            return ultimo > 61 ? 'risco' : ultimo > 45 ? 'atencao' : 'ok'
-
-        case 'LDL':
-            return ultimo >= 190 ? 'risco' : ultimo >= 130 ? 'atencao' : 'ok'
-
-        case 'HDL':
-            return ultimo < 35 ? 'risco' : ultimo < 40 ? 'atencao' : 'ok'
-
-        case 'Triglicerídeos':
-            return ultimo >= 200 ? 'risco' : ultimo >= 150 ? 'atencao' : 'ok'
-
-        case 'Testosterona Total':
-            return ultimo > 1200 ? 'atencao' : 'ok'
-
-        case 'Testosterona Livre':
-            return ultimo > 37 ? 'atencao' : 'ok'
-
-        case 'Creatinina':
-            return ultimo > 1.4 ? 'risco' : ultimo > 1.25 ? 'atencao' : 'ok'
-
-        case 'Ureia':
-            return ultimo > 50 ? 'atencao' : 'ok'
-
-        case 'Glicemia jejum':
-            return ultimo >= 126 ? 'risco' : ultimo > 99 ? 'atencao' : 'ok'
-
-        case 'Hematócrito':
-            return ultimo >= 55 ? 'risco' : ultimo > 52 ? 'atencao' : 'ok'
-
-        case 'Hemoglobina':
-            return ultimo > 18 ? 'risco' : ultimo > 17.5 ? 'atencao' : 'ok'
-
-        default:
-            return 'ok'
-    }
-}
-
-function criarMarker({ id, cat, name, unit, ref, values, display = null }) {
-    const marker = {
-        id,
-        cat,
-        name,
-        unit,
-        ref,
-        values,
-        display,
-        status: 'ok',
+function getMarkerStatus(marker, value) {
+    if (!marker || value === undefined || value === null || value === '') {
+        return 'ok'
     }
 
-    marker.status = avaliarStatus(marker)
+    const numberValue = Number(value)
 
-    return marker
+    if (Number.isNaN(numberValue)) {
+        return 'ok'
+    }
+
+    if (marker.reverse) {
+        if (numberValue <= marker.risk) return 'risco'
+        if (numberValue <= marker.attention) return 'atencao'
+        return 'ok'
+    }
+
+    if (numberValue >= marker.risk) return 'risco'
+    if (numberValue >= marker.attention) return 'atencao'
+
+    return 'ok'
 }
 
 function extrairValues(exames, campo) {
@@ -108,9 +284,9 @@ function extrairValues(exames, campo) {
         .filter((valor) => valor !== undefined && valor !== null && valor !== '')
 }
 
-function montarDadosClinicosPorExames(exames = [], paciente = null) {
+function montarDadosClinicosPorExames(exames = []) {
     if (!exames.length) {
-        return dataMock
+        return EMPTY_DATA
     }
 
     const examesOrdenados = [...exames].sort(
@@ -119,117 +295,26 @@ function montarDadosClinicosPorExames(exames = [], paciente = null) {
 
     const examDates = examesOrdenados.map((exam) => formatarData(exam.examDate))
 
-    const markers = [
-        criarMarker({
-            id: 'alt',
-            cat: 'Hepático',
-            name: 'ALT / TGP',
-            unit: 'U/L',
-            ref: '7–56',
-            values: extrairValues(examesOrdenados, 'tgp'),
-        }),
-        criarMarker({
-            id: 'ast',
-            cat: 'Hepático',
-            name: 'AST / TGO',
-            unit: 'U/L',
-            ref: '10–40',
-            values: extrairValues(examesOrdenados, 'tgo'),
-        }),
-        criarMarker({
-            id: 'ggt',
-            cat: 'Hepático',
-            name: 'GGT',
-            unit: 'U/L',
-            ref: '8–61',
-            values: extrairValues(examesOrdenados, 'ggt'),
-        }),
+    const markers = MARKERS
+        .map((markerConfig) => {
+            const values = extrairValues(examesOrdenados, markerConfig.key)
 
-        criarMarker({
-            id: 'ldl',
-            cat: 'Lipídico',
-            name: 'LDL',
-            unit: 'mg/dL',
-            ref: '< 100',
-            values: extrairValues(examesOrdenados, 'ldl'),
-        }),
-        criarMarker({
-            id: 'hdl',
-            cat: 'Lipídico',
-            name: 'HDL',
-            unit: 'mg/dL',
-            ref: '> 40',
-            values: extrairValues(examesOrdenados, 'hdl'),
-        }),
-        criarMarker({
-            id: 'triglycerides',
-            cat: 'Lipídico',
-            name: 'Triglicerídeos',
-            unit: 'mg/dL',
-            ref: '< 150',
-            values: extrairValues(examesOrdenados, 'triglycerides'),
-        }),
+            if (!values.length) return null
 
-        criarMarker({
-            id: 'testosteroneTotal',
-            cat: 'Hormonal',
-            name: 'Testosterona Total',
-            unit: 'ng/dL',
-            ref: '264–916',
-            values: extrairValues(examesOrdenados, 'testosteroneTotal'),
-        }),
-        criarMarker({
-            id: 'testosteroneFree',
-            cat: 'Hormonal',
-            name: 'Testosterona Livre',
-            unit: 'pg/mL',
-            ref: '8.7–25.1',
-            values: extrairValues(examesOrdenados, 'testosteroneFree'),
-        }),
+            const status = getMarkerStatus(markerConfig, getUltimoValor(values))
 
-        criarMarker({
-            id: 'hematocrit',
-            cat: 'Hematológico',
-            name: 'Hematócrito',
-            unit: '%',
-            ref: '38.8–50',
-            values: extrairValues(examesOrdenados, 'hematocrit'),
-        }),
-        criarMarker({
-            id: 'hemoglobin',
-            cat: 'Hematológico',
-            name: 'Hemoglobina',
-            unit: 'g/dL',
-            ref: '13.5–17.5',
-            values: extrairValues(examesOrdenados, 'hemoglobin'),
-        }),
-
-        criarMarker({
-            id: 'creatinine',
-            cat: 'Renal',
-            name: 'Creatinina',
-            unit: 'mg/dL',
-            ref: '0.7–1.3',
-            values: extrairValues(examesOrdenados, 'creatinine'),
-        }),
-        criarMarker({
-            id: 'urea',
-            cat: 'Renal',
-            name: 'Ureia',
-            unit: 'mg/dL',
-            ref: '16.6–48.5',
-            values: extrairValues(examesOrdenados, 'urea'),
-        }),
-
-        criarMarker({
-            id: 'glucose',
-            cat: 'Metabólico',
-            name: 'Glicemia jejum',
-            unit: 'mg/dL',
-            ref: '70–99',
-            values: extrairValues(examesOrdenados, 'glucose'),
-        }),
-    ].filter((marker) => marker.values.length > 0)
+            return {
+                id: markerConfig.id,
+                cat: markerConfig.category,
+                name: markerConfig.name,
+                unit: markerConfig.unit,
+                ref: markerConfig.ref,
+                values,
+                display: getUltimoValor(values),
+                status,
+            }
+        })
+        .filter(Boolean)
 
     const categories = CAT_ORDER
         .map((cat) => ({
@@ -238,22 +323,17 @@ function montarDadosClinicosPorExames(exames = [], paciente = null) {
         }))
         .filter((cat) => cat.markers.length > 0)
 
-    const byName = (name) => markers.find((marker) => marker.name === name)
-    const summaryNames = ['Testosterona Total', 'LDL', 'AST / TGO', 'HDL']
+    const summaryKeys = ['ldl', 'hdl', 'creatinine', 'hematocrit']
 
-    const summary = summaryNames
-        .map((name) => {
-            const marker = byName(name)
+    const summary = summaryKeys
+        .map((key) => {
+            const markerConfig = MARKERS.find((marker) => marker.key === key)
+            const marker = markers.find((item) => item.id === key)
 
-            if (!marker) return null
+            if (!marker || !markerConfig) return null
 
             return {
-                name:
-                    name === 'Testosterona Total'
-                        ? 'Testosterona'
-                        : name === 'AST / TGO'
-                            ? 'TGO / TGP'
-                            : name,
+                name: marker.name,
                 value: getUltimoValor(marker.values),
                 unit: marker.unit,
                 status: marker.status,
@@ -269,43 +349,11 @@ function montarDadosClinicosPorExames(exames = [], paciente = null) {
             desc: `${marker.name} em ${getUltimoValor(marker.values)} ${marker.unit}`,
         }))
 
-    const ultimoExame = examesOrdenados[examesOrdenados.length - 1]
-
-    const patientName = paciente?.userId?.name || athlete.fullName
-    const patientAge = paciente?.age || athlete.age
-    const patientCompounds = paciente?.substances?.length
-        ? paciente.substances
-        : athlete.compounds
-
-    const patientStatus = alerts.some((alert) => alert.level === 'risco')
-        ? 'risco'
-        : alerts.some((alert) => alert.level === 'atencao')
-            ? 'atencao'
-            : 'estavel'
-
-    const patientsAtualizados = [
-        {
-            id: 'p1',
-            name: patientName,
-            initials: patientName
-                .split(' ')
-                .map((parte) => parte[0])
-                .join('')
-                .slice(0, 2)
-                .toUpperCase(),
-            age: patientAge,
-            compounds: patientCompounds,
-            lastExam: formatarData(ultimoExame?.examDate),
-            status: patientStatus,
-            alerts: alerts.length,
-        },
-        ...patients.filter((patient) => patient.id !== 'p1'),
-    ]
-
-    const examHistoryAtualizado = examesOrdenados
+    const examHistory = examesOrdenados
         .slice()
         .reverse()
         .map((exam) => ({
+            id: exam._id,
             date: formatarData(exam.examDate),
             lab: exam.source === 'manual' ? 'Importação manual' : 'Laboratório',
             markers: Object.keys(exam.markers || {}).length,
@@ -315,75 +363,26 @@ function montarDadosClinicosPorExames(exames = [], paciente = null) {
                     : exam.riskLevel === 'attention'
                         ? 'atencao'
                         : 'ok',
-            file: exam.alerts?.[0] || 'Exame laboratorial',
+            file: exam.originalFileName || exam.alerts?.[0] || 'Exame laboratorial',
+            raw: exam,
         }))
 
     return {
-        ...dataMock,
+        ...EMPTY_DATA,
         examDates,
         markers,
         categories,
         summary,
         alerts,
-        patients: patientsAtualizados,
-        examHistory: examHistoryAtualizado,
+        examHistory,
     }
 }
 
 export function useClinicalState() {
-    const [data, setData] = useState(dataMock)
-
-    const [account, setAccount] = useState(() => {
-        const parts = athlete.fullName.split(' ')
-
-        return {
-            nome: parts[0],
-            sobrenome: parts.slice(1).join(' '),
-            idade: athlete.age,
-            sexo: athlete.sexo,
-            peso: athlete.peso,
-            altura: athlete.altura,
-            cicloStatus: athlete.cicloStatus,
-            dose: athlete.dose,
-            cicloTempo: athlete.cicloTempo,
-            compounds: athlete.compounds.slice(),
-            condicoes: athlete.condicoes.slice(),
-            examFreq: athlete.examFreq,
-            lastExam: athlete.lastExam,
-        }
-    })
-
-    const [medico, setMedico] = useState(() => ({ ...medicoSeed }))
-
-    const [clinical, setClinical] = useState(() => {
-        const c = {}
-
-        patients.forEach((p) => {
-            c[p.id] = {
-                notes: [],
-                requested: {},
-                uploads: [],
-            }
-        })
-
-        if (c.p1) {
-            c.p1.uploads = examHistory.map((e) => ({ ...e }))
-
-            c.p1.notes = [
-                {
-                    date: '18 mar 2026',
-                    text: 'Hematócrito e LDL em elevação. Orientada redução da dosagem semanal e reavaliação do perfil lipídico em 90 dias. Reforçar hidratação e monitorar pressão arterial.',
-                },
-            ]
-
-            c.p1.requested = {
-                'Hemograma completo (controle de hematócrito)': '18 mar 2026',
-                'Perfil lipídico completo': '18 mar 2026',
-            }
-        }
-
-        return c
-    })
+    const [data, setData] = useState(EMPTY_DATA)
+    const [account, setAccount] = useState(EMPTY_ACCOUNT)
+    const [medico, setMedico] = useState(EMPTY_MEDICO)
+    const [clinical, setClinical] = useState({})
 
     useEffect(() => {
         async function carregarDadosClinicos() {
@@ -396,184 +395,107 @@ export function useClinicalState() {
                 const paciente = perfilResponse.patient
                 const exames = examesResponse.exams || []
 
-                const dadosConvertidos = montarDadosClinicosPorExames(exames, paciente)
-
+                const dadosConvertidos = montarDadosClinicosPorExames(exames)
                 setData(dadosConvertidos)
 
-                const nomeCompleto = paciente?.userId?.name || athlete.fullName
-                const partesNome = nomeCompleto.split(' ')
+                const nomeCompleto = paciente?.userId?.name || ''
+                const partesNome = nomeCompleto.split(' ').filter(Boolean)
 
-                setAccount((prev) => ({
-                    ...prev,
+                setAccount({
                     nome: partesNome[0] || '',
                     sobrenome: partesNome.slice(1).join(' '),
-                    idade: paciente?.age || prev.idade,
+                    idade: paciente?.age || '',
                     sexo:
                         paciente?.biologicalSex === 'male'
                             ? 'Masculino'
                             : paciente?.biologicalSex === 'female'
                                 ? 'Feminino'
-                                : prev.sexo,
-                    peso: paciente?.weight || prev.peso,
-                    altura: paciente?.height ? paciente.height * 100 : prev.altura,
-                    cicloStatus: paciente?.cycleStatus || prev.cicloStatus,
-                    dose: paciente?.weeklyDosage || prev.dose,
-                    cicloTempo: paciente?.cycleTime || prev.cicloTempo,
-                    compounds: paciente?.substances?.length
-                        ? paciente.substances
-                        : prev.compounds,
-                    condicoes: paciente?.healthConditions?.length
-                        ? paciente.healthConditions
-                        : prev.condicoes,
-                    lastExam:
-                        paciente?.lastExamDate
-                            ? formatarData(paciente.lastExamDate)
-                            : exames[0]?.examDate
-                                ? formatarData(exames[0].examDate)
-                                : prev.lastExam,
-                }))
+                                : '',
+                    peso: paciente?.weight || '',
+                    altura: paciente?.height ? paciente.height * 100 : '',
+                    cicloStatus: paciente?.cycleStatus || '',
+                    dose: paciente?.weeklyDosage || '',
+                    cicloTempo: paciente?.cycleTime || '',
+                    compounds: paciente?.substances || [],
+                    condicoes: paciente?.healthConditions || [],
+                    examFreq: paciente?.examStatus || '',
+                    lastExam: paciente?.lastExamDate
+                        ? formatarData(paciente.lastExamDate)
+                        : '',
+                })
 
-                setClinical((prev) => ({
-                    ...prev,
+                setClinical({
                     p1: {
-                        ...(prev.p1 || { notes: [], requested: {}, uploads: [] }),
+                        notes: [],
+                        requested: {},
                         uploads: dadosConvertidos.examHistory,
                     },
-                }))
+                })
             } catch (error) {
                 console.error('Erro ao carregar dados clínicos:', error)
+
+                setData(EMPTY_DATA)
+                setAccount(EMPTY_ACCOUNT)
+                setClinical({})
             }
         }
 
         carregarDadosClinicos()
     }, [])
 
-    const updAccount = useCallback(
-        (k, v) => setAccount((a) => ({ ...a, [k]: v })),
-        []
-    )
+    const updAccount = useCallback((k, v) => {
+        setAccount((a) => ({
+            ...a,
+            [k]: v,
+        }))
+    }, [])
 
-    const updMed = useCallback(
-        (k, v) => setMedico((m) => ({ ...m, [k]: v })),
-        []
-    )
+    const updMed = useCallback((k, v) => {
+        setMedico((m) => ({
+            ...m,
+            [k]: v,
+        }))
+    }, [])
 
     const toggleCompound = useCallback((compound) => {
         setAccount((a) => {
-            const has = a.compounds.includes(compound)
+            const compounds = a.compounds || []
+            const has = compounds.includes(compound)
 
             return {
                 ...a,
                 compounds: has
-                    ? a.compounds.filter((item) => item !== compound)
-                    : a.compounds.concat(compound),
+                    ? compounds.filter((item) => item !== compound)
+                    : compounds.concat(compound),
             }
         })
     }, [])
 
     const toggleCondition = useCallback((condition) => {
         setAccount((a) => {
-            let arr = a.condicoes
+            let condicoes = a.condicoes || []
 
             if (condition === 'Nenhuma das anteriores') {
-                arr = arr.includes(condition) ? [] : ['Nenhuma das anteriores']
+                condicoes = condicoes.includes(condition) ? [] : ['Nenhuma das anteriores']
             } else {
-                arr = arr.filter((item) => item !== 'Nenhuma das anteriores')
-                arr = arr.includes(condition)
-                    ? arr.filter((item) => item !== condition)
-                    : arr.concat(condition)
+                condicoes = condicoes.filter((item) => item !== 'Nenhuma das anteriores')
+                condicoes = condicoes.includes(condition)
+                    ? condicoes.filter((item) => item !== condition)
+                    : condicoes.concat(condition)
             }
 
             return {
                 ...a,
-                condicoes: arr,
+                condicoes,
             }
         })
     }, [])
 
-    const addNote = useCallback((pid, text) => {
-        const draft = (text || '').trim()
+    const addNote = useCallback(() => false, [])
 
-        if (!draft) return false
+    const togglePatientExam = useCallback(() => {}, [])
 
-        setClinical((c) => {
-            const pc = c[pid] || {
-                notes: [],
-                requested: {},
-                uploads: [],
-            }
-
-            return {
-                ...c,
-                [pid]: {
-                    ...pc,
-                    notes: [
-                        {
-                            date: TODAY,
-                            text: draft,
-                        },
-                        ...pc.notes,
-                    ],
-                },
-            }
-        })
-
-        return true
-    }, [])
-
-    const togglePatientExam = useCallback((pid, label) => {
-        setClinical((c) => {
-            const pc = c[pid] || {
-                notes: [],
-                requested: {},
-                uploads: [],
-            }
-
-            const req = {
-                ...pc.requested,
-            }
-
-            if (req[label]) {
-                delete req[label]
-            } else {
-                req[label] = TODAY
-            }
-
-            return {
-                ...c,
-                [pid]: {
-                    ...pc,
-                    requested: req,
-                },
-            }
-        })
-    }, [])
-
-    const addUpload = useCallback((pid, filename) => {
-        setClinical((c) => {
-            const pc = c[pid] || {
-                notes: [],
-                requested: {},
-                uploads: [],
-            }
-
-            const entry = {
-                date: TODAY,
-                lab: 'Importação manual',
-                markers: 32,
-                status: 'atencao',
-                file: filename || 'exame.pdf',
-            }
-
-            return {
-                ...c,
-                [pid]: {
-                    ...pc,
-                    uploads: [entry, ...pc.uploads],
-                },
-            }
-        })
-    }, [])
+    const addUpload = useCallback(() => {}, [])
 
     const value = useMemo(
         () => ({
