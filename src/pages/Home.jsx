@@ -1,14 +1,11 @@
 import { useEffect } from "react";
-import Navbar from "../components/Navbar";
+import { useLocation } from "react-router-dom";
 import "../style/juicer-tokens.css";
 import "../style/home.css";
 import SecaoInicio from "../components/SecaoInicio/SecaoInicio";
 import EntendaProjeto from "../components/entendaProjeto/EntendaProjeto";
 import ComoFunciona from "../components/comoFunciona/ComoFunciona";
 import OQueAcompanhar from "../components/oQueAcompanhar/OQueAcompanhar";
-
-import MapaCorporal from "./MapaCorporal";
-import Simulador from "./Simulador";
 
 import Publicos from "../components/publicos/Publicos";
 import OQueNaoFaz from "../components/oQueNaoFaz/OQueNaoFaz";
@@ -17,6 +14,14 @@ import CTAFinal from "../components/CTAFinal/CTAFinal";
 
 
 export default function Home() {
+    const location = useLocation()
+
+    useEffect(() => {
+        if (!location.hash) return
+        const el = document.querySelector(location.hash)
+        if (el) el.scrollIntoView({ behavior: "smooth" })
+    }, [location])
+
     useEffect(() => {
         const els = document.querySelectorAll(".juicer .reveal");
         const io = new IntersectionObserver(
@@ -33,38 +38,17 @@ export default function Home() {
         return () => io.disconnect();
     }, []);
 
-
-    return (
-        <div className="juicer">
-            <Navbar />
-            <SecaoInicio />
-            <ComoFunciona />
-            <OQueAcompanhar />
-            <Publicos />
-            <OQueNaoFaz />
-            <SecaoSobre />
-            <CTAFinal />
-            {/* <Footer /> */}
-        </div>
-    );
-
-<<<<<<< HEAD
-=======
 return (
     <div className="juicer">
-      <Navbar />
     <SecaoInicio />
     <EntendaProjeto />
     <SecaoSobre />
     <ComoFunciona />
     <OQueAcompanhar />
-    <MapaCorporal />
-    <Simulador />
     <Publicos />
     <OQueNaoFaz />
     <CTAFinal />
       {/* <Footer /> */}
     </div>
 );
->>>>>>> feat/pagina-inicial.att
 }

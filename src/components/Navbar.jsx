@@ -4,23 +4,6 @@ import { Link } from 'react-router-dom'
 import { useLanguage, useTranslation } from '../context/LanguageContext'
 import logoIcon from '../assets/juicers.png'
 
-<<<<<<< HEAD
-const LEFT_LINKS = [
-    { label: 'Início', href: '/#inicio' },
-    { label: 'Solução', href: '/#sol' },
-    { label: 'O que acompanhar', href: '/#monitorar' },
-    { label: 'Impacto', to: '/mapa-corporal' },
-    { label: 'Simulador', to: '/simulador' },
-    { label: "Referências", to: "/referencias" }
-]
-
-const RIGHT_LINKS = [
-    { label: 'Para quem é', href: '/#pub' },
-    { label: 'Transparência', href: '/#naofaz' },
-    { label: 'Sobre', href: '/#sobre' },
-    { label: 'Feedback', href: '/#feedback' },
-]
-=======
 const MENU_LINKS = {
     pt: [
         { label: 'INÍCIO',        href: '#inicio'    },
@@ -44,19 +27,20 @@ const MENU_LINKS = {
 
 const NAV_LINKS = {
     pt: [
-        { label: 'SIMULADOR',  href: null        },
-        { label: 'REFERÊNCIA', href: null        },
-        { label: 'FEEDBACK',   href: '#feedback' },
+        { label: 'SIMULADOR',     to: '/simulador'     },
+        { label: 'MAPA CORPORAL', to: '/mapa-corporal' },
+        { label: 'REFERÊNCIA',    to: '/referencias'   },
+        { label: 'FEEDBACK',      href: '#feedback'    },
     ],
     en: [
-        { label: 'SIMULATOR',  href: null        },
-        { label: 'REFERENCE',  href: null        },
-        { label: 'FEEDBACK',   href: '#feedback' },
+        { label: 'SIMULATOR',  to: '/simulador'     },
+        { label: 'BODY MAP',   to: '/mapa-corporal' },
+        { label: 'REFERENCE',  to: '/referencias'   },
+        { label: 'FEEDBACK',   href: '#feedback'    },
     ],
 }
 
 const ENTRAR = { pt: 'Entrar', en: 'Sign in' }
->>>>>>> feat/pagina-inicial.att
 
 export default function Navbar() {
     const { lang, setLang } = useLanguage()
@@ -88,62 +72,7 @@ export default function Navbar() {
 
     const close = () => setMenuOpen(false)
 
-    function renderLink(link) {
-        if (link.to) {
-            return (
-                <Link to={link.to} onClick={close}>
-                    {link.label}
-                </Link>
-            )
-        }
-
-        return (
-            <a href={link.href} onClick={close}>
-                {link.label}
-            </a>
-        )
-    }
-
     return (
-<<<<<<< HEAD
-        <>
-            <nav className={`navbar${scrolled ? ' scrolled' : ''}`}>
-                <ul className="menu_list menu_left">
-                    {LEFT_LINKS.map((link) => (
-                        <li key={link.to || link.href}>
-                            {renderLink(link)}
-                        </li>
-                    ))}
-                </ul>
-
-                <Link className="navbar-brand" to="/" onClick={close}>
-                    <img src={logoIcon} alt="Juicers" className="logo-icon" />
-                    <span className="brand-name">Juicers</span>
-                </Link>
-
-                <div className="nav-end">
-                    <ul className="menu_list menu_right">
-                        {RIGHT_LINKS.map((link) => (
-                            <li key={link.to || link.href}>
-                                {renderLink(link)}
-                            </li>
-                        ))}
-
-                        <li>
-                            <Link className="btn-login" to="/login" onClick={close}>
-                                Entrar
-                            </Link>
-                        </li>
-                    </ul>
-
-                    <div
-                        className={`hamburger${menuOpen ? ' open' : ''}`}
-                        onClick={() => setMenuOpen(!menuOpen)}
-                    >
-                        <span />
-                        <span />
-                        <span />
-=======
         <nav className={`navbar${scrolled ? ' scrolled' : ''}`}>
             <div className="nav-start">
                 <a className="navbar-brand" href="/">
@@ -189,37 +118,23 @@ export default function Navbar() {
 
                     <div className={`nav-dropdown${menuOpen ? ' open' : ''}`}>
                         {menuLinks.map(l => (
-                            <a key={l.href} href={l.href} onClick={close}>{l.label}</a>
+                            <Link key={l.href} to={`/${l.href}`} onClick={close}>{l.label}</Link>
                         ))}
->>>>>>> feat/pagina-inicial.att
                     </div>
                 </div>
 
-<<<<<<< HEAD
-            <div className={`mobile-menu${menuOpen ? ' open' : ''}${scrolled ? ' scrolled' : ''}`}>
-                {[...LEFT_LINKS, ...RIGHT_LINKS].map((link) => (
-                    <div key={link.to || link.href}>
-                        {renderLink(link)}
-                    </div>
-                ))}
-
-                <Link className="btn-login" to="/login" onClick={close}>
-                    Entrar
-                </Link>
-=======
                 {navLinks.map(l => (
-                    <a
+                    <Link
                         key={l.label}
                         className="nav-link"
-                        href={l.href ?? '#'}
-                        onClick={l.href ? undefined : (e) => e.preventDefault()}
+                        to={l.to ?? `/${l.href}`}
+                        onClick={close}
                     >
                         {l.label}
-                    </a>
+                    </Link>
                 ))}
 
                 <Link className="btn-login" to="/login">{entrar}</Link>
->>>>>>> feat/pagina-inicial.att
             </div>
         </nav>
     )

@@ -1,10 +1,6 @@
 import { useState } from "react";
-<<<<<<< HEAD:src/pages/Simulador.jsx
+import { useTranslation } from "../context/LanguageContext";
 import "../style/simulador.css";
-=======
-import { useTranslation } from "../../context/LanguageContext";
-import "./simulador.css";
->>>>>>> feat/pagina-inicial.att:src/components/simulador/Simulador.jsx
 
 function calculateRiskScore({ age, sex, frequency, months, route, stacking }) {
   let pontos = 0;
@@ -271,11 +267,7 @@ function ToggleGroup({ options, value, onChange }) {
           key={String(opt.key)}
           type="button"
           className={`btn flex-fill fw-medium ${
-<<<<<<< HEAD:src/pages/Simulador.jsx
             value === opt ? "option-btn" : "btn-outline-secondary"
-=======
-            value === opt.key ? "btn-danger" : "btn-outline-secondary"
->>>>>>> feat/pagina-inicial.att:src/components/simulador/Simulador.jsx
           }`}
           onClick={() => onChange(opt.key)}
         >

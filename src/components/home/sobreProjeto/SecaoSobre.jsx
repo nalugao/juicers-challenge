@@ -1,9 +1,5 @@
-<<<<<<< HEAD:src/components/home/sobreProjeto/SecaoSobre.jsx
+import { useTranslation } from "../../../context/LanguageContext";
 import "../../../style/SecaoProjeto.css";
-=======
-import { useTranslation } from "../../context/LanguageContext";
-import "../../style/SecaoProjeto.css";
->>>>>>> feat/pagina-inicial.att:src/components/sobreProjeto/SecaoSobre.jsx
 
 const T = {
   pt: {

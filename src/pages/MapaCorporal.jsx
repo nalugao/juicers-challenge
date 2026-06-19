@@ -1,15 +1,7 @@
-<<<<<<< HEAD:src/pages/MapaCorporal.jsx
-
 import HumanBody from "../components/home/HumanBody"
 import TituloSubtitulo from "../components/TituloSubtitulo"
+import { useTranslation } from "../context/LanguageContext"
 import '../style/MapaCorporal.css'
-
-=======
-import HumanBody from "../HumanBody"
-import TituloSubtitulo from "../TituloSubtitulo"
-import { useTranslation } from "../../context/LanguageContext"
-import './MapaCorporal.css'
->>>>>>> feat/pagina-inicial.att:src/components/mapaCorporal/MapaCorporal.jsx
 
 const T = {
     pt: {
