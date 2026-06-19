@@ -1,0 +1,244 @@
+
+.jc-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.jc-field-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #9a9a9a;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.jc-input {
+  background: #0f0f0f;
+  border: 1px solid #2a2a2a;
+  border-radius: 9px;
+  padding: 10px 12px;
+  color: #f0f0f0;
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.15s ease;
+}
+
+.jc-input.amber:focus {
+  border-color: #e6a817;
+}
+
+.jc-input.teal:focus {
+  border-color: #2fd6be;
+}
+
+/* ---------- SectionCard ---------- */
+.jc-section-card {
+  background: #141414;
+  border: 1px solid #2a2a2a;
+  border-radius: 14px;
+  padding: 22px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.jc-section-card-heading {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.jc-section-card-title {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.jc-section-card-desc {
+    margin: 0;
+    font-size: 12px;
+    color: #7e7e7e;
+}
+
+/* ---------- ExamRow ---------- */
+.jc-exam-row {
+  background: #141414;
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+  padding: 15px 20px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.jc-exam-row-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 118px;
+}
+
+.jc-exam-row-date {
+  font-size: 14.5px;
+  font-weight: 650;
+  color: #f0f0f0;
+}
+
+.jc-exam-row-lab {
+  font-size: 11.5px;
+  color: #888;
+}
+
+.jc-exam-row-markers {
+  font-size: 13px;
+  color: #9a9a9a;
+  flex: 1;
+}
+
+.jc-exam-row-status {
+  font-size: 11px;
+  font-weight: 650;
+  border-radius: 20px;
+  padding: 3px 11px;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+.jc-btn-ghost {
+  background: transparent;
+  border: 1px solid #2f2f2f;
+  color: #d0d0d0;
+  font-size: 12.5px;
+  font-weight: 600;
+  font-family: inherit;
+  border-radius: 8px;
+  padding: 7px 14px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.jc-btn-ghost.amber:hover {
+  border-color: #e6a817;
+  color: #e6a817;
+}
+
+.jc-btn-ghost.teal:hover {
+  border-color: #2fd6be;
+  color: #2fd6be;
+}
+
+/* ---------- NoteCard ---------- */
+.jc-note-card {
+  background: #141414;
+  border: 1px solid #2a2a2a;
+  border-left: 3px solid #2fd6be;
+  border-radius: 10px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.jc-note-card-date {
+  font-size: 11px;
+  font-weight: 650;
+  color: #2fd6be;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.jc-note-card-text {
+  margin: 0;
+  font-size: 13px;
+  color: #cfcfcf;
+  line-height: 1.55;
+}
+
+/* ---------- PageHeader ---------- */
+.jc-page-header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.jc-page-header-title {
+    margin: 0;
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.jc-page-header-sub {
+    margin: 0;
+    font-size: 13px;
+    color: #888;
+}
+
+/* ---------- SectionLabel ---------- */
+.jc-section-label {
+    margin: 2px 0 0;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  color: #bdbdbd;
+}
+
+@media (max-width: 720px) {
+  .jc-exam-row {
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 14px 16px;
+  }
+
+  .jc-exam-row-meta {
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  .jc-exam-row-markers {
+    flex: 1 1 100%;
+    order: 3;
+  }
+
+  .jc-exam-row-status {
+    order: 2;
+  }
+
+  .jc-btn-ghost {
+    order: 4;
+    width: 100%;
+    text-align: center;
+  }
+
+  .jc-section-card {
+    padding: 18px 16px;
+  }
+
+  .jc-page-header-title {
+    font-size: 21px;
+  }
+}
+
+@media (max-width: 480px) {
+  .jc-exam-row-meta {
+    min-width: 0;
+  }
+
+  .jc-input {
+    font-size: 13px;
+    padding: 9px 10px;
+  }
+}
