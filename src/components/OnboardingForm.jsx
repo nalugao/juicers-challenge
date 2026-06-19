@@ -34,6 +34,7 @@ export default function OnboardingForm({
     const [erro, setErro] = useState('')
     const [errors, setErrors] = useState({})
     const [salvando, setSalvando] = useState(false)
+    const [novoComposto, setNovoComposto] = useState('')
 
     const [form, setForm] = useState({
         nome: nomeSeparado.nome,
@@ -43,8 +44,8 @@ export default function OnboardingForm({
         peso: '',
         altura: '',
         cicloAtivo: 'sim',
+        // cada item: { nome, dosagem } (dosagem em mg/semana)
         compostos: [],
-        dosagem: '',
         tempoUso: '',
         fezeExames: 'recentes',
         dataUltimoExame: '',
@@ -67,6 +68,45 @@ export default function OnboardingForm({
                 ? p[key].filter(v => v !== val)
                 : [...p[key], val],
         }))
+    }
+
+    // ── Compostos: adicionar (sugestão ou livre), remover e editar dosagem ──
+    const nomesSelecionados = form.compostos.map(c => c.nome)
+    const sugestoesDisponiveis = COMPOSTOS.filter(c => !nomesSelecionados.includes(c))
+
+    const adicionarComposto = nomeBruto => {
+        const nome = nomeBruto.trim()
+        if (!nome) return
+        if (nomesSelecionados.some(n => n.toLowerCase() === nome.toLowerCase())) return
+
+        setErro('')
+        setErrors(prev => ({ ...prev, compostos: '' }))
+        setForm(p => ({ ...p, compostos: [...p.compostos, { nome, dosagem: '' }] }))
+    }
+
+    const removerComposto = nome => {
+        setForm(p => ({ ...p, compostos: p.compostos.filter(c => c.nome !== nome) }))
+    }
+
+    const atualizarDosagemComposto = (nome, val) => {
+        setErro('')
+        setErrors(prev => ({ ...prev, compostos: '' }))
+        setForm(p => ({
+            ...p,
+            compostos: p.compostos.map(c => (c.nome === nome ? { ...c, dosagem: val } : c)),
+        }))
+    }
+
+    const handleAdicionarCustom = () => {
+        adicionarComposto(novoComposto)
+        setNovoComposto('')
+    }
+
+    const handleCustomKeyDown = e => {
+        if (e.key === 'Enter') {
+            e.preventDefault()
+            handleAdicionarCustom()
+        }
     }
 
     const validarEtapa1 = () => {
@@ -114,13 +154,9 @@ export default function OnboardingForm({
 
         if (form.cicloAtivo !== 'nunca') {
             if (form.compostos.length === 0) {
-                novosErros.compostos = 'Selecione pelo menos um composto.'
-            }
-
-            if (!form.dosagem) {
-                novosErros.dosagem = 'Preencha a dosagem semanal.'
-            } else if (Number(form.dosagem) <= 0) {
-                novosErros.dosagem = 'Informe uma dosagem válida.'
+                novosErros.compostos = 'Selecione ou adicione pelo menos um composto.'
+            } else if (form.compostos.some(c => !c.dosagem || Number(c.dosagem) <= 0)) {
+                novosErros.compostos = 'Informe a dosagem semanal (mg) de cada composto.'
             }
 
             if (!form.tempoUso) {
@@ -195,6 +231,11 @@ export default function OnboardingForm({
                 Feminino: 'female',
             }
 
+            const dosagemSemanalTotal = form.compostos.reduce(
+                (soma, c) => soma + (Number(c.dosagem) || 0),
+                0
+            )
+
             const dadosParaBanco = {
                 birthDate: '',
                 age: Number(form.idade),
@@ -203,11 +244,14 @@ export default function OnboardingForm({
                 weight: Number(form.peso),
                 height: Number(form.altura) / 100,
                 cycleStatus: form.cicloAtivo,
-                weeklyDosage: Number(form.dosagem || 0),
+                weeklyDosage: dosagemSemanalTotal,
                 cycleTime: form.tempoUso,
                 examStatus: form.fezeExames,
                 lastExamDate: form.dataUltimoExame,
-                substances: form.compostos,
+                substances: form.compostos.map(c => ({
+                    name: c.nome,
+                    weeklyDosage: Number(c.dosagem) || 0,
+                })),
                 healthConditions: form.condicoes,
             }
 
@@ -226,7 +270,7 @@ export default function OnboardingForm({
                 altura: form.altura,
                 cicloAtivo: form.cicloAtivo,
                 compostos: form.compostos,
-                dosagem: form.dosagem,
+                dosagem: dosagemSemanalTotal,
                 tempoUso: form.tempoUso,
                 fezeExames: form.fezeExames,
                 dataUltimoExame: form.dataUltimoExame,
@@ -511,16 +555,75 @@ export default function OnboardingForm({
                                     <div className={`ob-field ${errors.compostos ? 'ob-field-error' : ''}`}>
                                         <label>Compostos utilizados</label>
 
-                                        <div className="ob-tags">
-                                            {COMPOSTOS.map(c => (
-                                                <div
-                                                    key={c}
-                                                    className={`ob-tag-item ${form.compostos.includes(c) ? 'selected' : ''}`}
-                                                    onClick={() => toggleArray('compostos', c)}
-                                                >
-                                                    {c}
+                                        <div className="ob-compost-block">
+                                            {/* sugestões rápidas (1 clique adiciona) */}
+                                            {sugestoesDisponiveis.length > 0 && (
+                                                <div className="ob-tags">
+                                                    {sugestoesDisponiveis.map(c => (
+                                                        <div
+                                                            key={c}
+                                                            className="ob-tag-item"
+                                                            onClick={() => adicionarComposto(c)}
+                                                        >
+                                                            + {c}
+                                                        </div>
+                                                    ))}
                                                 </div>
-                                            ))}
+                                            )}
+
+                                            {/* composto livre, não-listado */}
+                                            <div className="ob-compost-custom">
+                                                <input
+                                                    type="text"
+                                                    placeholder="Outro composto (ex: Primobolan)"
+                                                    value={novoComposto}
+                                                    onChange={e => setNovoComposto(e.target.value)}
+                                                    onKeyDown={handleCustomKeyDown}
+                                                />
+                                                <button
+                                                    type="button"
+                                                    className="ob-compost-custom-btn"
+                                                    onClick={handleAdicionarCustom}
+                                                >
+                                                    Adicionar
+                                                </button>
+                                            </div>
+
+                                            {/* lista de compostos selecionados, com mg/semana */}
+                                            <div className="ob-compost-list">
+                                                {form.compostos.length === 0 && (
+                                                    <div className="ob-compost-empty">
+                                                        Nenhum composto adicionado ainda.
+                                                    </div>
+                                                )}
+
+                                                {form.compostos.map(c => (
+                                                    <div key={c.nome} className="ob-compost-row">
+                                                        <span className="ob-compost-name">{c.nome}</span>
+
+                                                        <div className="ob-compost-mg">
+                                                            <input
+                                                                type="number"
+                                                                placeholder="mg"
+                                                                value={c.dosagem}
+                                                                onChange={e =>
+                                                                    atualizarDosagemComposto(c.nome, e.target.value)
+                                                                }
+                                                            />
+                                                            <span>mg/sem</span>
+                                                        </div>
+
+                                                        <button
+                                                            type="button"
+                                                            className="ob-compost-remove"
+                                                            onClick={() => removerComposto(c.nome)}
+                                                            aria-label={`Remover ${c.nome}`}
+                                                        >
+                                                            ×
+                                                        </button>
+                                                    </div>
+                                                ))}
+                                            </div>
                                         </div>
 
                                         {errors.compostos && (
@@ -530,44 +633,25 @@ export default function OnboardingForm({
                                         )}
                                     </div>
 
-                                    <div className="ob-row">
-                                        <div className={`ob-field ${errors.dosagem ? 'ob-field-error' : ''}`}>
-                                            <label>Dosagem semanal (mg)</label>
+                                    <div className={`ob-field ${errors.tempoUso ? 'ob-field-error' : ''}`}>
+                                        <label>Tempo de uso</label>
 
-                                            <input
-                                                type="number"
-                                                placeholder="500"
-                                                value={form.dosagem}
-                                                onChange={e => update('dosagem', e.target.value)}
-                                            />
+                                        <select
+                                            value={form.tempoUso}
+                                            onChange={e => update('tempoUso', e.target.value)}
+                                        >
+                                            <option value="">Selecionar</option>
+                                            <option>Menos de 3 meses</option>
+                                            <option>3–6 meses</option>
+                                            <option>6–12 meses</option>
+                                            <option>Mais de 12 meses</option>
+                                        </select>
 
-                                            {errors.dosagem && (
-                                                <small className="ob-error-text">
-                                                    {errors.dosagem}
-                                                </small>
-                                            )}
-                                        </div>
-
-                                        <div className={`ob-field ${errors.tempoUso ? 'ob-field-error' : ''}`}>
-                                            <label>Tempo de uso</label>
-
-                                            <select
-                                                value={form.tempoUso}
-                                                onChange={e => update('tempoUso', e.target.value)}
-                                            >
-                                                <option value="">Selecionar</option>
-                                                <option>Menos de 3 meses</option>
-                                                <option>3–6 meses</option>
-                                                <option>6–12 meses</option>
-                                                <option>Mais de 12 meses</option>
-                                            </select>
-
-                                            {errors.tempoUso && (
-                                                <small className="ob-error-text">
-                                                    {errors.tempoUso}
-                                                </small>
-                                            )}
-                                        </div>
+                                        {errors.tempoUso && (
+                                            <small className="ob-error-text">
+                                                {errors.tempoUso}
+                                            </small>
+                                        )}
                                     </div>
                                 </>
                             )}
