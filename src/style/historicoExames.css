@@ -9,7 +9,8 @@
     padding: 32px 32px 0px;
     background-color: #111;
     border: 1px solid #161616;
-    border-radius: 10px
+    border-radius: 10px;
+    box-sizing: border-box;
 }
 
 /* PAGE HEADER */
@@ -43,6 +44,7 @@
     border: 1px solid #1a1a1a;
     border-radius: 9px;
     padding: 14px 16px;
+    min-width: 0;
 }
 
 .he-stat-label {
@@ -91,6 +93,7 @@
     background: transparent;
     transition: all .2s;
     margin-bottom: 28px;
+    box-sizing: border-box;
 }
 
 .he-upload-zone:hover,
@@ -173,6 +176,7 @@
     align-items: center;
     transition: border-color .15s;
     cursor: pointer;
+    box-sizing: border-box;
 }
 
 .he-exam-card:hover {
@@ -202,6 +206,7 @@
     font-weight: 500;
     color: #ccc;
     margin-bottom: 3px;
+    overflow-wrap: anywhere;
 }
 
 .he-exam-meta {
@@ -214,6 +219,8 @@
     display: flex;
     align-items: center;
     gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
 }
 
 /* RISK BADGES */
@@ -223,6 +230,7 @@
     font-size: 10px;
     font-weight: 600;
     border: 1px solid transparent;
+    white-space: nowrap;
 }
 
 .he-badge--high {
@@ -292,6 +300,8 @@
     transform: translateY(80px);
     opacity: 0;
     transition: all .3s ease;
+    max-width: calc(100vw - 40px);
+    box-sizing: border-box;
 }
 
 .he-toast--show {
@@ -309,4 +319,79 @@
 
 .he-toast-dot--warn {
     background: #e67e22;
+}
+
+/* =========================================================
+   RESPONSIVIDADE
+   ========================================================= */
+
+/* Tablets / telas médias */
+@media (max-width: 900px) {
+    .he-page {
+        padding: 24px 20px 0;
+        border-radius: 0;
+    }
+
+    .he-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+    .he-page {
+        padding: 18px 14px 0;
+    }
+
+    .he-page-header h1 {
+        font-size: 18px;
+    }
+
+    .he-page-header p {
+        font-size: 13px;
+    }
+
+    .he-stats {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .he-upload-zone {
+        padding: 20px 14px;
+        margin-bottom: 20px;
+    }
+
+    /* Card de exame: empilha em duas linhas
+       (ícone + nome/meta | badges + remover) em vez de
+       espremer tudo em 3 colunas fixas */
+    .he-exam-card {
+        grid-template-columns: 34px 1fr;
+        grid-template-rows: auto auto;
+        row-gap: 10px;
+    }
+
+    .he-exam-badges {
+        grid-column: 1 / -1;
+        justify-content: flex-start;
+    }
+
+    .he-toast {
+        left: 14px;
+        right: 14px;
+        bottom: 14px;
+        max-width: none;
+    }
+}
+
+/* Telas bem pequenas */
+@media (max-width: 380px) {
+    .he-stat-val {
+        font-size: 19px;
+    }
+
+    .he-badge {
+        font-size: 9px;
+        padding: 3px 7px;
+    }
 }

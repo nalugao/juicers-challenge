@@ -22,8 +22,8 @@ const INITIAL = {
     peso: '',
     altura: '',
     cicloAtivo: 'sim',
+    // cada item: { nome, dosagem } (dosagem em mg/semana)
     compostos: [],
-    dosagem: '',
     tempoUso: '',
     fezeExames: 'recentes',
     dataUltimoExame: '',
@@ -31,11 +31,32 @@ const INITIAL = {
     ultimaAtualizacao: '',
 }
 
+// Normaliza tanto o formato antigo (array de strings) quanto
+// o formato novo (array de {nome/dosagem} ou {name/weeklyDosage})
+function normalizarCompostos(raw) {
+    if (!Array.isArray(raw)) return []
+
+    return raw
+        .map(item => {
+            if (typeof item === 'string') return { nome: item, dosagem: '' }
+            return {
+                nome: item.nome || item.name || '',
+                dosagem: item.dosagem ?? item.weeklyDosage ?? '',
+            }
+        })
+        .filter(c => c.nome)
+}
+
 function carregarDadosConta() {
     const dados = localStorage.getItem('dadosContaCicloRisco')
     if (!dados) return INITIAL
     try {
-        return { ...INITIAL, ...JSON.parse(dados) }
+        const parsed = JSON.parse(dados)
+        return {
+            ...INITIAL,
+            ...parsed,
+            compostos: normalizarCompostos(parsed.compostos),
+        }
     } catch {
         return INITIAL
     }
@@ -67,31 +88,6 @@ function RadioGroup({ options, value, onChange }) {
                 )
             })}
         </div>
-    )
-}
-
-function TagPicker({ options, value, onChange }) {
-    const toggle = v =>
-        onChange(value.includes(v) ? value.filter(x => x !== v) : [...value, v])
-    return (
-        <>
-            <div className="dc-tags">
-                {options.map(c => (
-                    <div
-                        key={c}
-                        className={`dc-tag${value.includes(c) ? ' dc-tag--sel' : ''}`}
-                        onClick={() => toggle(c)}
-                    >
-                        {c}
-                    </div>
-                ))}
-            </div>
-            <div className="dc-tag-count">
-                {value.length === 0
-                    ? 'Nenhum composto selecionado'
-                    : `${value.length} composto${value.length > 1 ? 's' : ''} selecionado${value.length > 1 ? 's' : ''}`}
-            </div>
-        </>
     )
 }
 
@@ -133,6 +129,7 @@ export default function DadosContaAtleta({ embedded = false }) {
     const [saved, setSaved] = useState(dadosIniciais)
     const [toast, setToast] = useState({ show: false, msg: '', warn: false })
     const [saving, setSaving] = useState(false)
+    const [novoComposto, setNovoComposto] = useState('')
 
     useEffect(() => {
         async function carregarDoBanco() {
@@ -152,11 +149,10 @@ export default function DadosContaAtleta({ embedded = false }) {
                     peso: patient.weight || '',
                     altura: patient.height ? patient.height * 100 : '',
                     cicloAtivo: patient.cycleStatus || 'sim',
-                    dosagem: patient.weeklyDosage || '',
                     tempoUso: patient.cycleTime || '',
                     fezeExames: patient.examStatus || 'recentes',
                     dataUltimoExame: patient.lastExamDate || '',
-                    compostos: patient.substances || [],
+                    compostos: normalizarCompostos(patient.substances),
                     condicoes: patient.healthConditions || [],
                     ultimaAtualizacao: patient.updatedAt
                         ? new Date(patient.updatedAt).toLocaleDateString('pt-BR')
@@ -178,6 +174,41 @@ export default function DadosContaAtleta({ embedded = false }) {
 
     const update = (key, val) => setForm(p => ({ ...p, [key]: val }))
 
+    // ── Compostos: adicionar (sugestão ou livre), remover e editar dosagem ──
+    const nomesSelecionados = form.compostos.map(c => c.nome)
+    const sugestoesDisponiveis = COMPOSTOS.filter(c => !nomesSelecionados.includes(c))
+
+    const adicionarComposto = nomeBruto => {
+        const nome = nomeBruto.trim()
+        if (!nome) return
+        if (nomesSelecionados.some(n => n.toLowerCase() === nome.toLowerCase())) return
+
+        setForm(p => ({ ...p, compostos: [...p.compostos, { nome, dosagem: '' }] }))
+    }
+
+    const removerComposto = nome => {
+        setForm(p => ({ ...p, compostos: p.compostos.filter(c => c.nome !== nome) }))
+    }
+
+    const atualizarDosagemComposto = (nome, val) => {
+        setForm(p => ({
+            ...p,
+            compostos: p.compostos.map(c => (c.nome === nome ? { ...c, dosagem: val } : c)),
+        }))
+    }
+
+    const handleAdicionarCustom = () => {
+        adicionarComposto(novoComposto)
+        setNovoComposto('')
+    }
+
+    const handleCustomKeyDown = e => {
+        if (e.key === 'Enter') {
+            e.preventDefault()
+            handleAdicionarCustom()
+        }
+    }
+
     const showToast = (msg, warn = false) => {
         setToast({ show: true, msg, warn })
         setTimeout(() => setToast(t => ({ ...t, show: false })), 3200)
@@ -194,6 +225,11 @@ export default function DadosContaAtleta({ embedded = false }) {
 
             const nomeCompleto = `${form.nome || ''} ${form.sobrenome || ''}`.trim()
 
+            const dosagemSemanalTotal = form.compostos.reduce(
+                (soma, c) => soma + (Number(c.dosagem) || 0),
+                0
+            )
+
             await updateUserProfile({
                 name: nomeCompleto,
             })
@@ -204,11 +240,14 @@ export default function DadosContaAtleta({ embedded = false }) {
                 weight: Number(form.peso),
                 height: Number(form.altura) / 100,
                 cycleStatus: form.cicloAtivo,
-                weeklyDosage: Number(form.dosagem),
+                weeklyDosage: dosagemSemanalTotal,
                 cycleTime: form.tempoUso,
                 examStatus: form.fezeExames,
                 lastExamDate: form.dataUltimoExame,
-                substances: form.compostos,
+                substances: form.compostos.map(c => ({
+                    name: c.nome,
+                    weeklyDosage: Number(c.dosagem) || 0,
+                })),
                 healthConditions: form.condicoes,
             })
 
@@ -280,7 +319,6 @@ export default function DadosContaAtleta({ embedded = false }) {
 
                 <div className="dc-grid">
 
-                    {/* Perfil básico — 2 colunas × 2 linhas */}
                     <div className="dc-section dc-section--accent dc-section--perfil">
                         <div className="dc-section-title">
                             <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#c0392b" strokeWidth="1.4">
@@ -343,36 +381,105 @@ export default function DadosContaAtleta({ embedded = false }) {
                             />
                         </div>
                         {form.cicloAtivo !== 'nunca' && (
-                            <div className="dc-row2">
-                                <div className="dc-field">
-                                    <label>Dosagem semanal (mg)</label>
-                                    <input type="number" value={form.dosagem} placeholder="500" onChange={e => update('dosagem', e.target.value)} />
-                                </div>
-                                <div className="dc-field">
-                                    <label>Tempo de uso</label>
-                                    <select value={form.tempoUso} onChange={e => update('tempoUso', e.target.value)}>
-                                        <option value="">Selecionar</option>
-                                        <option>Menos de 3 meses</option>
-                                        <option>3–6 meses</option>
-                                        <option>6–12 meses</option>
-                                        <option>Mais de 12 meses</option>
-                                    </select>
-                                </div>
+                            <div className="dc-field">
+                                <label>Tempo de uso</label>
+                                <select value={form.tempoUso} onChange={e => update('tempoUso', e.target.value)}>
+                                    <option value="">Selecionar</option>
+                                    <option>Menos de 3 meses</option>
+                                    <option>3–6 meses</option>
+                                    <option>6–12 meses</option>
+                                    <option>Mais de 12 meses</option>
+                                </select>
                             </div>
                         )}
                     </div>
 
                     {/* Compostos — linha inteira */}
-                    <div className="dc-section dc-section--compostos">
-                        <div className="dc-section-title">
-                            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#c0392b" strokeWidth="1.4">
-                                <path d="M6 2v4L3 12h10L10 6V2" />
-                                <path d="M6 2h4" />
-                            </svg>
-                            Compostos utilizados
+                    {form.cicloAtivo !== 'nunca' && (
+                        <div className="dc-section dc-section--compostos">
+                            <div className="dc-section-title">
+                                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#c0392b" strokeWidth="1.4">
+                                    <path d="M6 2v4L3 12h10L10 6V2" />
+                                    <path d="M6 2h4" />
+                                </svg>
+                                Compostos utilizados
+                            </div>
+
+                            <div className="dc-compost-block">
+                                {sugestoesDisponiveis.length > 0 && (
+                                    <div className="dc-tags">
+                                        {sugestoesDisponiveis.map(c => (
+                                            <div
+                                                key={c}
+                                                className="dc-tag"
+                                                onClick={() => adicionarComposto(c)}
+                                            >
+                                                + {c}
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+
+                                <div className="dc-compost-custom">
+                                    <input
+                                        type="text"
+                                        placeholder="Outro composto (ex: Primobolan)"
+                                        value={novoComposto}
+                                        onChange={e => setNovoComposto(e.target.value)}
+                                        onKeyDown={handleCustomKeyDown}
+                                    />
+                                    <button
+                                        type="button"
+                                        className="dc-compost-custom-btn"
+                                        onClick={handleAdicionarCustom}
+                                    >
+                                        Adicionar
+                                    </button>
+                                </div>
+
+                                <div className="dc-compost-list">
+                                    {form.compostos.length === 0 && (
+                                        <div className="dc-compost-empty">
+                                            Nenhum composto adicionado ainda.
+                                        </div>
+                                    )}
+
+                                    {form.compostos.map(c => (
+                                        <div key={c.nome} className="dc-compost-row">
+                                            <span className="dc-compost-name">{c.nome}</span>
+
+                                            <div className="dc-compost-mg">
+                                                <input
+                                                    type="number"
+                                                    placeholder="mg"
+                                                    value={c.dosagem}
+                                                    onChange={e =>
+                                                        atualizarDosagemComposto(c.nome, e.target.value)
+                                                    }
+                                                />
+                                                <span>mg/sem</span>
+                                            </div>
+
+                                            <button
+                                                type="button"
+                                                className="dc-compost-remove"
+                                                onClick={() => removerComposto(c.nome)}
+                                                aria-label={`Remover ${c.nome}`}
+                                            >
+                                                ×
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
+
+                                <div className="dc-tag-count">
+                                    {form.compostos.length === 0
+                                        ? 'Nenhum composto selecionado'
+                                        : `${form.compostos.length} composto${form.compostos.length > 1 ? 's' : ''} selecionado${form.compostos.length > 1 ? 's' : ''}`}
+                                </div>
+                            </div>
                         </div>
-                        <TagPicker options={COMPOSTOS} value={form.compostos} onChange={v => update('compostos', v)} />
-                    </div>
+                    )}
 
                     {/* Exames — 2 colunas */}
                     <div className="dc-section dc-section--exames">
