@@ -48,8 +48,10 @@ export default function Navbar() {
     const navLinks = useTranslation(NAV_LINKS, 'Navbar.NAV_LINKS')
     const entrar = useTranslation(ENTRAR, 'Navbar.ENTRAR')
     const [menuOpen, setMenuOpen] = useState(false)
+    const [mobileOpen, setMobileOpen] = useState(false)
     const [scrolled, setScrolled] = useState(false)
     const menuRef = useRef(null)
+    const mobileRef = useRef(null)
 
     useEffect(() => {
         const onScroll = () => setScrolled(window.scrollY > 40)
@@ -70,7 +72,19 @@ export default function Navbar() {
         return () => document.removeEventListener('mousedown', onClickOutside)
     }, [menuOpen])
 
+    useEffect(() => {
+        if (!mobileOpen) return
+        const onClickOutside = (e) => {
+            if (mobileRef.current && !mobileRef.current.contains(e.target)) {
+                setMobileOpen(false)
+            }
+        }
+        document.addEventListener('mousedown', onClickOutside)
+        return () => document.removeEventListener('mousedown', onClickOutside)
+    }, [mobileOpen])
+
     const close = () => setMenuOpen(false)
+    const closeMobile = () => setMobileOpen(false)
 
     return (
         <nav className={`navbar${scrolled ? ' scrolled' : ''}`}>
@@ -135,6 +149,29 @@ export default function Navbar() {
                 ))}
 
                 <Link className="btn-login" to="/login">{entrar}</Link>
+
+                <div className="hamburger-wrap" ref={mobileRef}>
+                    <button
+                        type="button"
+                        className={`hamburger-btn${mobileOpen ? ' open' : ''}`}
+                        onClick={() => setMobileOpen(!mobileOpen)}
+                        aria-expanded={mobileOpen}
+                        aria-label="Menu"
+                    >
+                        <span /><span /><span />
+                    </button>
+
+                    <div className={`mobile-panel${mobileOpen ? ' open' : ''}`}>
+                        {menuLinks.map(l => (
+                            <Link key={l.href} to={`/${l.href}`} onClick={closeMobile}>{l.label}</Link>
+                        ))}
+                        <div className="mobile-divider" />
+                        {navLinks.map(l => (
+                            <Link key={l.label} to={l.to ?? `/${l.href}`} onClick={closeMobile}>{l.label}</Link>
+                        ))}
+                        <Link className="btn-login mobile" to="/login" onClick={closeMobile}>{entrar}</Link>
+                    </div>
+                </div>
             </div>
         </nav>
     )

@@ -71,4 +71,4 @@
         width:100%
     }
 }
-@media (max-width:620px){ .juicer .cta-card{padding:38px 26px} }
+@media (max-width:620px){ .juicer .cta-card{padding:38px 26px} .juicer .cta-actions{min-width:0} }
