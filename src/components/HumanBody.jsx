@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import '../style/humanBody.css'
 import TituloSubtitulo from "./TituloSubtitulo";
+import { useTranslation } from "../context/LanguageContext";
 
 const HEAD =
   "M15.92 68.5l8.8 12.546 3.97 13.984-9.254-7.38-4.622-15.848zm27.1 0l-8.8 12.546-3.976 13.988 9.254-7.38 4.622-15.848zm6.11-27.775l.108-11.775-21.16-14.742L8.123 26.133 8.09 40.19l-3.24.215 1.462 9.732 5.208 1.81 2.36 11.63 9.72 11.018 10.856-.324 9.56-10.37 1.918-11.952 5.207-1.81 1.342-9.517zm-43.085-1.84l-.257-13.82L28.226 11.9l23.618 15.755-.216 10.37 4.976-17.085L42.556 2.376 25.49 0 10.803 3.673.002 24.415z";
@@ -35,56 +36,96 @@ const BODY_PARTS = [
 ];
 
 
-const CONDITIONS = [
-  {
-    id: "brain",
-    cx: 125, cy: 28,
-    title: "Cérebro",
-    subtitle: "SAÚDE MENTAL",
-    body:
-      'Esteroides anabolizantes podem causar agressividade, alterações de humor, depressão e dependência psicológica. Estudos associam uso prolongado a episódios de "rage" e impulsividade.',
-  },
-  {
-    id: "heart",
-    cx: 133, cy: 150,
-    title: "Coração",
-    subtitle: "RISCO CARDIOVASCULAR",
-    body:
-      "Os esteroides anabolizantes aumentam o risco de infarto, AVC e cardiomiopatia. A hipertrofia ventricular esquerda é comum em usuários de longo prazo.",
-  },
-  {
-    id: "liver",
-    cx: 110, cy: 192,
-    title: "Fígado",
-    subtitle: "HEPATOTOXICIDADE",
-    body:
-      "Esteroides orais 17α-alquilados sobrecarregam o fígado, podendo causar peliose hepática, colestase e tumores hepáticos benignos ou malignos.",
-  },
-  {
-    id: "kidney",
-    cx: 142, cy: 213,
-    title: "Rins",
-    subtitle: "DANO RENAL",
-    body:
-      "Sobrecarga renal com risco de glomeruloesclerose focal segmentar, especialmente em ciclos prolongados ou doses elevadas combinadas com baixa hidratação.",
-  },
-  {
-    id: "reproductive",
-    cx: 125, cy: 268,
-    title: "Sistema Reprodutor",
-    subtitle: "DESREGULAÇÃO HORMONAL",
-    body:
-      "Atrofia testicular, infertilidade, ginecomastia e supressão do eixo HPT (hipotálamo-pituitária-testículo). Recuperação parcial em alguns casos após cessação.",
-  },
-  {
-    id: "tendon",
-    cx: 78, cy: 128,
-    title: "Tendões",
-    subtitle: "LESÕES MUSCULOESQUELÉTICAS",
-    body:
-      "Aumento do risco de ruptura tendinosa — os tendões não acompanham o ganho rápido de massa muscular, gerando desequilíbrio mecânico em movimentos de alta carga.",
-  },
+const CONDITIONS_META = [
+  { id: "brain", cx: 125, cy: 28 },
+  { id: "heart", cx: 133, cy: 150 },
+  { id: "liver", cx: 110, cy: 192 },
+  { id: "kidney", cx: 142, cy: 213 },
+  { id: "reproductive", cx: 125, cy: 268 },
+  { id: "tendon", cx: 78, cy: 128 },
 ];
+
+const CONDITIONS_TEXT = {
+  pt: {
+    brain: {
+      title: "Cérebro",
+      subtitle: "SAÚDE MENTAL",
+      body: 'Esteroides anabolizantes podem causar agressividade, alterações de humor, depressão e dependência psicológica. Estudos associam uso prolongado a episódios de "rage" e impulsividade.',
+    },
+    heart: {
+      title: "Coração",
+      subtitle: "RISCO CARDIOVASCULAR",
+      body: "Os esteroides anabolizantes aumentam o risco de infarto, AVC e cardiomiopatia. A hipertrofia ventricular esquerda é comum em usuários de longo prazo.",
+    },
+    liver: {
+      title: "Fígado",
+      subtitle: "HEPATOTOXICIDADE",
+      body: "Esteroides orais 17α-alquilados sobrecarregam o fígado, podendo causar peliose hepática, colestase e tumores hepáticos benignos ou malignos.",
+    },
+    kidney: {
+      title: "Rins",
+      subtitle: "DANO RENAL",
+      body: "Sobrecarga renal com risco de glomeruloesclerose focal segmentar, especialmente em ciclos prolongados ou doses elevadas combinadas com baixa hidratação.",
+    },
+    reproductive: {
+      title: "Sistema Reprodutor",
+      subtitle: "DESREGULAÇÃO HORMONAL",
+      body: "Atrofia testicular, infertilidade, ginecomastia e supressão do eixo HPT (hipotálamo-pituitária-testículo). Recuperação parcial em alguns casos após cessação.",
+    },
+    tendon: {
+      title: "Tendões",
+      subtitle: "LESÕES MUSCULOESQUELÉTICAS",
+      body: "Aumento do risco de ruptura tendinosa — os tendões não acompanham o ganho rápido de massa muscular, gerando desequilíbrio mecânico em movimentos de alta carga.",
+    },
+  },
+  en: {
+    brain: {
+      title: "Brain",
+      subtitle: "MENTAL HEALTH",
+      body: 'Anabolic steroids can cause aggression, mood swings, depression and psychological dependence. Studies link prolonged use to "rage" episodes and impulsivity.',
+    },
+    heart: {
+      title: "Heart",
+      subtitle: "CARDIOVASCULAR RISK",
+      body: "Anabolic steroids increase the risk of heart attack, stroke and cardiomyopathy. Left ventricular hypertrophy is common in long-term users.",
+    },
+    liver: {
+      title: "Liver",
+      subtitle: "HEPATOTOXICITY",
+      body: "17α-alkylated oral steroids overload the liver, potentially causing hepatic peliosis, cholestasis and benign or malignant liver tumors.",
+    },
+    kidney: {
+      title: "Kidneys",
+      subtitle: "KIDNEY DAMAGE",
+      body: "Renal overload with risk of focal segmental glomerulosclerosis, especially in prolonged cycles or high doses combined with low hydration.",
+    },
+    reproductive: {
+      title: "Reproductive System",
+      subtitle: "HORMONAL DYSREGULATION",
+      body: "Testicular atrophy, infertility, gynecomastia and suppression of the HPT axis (hypothalamus-pituitary-testis). Partial recovery in some cases after cessation.",
+    },
+    tendon: {
+      title: "Tendons",
+      subtitle: "MUSCULOSKELETAL INJURIES",
+      body: "Increased risk of tendon rupture — tendons don't keep pace with rapid muscle mass gain, creating mechanical imbalance during high-load movements.",
+    },
+  },
+};
+
+const UI_TEXT = {
+  pt: {
+    close: "Fechar",
+    clinicalRef: "referência clínica",
+    emptyLabel: "Selecione um ponto",
+    emptyText: "Clique sobre os marcadores no diagrama para visualizar os efeitos sistêmicos.",
+  },
+  en: {
+    close: "Close",
+    clinicalRef: "clinical reference",
+    emptyLabel: "Select a point",
+    emptyText: "Click on the markers in the diagram to view the systemic effects.",
+  },
+};
 
 function CloseIcon() {
   return (
@@ -107,6 +148,9 @@ function CloseIcon() {
 
 export default function BodyRiskMap({ className = "", style }) {
   const [selectedId, setSelectedId] = useState("heart");
+  const ui = useTranslation(UI_TEXT, "HumanBody.UI_TEXT");
+  const condText = useTranslation(CONDITIONS_TEXT, "HumanBody.CONDITIONS_TEXT");
+  const CONDITIONS = CONDITIONS_META.map((m) => ({ ...m, ...condText[m.id] }));
   const selected = CONDITIONS.find((c) => c.id === selectedId);
 
   const rootClass = className ? `hbd-root ${className}` : "hbd-root";
@@ -174,7 +218,7 @@ export default function BodyRiskMap({ className = "", style }) {
                 <button
                   className="hbd-card-close"
                   onClick={() => setSelectedId(null)}
-                  aria-label="Fechar"
+                  aria-label={ui.close}
                   type="button"
                 >
                   <CloseIcon />
@@ -186,7 +230,7 @@ export default function BodyRiskMap({ className = "", style }) {
 
                 <div className="hbd-card-footer">
                   <span className="hbd-card-footer-label">
-                    {selected.id} · referência clínica
+                    {selected.id} · {ui.clinicalRef}
                   </span>
                   <div className="hbd-pager">
                     {CONDITIONS.map((c) => (
@@ -204,10 +248,9 @@ export default function BodyRiskMap({ className = "", style }) {
               </div>
             ) : (
               <div className="hbd-empty">
-                <div className="hbd-empty-label">Selecione um ponto</div>
+                <div className="hbd-empty-label">{ui.emptyLabel}</div>
                 <p className="hbd-empty-text">
-                  Clique sobre os marcadores no diagrama para visualizar os
-                  efeitos sistêmicos.
+                  {ui.emptyText}
                 </p>
               </div>
             )}

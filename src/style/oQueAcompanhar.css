@@ -1,17 +1,21 @@
 
 .juicer .mon-grid{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
+    display:flex;
+    flex-direction:column;
     gap:20px
 }
 
 .juicer .mon{
+    width:74%;
     background:var(--j-surface);
     border:1px solid var(--j-hairline);
     border-radius:var(--j-radius);
     padding:26px;
     transition:.2s
 }
+
+.juicer .mon:nth-child(odd){ align-self:flex-start }
+.juicer .mon:nth-child(even){ align-self:flex-end }
 .juicer .mon:hover{
     border-color:var(--j-teal-dim);
     transform:translateY(-3px)
@@ -42,4 +46,5 @@
     color:var(--j-teal)
 }
 .juicer .mon p{color:var(--j-mid);font-size:.95rem;margin-bottom:16px}
-@media (max-width:880px){ .juicer .mon-grid{grid-template-columns:1fr} }
+@media (max-width:980px){ .juicer .mon{width:85%} }
+@media (max-width:640px){ .juicer .mon{width:100%;align-self:stretch!important} }

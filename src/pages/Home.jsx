@@ -3,6 +3,7 @@ import Navbar from "../components/Navbar";
 import "../style/juicer-tokens.css";
 import "../style/home.css";
 import SecaoInicio from "../components/SecaoInicio/SecaoInicio";
+import EntendaProjeto from "../components/entendaProjeto/EntendaProjeto";
 import ComoFunciona from "../components/comoFunciona/ComoFunciona";
 import OQueAcompanhar from "../components/oQueAcompanhar/OQueAcompanhar";
 import MapaCorporal from "../components/mapaCorporal/MapaCorporal";
@@ -34,13 +35,14 @@ return (
     <div className="juicer">
       <Navbar />
     <SecaoInicio />
+    <EntendaProjeto />
+    <SecaoSobre />
     <ComoFunciona />
     <OQueAcompanhar />
     <MapaCorporal />
     <Simulador />
     <Publicos />
     <OQueNaoFaz />
-    <SecaoSobre />
     <CTAFinal />
       {/* <Footer /> */}
     </div>

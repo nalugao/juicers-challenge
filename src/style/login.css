@@ -30,7 +30,7 @@
 
 .login_left_headline em {
     font-style: normal;
-    color: #E24B4A;
+    color: #2FD6BE;
 }
 
 .login_left_sub {
@@ -100,7 +100,7 @@
 
 .field input:focus,
 .field select:focus {
-    border-color: #E24B4A;
+    border-color: #2FD6BE;
     background: #fff;
     box-shadow: 0 0 0 3px rgba(226, 75, 74, 0.12);
 }
@@ -129,13 +129,13 @@
 }
 
 .forgot:hover {
-    color: #E24B4A;
+    color: #2FD6BE;
 }
 
 .btn_entrar {
     width: 100%;
     padding: 13px;
-    background: #E24B4A;
+    background: #2FD6BE;
     color: #fff;
     border: none;
     border-radius: 10px;
@@ -205,7 +205,7 @@
 }
 
 .login_card_footer a {
-    color: #E24B4A;
+    color: #2FD6BE;
     text-decoration: none;
 }
 
@@ -279,7 +279,7 @@
 
     .field input:focus,
     .field select:focus {
-        border-color: #E24B4A;
+        border-color: #2FD6BE;
         background-color: #1a1a1a;
     }
 

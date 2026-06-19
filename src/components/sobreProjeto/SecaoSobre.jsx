@@ -1,20 +1,37 @@
+import { useTranslation } from "../../context/LanguageContext";
 import "../../style/SecaoProjeto.css";
 
+const T = {
+  pt: {
+    eyebrow: "Sobre o projeto",
+    h2: "Acompanhar é cuidar.",
+    p: "A Juicers é uma ferramenta de acompanhamento de saúde, educação e redução de danos para quem usa anabolizantes, e para os profissionais que os apoiam. A maioria das pessoas já conhece os riscos; o que costuma faltar é acompanhamento. Em vez de julgar, ajudamos a enxergar e a decidir melhor.",
+    sealTitle: "Privado por padrão",
+    sealP: "Seus dados de saúde ficam no seu dispositivo. Você no controle, sempre.",
+  },
+  en: {
+    eyebrow: "About the project",
+    h2: "Tracking is caring.",
+    p: "Juicers is a health tracking, education and harm reduction tool for people who use anabolic steroids, and for the professionals who support them. Most people already know the risks; what's usually missing is tracking. Instead of judging, we help you see clearly and decide better.",
+    sealTitle: "Private by default",
+    sealP: "Your health data stays on your device. You're always in control.",
+  },
+};
+
 export default function SecaoSobre() {
+  const t = useTranslation(T, "SecaoSobre.T");
+
   return (
     <section id="sobre" className="section" style={{ background: "var(--j-surface)" }}>
       <div className="wrap">
         <div className="about-grid">
           <div className="reveal">
-            <span className="eyebrow">Sobre o projeto</span>
+            <span className="eyebrow">{t.eyebrow}</span>
             <h2 style={{ fontSize: "clamp(1.8rem,3.5vw,2.6rem)", margin: "12px 0 16px" }}>
-              Acompanhar é cuidar.
+              {t.h2}
             </h2>
             <p>
-              A Juicers é uma ferramenta de acompanhamento de saúde, educação e redução de danos
-              para quem usa anabolizantes, e para os profissionais que os apoiam. A maioria das
-              pessoas já conhece os riscos; o que costuma faltar é acompanhamento. Em vez de julgar,
-              ajudamos a enxergar e a decidir melhor.
+              {t.p}
             </p>
           </div>
           <div className="seal reveal">
@@ -22,8 +39,8 @@ export default function SecaoSobre() {
               <rect x="3" y="11" width="18" height="11" rx="2" />
               <path d="M7 11V7a5 5 0 0 1 10 0v4" />
             </svg>
-            <h4>Privado por padrão</h4>
-            <p>Seus dados de saúde ficam no seu dispositivo. Você no controle, sempre.</p>
+            <h4>{t.sealTitle}</h4>
+            <p>{t.sealP}</p>
           </div>
         </div>
       </div>

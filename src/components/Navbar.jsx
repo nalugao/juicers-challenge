@@ -1,26 +1,53 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import '../style/navbar.css'
 import { Link } from 'react-router-dom'
-import logoIcon from '../assets/logo-nome.png'
+import { useLanguage, useTranslation } from '../context/LanguageContext'
+import logoIcon from '../assets/juicers.png'
 
-const LEFT_LINKS = [
-    { label: 'Início',           href: '#inicio'        },
-    { label: 'Solução',          href: '#sol'           },
-    { label: 'O que acompanhar', href: '#monitorar'     },
-    { label: 'Impacto',          href: '#mapa-corporal' },
-    { label: 'Simulador',        href: '#simulador'     },
-]
+const MENU_LINKS = {
+    pt: [
+        { label: 'INÍCIO',        href: '#inicio'    },
+        { label: 'CONHEÇA',       href: '#entenda'   },
+        { label: 'SOBRE',         href: '#sobre'     },
+        { label: 'SOLUÇÃO',       href: '#sol'       },
+        { label: 'SINAIS',        href: '#monitorar' },
+        { label: 'PÚBLICO',       href: '#pub'       },
+        { label: 'TRANSPARÊNCIA', href: '#naofaz'    },
+    ],
+    en: [
+        { label: 'HOME',          href: '#inicio'    },
+        { label: 'LEARN',         href: '#entenda'   },
+        { label: 'ABOUT',         href: '#sobre'     },
+        { label: 'SOLUTION',      href: '#sol'       },
+        { label: 'SIGNALS',       href: '#monitorar' },
+        { label: 'AUDIENCE',      href: '#pub'       },
+        { label: 'TRANSPARENCY',  href: '#naofaz'    },
+    ],
+}
 
-const RIGHT_LINKS = [
-    { label: 'Para quem é',   href: '#pub'      },
-    { label: 'Transparência', href: '#naofaz'   },
-    { label: 'Sobre',         href: '#sobre'    },
-    { label: 'Feedback',      href: '#feedback' },
-]
+const NAV_LINKS = {
+    pt: [
+        { label: 'SIMULADOR',  href: null        },
+        { label: 'REFERÊNCIA', href: null        },
+        { label: 'FEEDBACK',   href: '#feedback' },
+    ],
+    en: [
+        { label: 'SIMULATOR',  href: null        },
+        { label: 'REFERENCE',  href: null        },
+        { label: 'FEEDBACK',   href: '#feedback' },
+    ],
+}
+
+const ENTRAR = { pt: 'Entrar', en: 'Sign in' }
 
 export default function Navbar() {
+    const { lang, setLang } = useLanguage()
+    const menuLinks = useTranslation(MENU_LINKS, 'Navbar.MENU_LINKS')
+    const navLinks = useTranslation(NAV_LINKS, 'Navbar.NAV_LINKS')
+    const entrar = useTranslation(ENTRAR, 'Navbar.ENTRAR')
     const [menuOpen, setMenuOpen] = useState(false)
     const [scrolled, setScrolled] = useState(false)
+    const menuRef = useRef(null)
 
     useEffect(() => {
         const onScroll = () => setScrolled(window.scrollY > 40)
@@ -28,44 +55,83 @@ export default function Navbar() {
         return () => window.removeEventListener('scroll', onScroll)
     }, [])
 
+    useEffect(() => {
+        if (!menuOpen) return
+        const onClickOutside = (e) => {
+            if (menuRef.current && !menuRef.current.contains(e.target)) {
+                setMenuOpen(false)
+            }
+        }
+        document.addEventListener('mousedown', onClickOutside)
+        return () => document.removeEventListener('mousedown', onClickOutside)
+    }, [menuOpen])
+
     const close = () => setMenuOpen(false)
 
     return (
-        <>
-            <nav className={`navbar${scrolled ? ' scrolled' : ''}`}>
-                <ul className="menu_list menu_left">
-                    {LEFT_LINKS.map(l => (
-                        <li key={l.href}><a href={l.href}>{l.label}</a></li>
-                    ))}
-                </ul>
-
+        <nav className={`navbar${scrolled ? ' scrolled' : ''}`}>
+            <div className="nav-start">
                 <a className="navbar-brand" href="/">
                     <img src={logoIcon} alt="Juicers" className="logo-icon" />
-                    <span className="brand-name">Juicers</span>
                 </a>
 
-                <div className="nav-end">
-                    <ul className="menu_list menu_right">
-                        {RIGHT_LINKS.map(l => (
-                            <li key={l.href}><a href={l.href}>{l.label}</a></li>
-                        ))}
-                        <li><Link className="btn-login" to="/login">Entrar</Link></li>
-                    </ul>
-                    <div
-                        className={`hamburger${menuOpen ? ' open' : ''}`}
-                        onClick={() => setMenuOpen(!menuOpen)}
+                <div className="lang-switch">
+                    <svg className="lang-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+                        <circle cx="12" cy="12" r="9" />
+                        <path d="M3 12h18M12 3c2.4 2.5 3.8 5.6 3.8 9s-1.4 6.5-3.8 9c-2.4-2.5-3.8-5.6-3.8-9s1.4-6.5 3.8-9z" />
+                    </svg>
+                    <button
+                        type="button"
+                        className={lang === 'pt' ? 'active' : ''}
+                        onClick={() => setLang('pt')}
                     >
-                        <span /><span /><span />
+                        PT
+                    </button>
+                    <span className="lang-sep">/</span>
+                    <button
+                        type="button"
+                        className={lang === 'en' ? 'active' : ''}
+                        onClick={() => setLang('en')}
+                    >
+                        EN
+                    </button>
+                </div>
+            </div>
+
+            <div className="nav-end">
+                <div className="menu-wrap" ref={menuRef}>
+                    <button
+                        type="button"
+                        className={`menu-btn${menuOpen ? ' open' : ''}`}
+                        onClick={() => setMenuOpen(!menuOpen)}
+                        aria-expanded={menuOpen}
+                    >
+                        MENU
+                        <svg className="menu-btn-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M6 9l6 6 6-6" />
+                        </svg>
+                    </button>
+
+                    <div className={`nav-dropdown${menuOpen ? ' open' : ''}`}>
+                        {menuLinks.map(l => (
+                            <a key={l.href} href={l.href} onClick={close}>{l.label}</a>
+                        ))}
                     </div>
                 </div>
-            </nav>
 
-            <div className={`mobile-menu${menuOpen ? ' open' : ''}${scrolled ? ' scrolled' : ''}`}>
-                {[...LEFT_LINKS, ...RIGHT_LINKS].map(l => (
-                    <a key={l.href} href={l.href} onClick={close}>{l.label}</a>
+                {navLinks.map(l => (
+                    <a
+                        key={l.label}
+                        className="nav-link"
+                        href={l.href ?? '#'}
+                        onClick={l.href ? undefined : (e) => e.preventDefault()}
+                    >
+                        {l.label}
+                    </a>
                 ))}
-                <Link className="btn-login" to="/login" onClick={close}>Entrar</Link>
+
+                <Link className="btn-login" to="/login">{entrar}</Link>
             </div>
-        </>
+        </nav>
     )
 }

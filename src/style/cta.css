@@ -8,15 +8,7 @@
     border-radius:24px;
     padding:64px 56px;
     background:linear-gradient(135deg,#0f3b35,#11202b 60%);
-    border:1px solid var(--j-teal-dim);
-    box-shadow:0 40px 90px -40px rgba(47,214,190,.4)
-}
-
-.juicer .cta-card::after{
-    content:"";
-    position:absolute;
-    inset:0;background:radial-gradient(500px 300px at 85% 20%,rgba(47,214,190,.18),transparent 60%);
-    pointer-events:none
+    border:1px solid var(--j-teal-dim)
 }
 
 .juicer .cta-inner{

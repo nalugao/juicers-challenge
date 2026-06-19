@@ -1,6 +1,6 @@
 .footer .logo-icon {
-    width: 96px !important;
-    height: 96px !important;
+    width: 150px !important;
+    height: auto !important;
     object-fit: contain;
     display: block;
 }
@@ -21,7 +21,7 @@
     left: clamp(1.5rem, 5vw, 3rem);
     width: 48px;
     height: 2px;
-    background: #E24B4A;
+    background: #2FD6BE;
 }
 
 /* ---- Grid principal ---- */
@@ -46,9 +46,9 @@
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: #E24B4A;
+    background: #2FD6BE;
     display: inline-block;
-    box-shadow: 0 0 6px rgba(226, 75, 74, 0.5);
+    box-shadow: 0 0 6px rgba(47, 214, 190, 0.5);
 }
 
 .footer_logo_text {
@@ -80,9 +80,9 @@
 }
 
 .footer_social_link:hover {
-    border-color: #E24B4A;
+    border-color: #2FD6BE;
     background: #1a0a0a;
-    color: #E24B4A;
+    color: #2FD6BE;
 }
 
 .footer_social_link svg {
@@ -120,7 +120,7 @@
     font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: #E24B4A;
+    color: #2FD6BE;
     margin-bottom: 1.1rem;
 }
 
@@ -159,7 +159,7 @@
 }
 
 .footer_nav ul li a:hover::before {
-    background: #E24B4A;
+    background: #2FD6BE;
 }
 
 /* ---- Bottom bar ---- */

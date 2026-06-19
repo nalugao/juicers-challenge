@@ -1,7 +1,38 @@
 import '../style/footer.css'
 import logoIcon from '../assets/juicers.png'
+import { useTranslation } from '../context/LanguageContext'
+
+const T = {
+    pt: {
+        tagline: "A Juicers é uma ferramenta consultiva de apoio para usuários e profissionais. Acompanhe o histórico de exames, visualize a evolução dos indicadores ao longo do tempo, identifique tendências de risco mais cedo e tome decisões mais conscientes com base em dados organizados.",
+        navTitle: "Navegação",
+        navLinks: [
+            { label: "Menu", href: "/" },
+            { label: "Sobre o Projeto", href: "#sobre-pagina" },
+            { label: "Entrar", href: "/login" },
+        ],
+        legalTitle: "Legal",
+        legalLinks: ["Termos de Uso", "Privacidade", "Fontes"],
+        rights: "Todos os direitos reservados.",
+        disclaimer: "Este site é informativo e não substitui orientação médica profissional.",
+    },
+    en: {
+        tagline: "Juicers is a consultative support tool for users and professionals. Track exam history, view indicator trends over time, spot risk patterns earlier and make more informed decisions based on organized data.",
+        navTitle: "Navigation",
+        navLinks: [
+            { label: "Menu", href: "/" },
+            { label: "About the Project", href: "#sobre-pagina" },
+            { label: "Sign in", href: "/login" },
+        ],
+        legalTitle: "Legal",
+        legalLinks: ["Terms of Use", "Privacy", "Sources"],
+        rights: "All rights reserved.",
+        disclaimer: "This site is informational and does not replace professional medical guidance.",
+    },
+}
 
 export default function Footer() {
+    const t = useTranslation(T, 'Footer.T')
 
     return (
         <footer className="footer">
@@ -13,7 +44,7 @@ export default function Footer() {
                         <img src={logoIcon} alt="Logo" className="logo-icon" />
                     </a>
                     <p className="footer_tagline">
-                        A Juicers é uma ferramenta consultiva de apoio para usuários e profissionais. Acompanhe o histórico de exames, visualize a evolução dos indicadores ao longo do tempo, identifique tendências de risco mais cedo e tome decisões mais conscientes com base em dados organizados.
+                        {t.tagline}
                     </p>
 
                     {/* Redes sociais */}
@@ -45,29 +76,29 @@ export default function Footer() {
 
                 {/* Navegação */}
                 <div className="footer_nav">
-                    <p className="footer_nav_titulo">Navegação</p>
+                    <p className="footer_nav_titulo">{t.navTitle}</p>
                     <ul>
-                        <li><a href="/">Menu</a></li>
-                        <li><a href="#sobre-pagina">Sobre o Projeto</a></li>
-                        <li><a href="/login">Entrar</a></li>
+                        {t.navLinks.map((l) => (
+                            <li key={l.label}><a href={l.href}>{l.label}</a></li>
+                        ))}
                     </ul>
                 </div>
 
                 {/* Legal */}
                 <div className="footer_nav">
-                    <p className="footer_nav_titulo">Legal</p>
+                    <p className="footer_nav_titulo">{t.legalTitle}</p>
                     <ul>
-                        <li><a href="#">Termos de Uso</a></li>
-                        <li><a href="#">Privacidade</a></li>
-                        <li><a href="#">Fontes</a></li>
+                        {t.legalLinks.map((l) => (
+                            <li key={l}><a href="#">{l}</a></li>
+                        ))}
                     </ul>
                 </div>
             </div>
 
             <div className="footer_bottom">
-                <p>© {new Date().getFullYear()} Juicer. Todos os direitos reservados.</p>
+                <p>© {new Date().getFullYear()} Juicer. {t.rights}</p>
                 <p className="footer_disclaimer">
-                    Este site é informativo e não substitui orientação médica profissional.
+                    {t.disclaimer}
                 </p>
             </div>
         </footer>
