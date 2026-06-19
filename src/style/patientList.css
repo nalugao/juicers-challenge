@@ -1,0 +1,320 @@
+/* ─── PatientsList.css ─── */
+
+.jc-fade {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* PAGE WRAPPER — resolve o conteúdo colado nas bordas da viewport */
+.jc-page {
+    padding: 28px 32px 48px;
+    box-sizing: border-box;
+}
+
+/* HEADER ROW (saudação + botão adicionar) */
+.jc-header-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.jc-btn-teal {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #2fd6be;
+    color: #06201d;
+    border: none;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: inherit;
+    border-radius: 10px;
+    padding: 11px 18px;
+    cursor: pointer;
+    flex: none;
+    transition: opacity .15s;
+    white-space: nowrap;
+}
+
+.jc-btn-teal:hover {
+    opacity: .88;
+}
+
+/* STAT CARDS */
+.jc-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+}
+
+.jc-stat-card {
+    background: #141414;
+    border: 1px solid #2a2a2a;
+    border-radius: 12px;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    box-sizing: border-box;
+    min-width: 0;
+}
+
+.jc-stat-label {
+    font-size: 12px;
+    color: #9a9a9a;
+    font-weight: 500;
+}
+
+.jc-stat-value {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -.02em;
+    color: #f0f0f0;
+}
+
+/* SEARCH */
+.jc-search-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #141414;
+    border: 1px solid #2a2a2a;
+    border-radius: 10px;
+    padding: 0 14px;
+    max-width: 360px;
+    box-sizing: border-box;
+}
+
+.jc-search-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #f0f0f0;
+    font-size: 13.5px;
+    font-family: inherit;
+    padding: 11px 0;
+    min-width: 0;
+}
+
+/* PATIENT LIST */
+.jc-patient-list {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+}
+
+.jc-patient-empty {
+    background: #141414;
+    border: 1px solid #2a2a2a;
+    border-radius: 12px;
+    padding: 18px;
+    color: #888;
+    font-size: 13px;
+}
+
+.jc-patient-row {
+    background: #141414;
+    border: 1px solid #2a2a2a;
+    border-radius: 12px;
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    box-sizing: border-box;
+    transition: border-color .15s;
+}
+
+.jc-patient-row:hover {
+    border-color: #3a3a3a;
+}
+
+.jc-patient-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(47, 214, 190, .14);
+    color: #2fd6be;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+    flex: none;
+}
+
+.jc-patient-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+    min-width: 0;
+}
+
+.jc-patient-name-row {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.jc-patient-name {
+    font-size: 14.5px;
+    font-weight: 650;
+    color: #f0f0f0;
+}
+
+.jc-patient-age {
+    font-size: 12px;
+    color: #888;
+}
+
+.jc-patient-compounds {
+    font-size: 11.5px;
+    color: #7e7e7e;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.jc-patient-exam {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    align-items: flex-start;
+    min-width: 96px;
+}
+
+.jc-patient-exam-label {
+    font-size: 10px;
+    color: #777;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+}
+
+.jc-patient-exam-value {
+    font-size: 12.5px;
+    color: #cfcfcf;
+    font-weight: 600;
+}
+
+.jc-status-badge {
+    font-size: 11px;
+    font-weight: 650;
+    border-radius: 20px;
+    padding: 4px 12px;
+    flex: none;
+    border: 1px solid transparent;
+    white-space: nowrap;
+}
+
+.jc-patient-alert {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 42px;
+    justify-content: center;
+}
+
+.jc-patient-alert-count {
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.jc-btn-soft-teal {
+    background: rgba(47, 214, 190, .12);
+    border: 1px solid rgba(47, 214, 190, .3);
+    color: #2fd6be;
+    font-size: 12.5px;
+    font-weight: 650;
+    font-family: inherit;
+    border-radius: 8px;
+    padding: 8px 15px;
+    cursor: pointer;
+    flex: none;
+    transition: all .15s;
+    white-space: nowrap;
+}
+
+.jc-btn-soft-teal:hover {
+    background: rgba(47, 214, 190, .2);
+}
+
+/* =========================================================
+   RESPONSIVIDADE
+   ========================================================= */
+
+@media (max-width: 900px) {
+    .jc-page {
+        padding: 22px 20px 40px;
+    }
+
+    .jc-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .jc-page {
+        padding: 18px 14px 32px;
+    }
+
+    .jc-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .jc-search-bar {
+        max-width: none;
+    }
+
+    .jc-header-row .jc-btn-teal {
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* Linha do paciente: empilha em vez de espremer 6 itens
+       numa única linha rígida */
+    .jc-patient-row {
+        flex-wrap: wrap;
+        row-gap: 12px;
+        padding: 16px;
+    }
+
+    .jc-patient-avatar {
+        order: 1;
+    }
+
+    .jc-patient-info {
+        order: 2;
+        flex: 1 1 160px;
+    }
+
+    .jc-patient-exam {
+        order: 3;
+        min-width: 0;
+    }
+
+    .jc-status-badge {
+        order: 4;
+    }
+
+    .jc-patient-alert {
+        order: 5;
+        justify-content: flex-start;
+    }
+
+    .jc-btn-soft-teal {
+        order: 6;
+        flex-basis: 100%;
+        text-align: center;
+        padding: 10px 15px;
+    }
+}
+
+@media (max-width: 380px) {
+    .jc-stat-value {
+        font-size: 23px;
+    }
+}

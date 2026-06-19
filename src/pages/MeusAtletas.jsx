@@ -5,6 +5,7 @@ import InviteModal from '../components/perfilDoUsuario/InviteModal.jsx'
 import Toast from '../components/perfilDoUsuario/Toast.jsx'
 import { getDoctorPatients, getDoctorPatientExams } from '../services/api'
 import { useAuth } from '../context/AuthContext.jsx'
+import '../style/meusAtletas.css'
 
 function getInitials(name = '') {
   return name
@@ -26,6 +27,21 @@ function formatDate(dateString) {
   }
 
   return dateString
+}
+
+// Compostos podem vir como string[] (formato antigo) ou como
+// {name, weeklyDosage}[] (formato atual, com dosagem por item).
+function formatCompounds(substances = []) {
+  if (!substances.length) return ['Sem compostos informados']
+
+  return substances.map(s => {
+    if (typeof s === 'string') return s
+
+    const nome = s.name || s.nome || 'Composto'
+    const dosagem = s.weeklyDosage ?? s.dosagem
+
+    return dosagem ? `${nome} · ${dosagem}mg/sem` : nome
+  })
 }
 
 const MARKER_RULES = {
@@ -210,9 +226,7 @@ function formatPatient(patient, exams = []) {
     name,
     initials: getInitials(name),
     age: patient.age || '-',
-    compounds: patient.substances?.length
-      ? patient.substances
-      : ['Sem compostos informados'],
+    compounds: formatCompounds(patient.substances),
     lastExam: formatDate(examInfo.lastExamDate || patient.lastExamDate),
     status: examInfo.status,
     alerts: examInfo.alerts,
@@ -290,7 +304,7 @@ export default function MeusAtletas() {
 
   if (carregando) {
     return (
-      <div style={{ color: '#aaa', padding: 24 }}>
+      <div className="ma-loading">
         Carregando pacientes...
       </div>
     )

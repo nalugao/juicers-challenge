@@ -1,6 +1,7 @@
 import React from 'react'
 import { PageHeader } from '../components/perfilDoUsuario/Primitives.jsx'
 import { STATUS } from '../theme.js'
+import '../style/patientList.css'
 
 export default function PatientsList({
   greeting,
@@ -29,72 +30,23 @@ export default function PatientsList({
   )
 
   const statCard = (label, value, color) => (
-    <div
-      style={{
-        background: '#141414',
-        border: '1px solid #2a2a2a',
-        borderRadius: 12,
-        padding: 18,
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 6,
-      }}
-    >
-      <span style={{ fontSize: 12, color: '#9a9a9a', fontWeight: 500 }}>
-        {label}
-      </span>
-
-      <span
-        style={{
-          fontSize: 28,
-          fontWeight: 700,
-          letterSpacing: '-.02em',
-          color: color || '#f0f0f0',
-        }}
-      >
+    <div className="jc-stat-card">
+      <span className="jc-stat-label">{label}</span>
+      <span className="jc-stat-value" style={color ? { color } : undefined}>
         {value}
       </span>
     </div>
   )
 
   return (
-    <div
-      className="jc-fade"
-      style={{ display: 'flex', flexDirection: 'column', gap: 24 }}
-    >
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'flex-start',
-          justifyContent: 'space-between',
-          gap: 16,
-          flexWrap: 'wrap',
-        }}
-      >
+    <div className="jc-fade jc-page">
+      <div className="jc-header-row">
         <PageHeader
           title={greeting}
           sub="Gerencie seus pacientes e acompanhe os indicadores de saúde"
         />
 
-        <button
-          onClick={onInvite}
-          className="jc-btn-teal"
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 8,
-            background: '#2fd6be',
-            color: '#06201d',
-            border: 'none',
-            fontSize: 13,
-            fontWeight: 700,
-            fontFamily: 'inherit',
-            borderRadius: 10,
-            padding: '11px 18px',
-            cursor: 'pointer',
-            flex: 'none',
-          }}
-        >
+        <button onClick={onInvite} className="jc-btn-teal">
           <svg
             width="16"
             height="16"
@@ -112,31 +64,13 @@ export default function PatientsList({
         </button>
       </div>
 
-      <div
-        className="jc-stats"
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(3,1fr)',
-          gap: 14,
-        }}
-      >
+      <div className="jc-stats">
         {statCard('Total de pacientes', total)}
         {statCard('Alertas de risco alto', risco, '#f04747')}
         {statCard('Alertas em atenção', atencao, '#e0a82e')}
       </div>
 
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: 10,
-          background: '#141414',
-          border: '1px solid #2a2a2a',
-          borderRadius: 10,
-          padding: '0 14px',
-          maxWidth: 360,
-        }}
-      >
+      <div className="jc-search-bar">
         <svg
           width="16"
           height="16"
@@ -155,31 +89,13 @@ export default function PatientsList({
           value={search}
           onChange={onSearch}
           placeholder="Buscar paciente por nome..."
-          style={{
-            flex: 1,
-            background: 'transparent',
-            border: 'none',
-            outline: 'none',
-            color: '#f0f0f0',
-            fontSize: 13.5,
-            fontFamily: 'inherit',
-            padding: '11px 0',
-          }}
+          className="jc-search-input"
         />
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 11 }}>
+      <div className="jc-patient-list">
         {filtered.length === 0 && (
-          <div
-            style={{
-              background: '#141414',
-              border: '1px solid #2a2a2a',
-              borderRadius: 12,
-              padding: 18,
-              color: '#888',
-              fontSize: 13,
-            }}
-          >
+          <div className="jc-patient-empty">
             Nenhum paciente encontrado.
           </div>
         )}
@@ -194,130 +110,37 @@ export default function PatientsList({
                 : '#e0a82e'
 
           return (
-            <div
-              key={p.id}
-              className="jc-patient-row"
-              style={{
-                background: '#141414',
-                border: '1px solid #2a2a2a',
-                borderRadius: 12,
-                padding: '15px 20px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: 18,
-              }}
-            >
-              <div
-                style={{
-                  width: 44,
-                  height: 44,
-                  borderRadius: '50%',
-                  background: 'rgba(47,214,190,.14)',
-                  color: '#2fd6be',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: 14,
-                  fontWeight: 700,
-                  flex: 'none',
-                }}
-              >
-                {p.initials}
-              </div>
+            <div key={p.id} className="jc-patient-row">
+              <div className="jc-patient-avatar">{p.initials}</div>
 
-              <div
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: 4,
-                  flex: 1,
-                  minWidth: 0,
-                }}
-              >
-                <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
-                  <span
-                    style={{
-                      fontSize: 14.5,
-                      fontWeight: 650,
-                      color: '#f0f0f0',
-                    }}
-                  >
-                    {p.name}
-                  </span>
-
-                  <span style={{ fontSize: 12, color: '#888' }}>
-                    {p.age} anos
-                  </span>
+              <div className="jc-patient-info">
+                <div className="jc-patient-name-row">
+                  <span className="jc-patient-name">{p.name}</span>
+                  <span className="jc-patient-age">{p.age} anos</span>
                 </div>
 
-                <span
-                  style={{
-                    fontSize: 11.5,
-                    color: '#7e7e7e',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap',
-                  }}
-                >
+                <span className="jc-patient-compounds">
                   {p.compounds.join('  ·  ')}
                 </span>
               </div>
 
-              <div
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: 2,
-                  alignItems: 'flex-start',
-                  minWidth: 96,
-                }}
-              >
-                <span
-                  style={{
-                    fontSize: 10,
-                    color: '#777',
-                    textTransform: 'uppercase',
-                    letterSpacing: '.04em',
-                  }}
-                >
-                  Último exame
-                </span>
-
-                <span
-                  style={{
-                    fontSize: 12.5,
-                    color: '#cfcfcf',
-                    fontWeight: 600,
-                  }}
-                >
-                  {p.lastExam}
-                </span>
+              <div className="jc-patient-exam">
+                <span className="jc-patient-exam-label">Último exame</span>
+                <span className="jc-patient-exam-value">{p.lastExam}</span>
               </div>
 
               <span
+                className="jc-status-badge"
                 style={{
-                  fontSize: 11,
-                  fontWeight: 650,
                   color: STATUS.color[safeStatus],
                   background: STATUS.bg[safeStatus],
-                  border: `1px solid ${STATUS.border[safeStatus]}`,
-                  borderRadius: 20,
-                  padding: '4px 12px',
-                  flex: 'none',
+                  borderColor: STATUS.border[safeStatus],
                 }}
               >
                 {STATUS.label[safeStatus]}
               </span>
 
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 6,
-                  minWidth: 42,
-                  justifyContent: 'center',
-                }}
-              >
+              <div className="jc-patient-alert">
                 <svg
                   width="15"
                   height="15"
@@ -332,13 +155,7 @@ export default function PatientsList({
                   <path d="M13.7 21a2 2 0 0 1-3.4 0" />
                 </svg>
 
-                <span
-                  style={{
-                    fontSize: 13,
-                    fontWeight: 700,
-                    color: alertColor,
-                  }}
-                >
+                <span className="jc-patient-alert-count" style={{ color: alertColor }}>
                   {p.alerts}
                 </span>
               </div>
@@ -346,18 +163,6 @@ export default function PatientsList({
               <button
                 onClick={() => onOpenPatient(p)}
                 className="jc-btn-soft-teal"
-                style={{
-                  background: 'rgba(47,214,190,.12)',
-                  border: '1px solid rgba(47,214,190,.3)',
-                  color: '#2fd6be',
-                  fontSize: 12.5,
-                  fontWeight: 650,
-                  fontFamily: 'inherit',
-                  borderRadius: 8,
-                  padding: '8px 15px',
-                  cursor: 'pointer',
-                  flex: 'none',
-                }}
               >
                 Ver dashboard
               </button>
