@@ -13,6 +13,7 @@ const MENU_LINKS = {
         { label: 'SINAIS',        href: '#monitorar' },
         { label: 'PÚBLICO',       href: '#pub'       },
         { label: 'TRANSPARÊNCIA', href: '#naofaz'    },
+        { label: 'PLANOS',        href: '#precos'    },
     ],
     en: [
         { label: 'HOME',          href: '#inicio'    },
@@ -22,6 +23,7 @@ const MENU_LINKS = {
         { label: 'SIGNALS',       href: '#monitorar' },
         { label: 'AUDIENCE',      href: '#pub'       },
         { label: 'TRANSPARENCY',  href: '#naofaz'    },
+        { label: 'PRICING',       href: '#precos'    },
     ],
 }
 

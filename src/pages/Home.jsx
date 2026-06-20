@@ -6,7 +6,7 @@ import SecaoInicio from "../components/SecaoInicio/SecaoInicio";
 import EntendaProjeto from "../components/entendaProjeto/EntendaProjeto";
 import ComoFunciona from "../components/comoFunciona/ComoFunciona";
 import OQueAcompanhar from "../components/oQueAcompanhar/OQueAcompanhar";
-
+import Planos from "../components/planos/Planos";
 import Publicos from "../components/publicos/Publicos";
 import OQueNaoFaz from "../components/oQueNaoFaz/OQueNaoFaz";
 import SecaoSobre from "../components/home/sobreProjeto/SecaoSobre";
@@ -47,6 +47,7 @@ return (
     <OQueAcompanhar />
     <Publicos />
     <OQueNaoFaz />
+    <Planos />
     <CTAFinal />
       {/* <Footer /> */}
     </div>
