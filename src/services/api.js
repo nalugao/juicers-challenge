@@ -1,7 +1,34 @@
-const API_URL = 'http://localhost:3000/api'
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api'
 
 function getToken() {
     return localStorage.getItem('tokenJuicers')
+}
+
+async function handleResponse(response, defaultMessage) {
+    const data = await response.json().catch(() => ({}))
+
+    if (!response.ok) {
+        throw new Error(data.message || defaultMessage)
+    }
+
+    return data
+}
+
+function authHeaders() {
+    const token = getToken()
+
+    return {
+        Authorization: `Bearer ${token}`,
+    }
+}
+
+function jsonAuthHeaders() {
+    const token = getToken()
+
+    return {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+    }
 }
 
 export async function registerUser({ name, email, password, role = 'patient' }) {
@@ -13,13 +40,7 @@ export async function registerUser({ name, email, password, role = 'patient' }) 
         body: JSON.stringify({ name, email, password, role }),
     })
 
-    const data = await response.json()
-
-    if (!response.ok) {
-        throw new Error(data.message || 'Erro ao cadastrar usuário.')
-    }
-
-    return data
+    return handleResponse(response, 'Erro ao cadastrar usuário.')
 }
 
 export async function loginUser({ email, password }) {
@@ -31,441 +52,212 @@ export async function loginUser({ email, password }) {
         body: JSON.stringify({ email, password }),
     })
 
-    const data = await response.json()
-
-    if (!response.ok) {
-        throw new Error(data.message || 'Erro ao fazer login.')
-    }
-
-    return data
+    return handleResponse(response, 'Erro ao fazer login.')
 }
 
 export async function savePatientProfile(patientData) {
-    const token = getToken()
-
     const response = await fetch(`${API_URL}/patients`, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-        },
+        headers: jsonAuthHeaders(),
         body: JSON.stringify(patientData),
     })
 
-    const data = await response.json()
-
-    if (!response.ok) {
-        throw new Error(data.message || 'Erro ao salvar perfil do paciente.')
-    }
-
-    return data
+    return handleResponse(response, 'Erro ao salvar perfil do paciente.')
 }
 
 export async function getMyPatientProfile() {
-    const token = getToken()
-
     const response = await fetch(`${API_URL}/patients/me`, {
         method: 'GET',
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
+        headers: authHeaders(),
     })
 
-    const data = await response.json()
-
-    if (!response.ok) {
-        throw new Error(data.message || 'Erro ao buscar perfil do paciente.')
-    }
-
-    return data
+    return handleResponse(response, 'Erro ao buscar perfil do paciente.')
 }
 
 export async function updateUserProfile(userData) {
-    const token = getToken()
-
     const response = await fetch(`${API_URL}/users/profile`, {
         method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-        },
+        headers: jsonAuthHeaders(),
         body: JSON.stringify(userData),
     })
 
-    const data = await response.json()
-
-    if (!response.ok) {
-        throw new Error(data.message || 'Erro ao atualizar usuário.')
-    }
-
-    return data
+    return handleResponse(response, 'Erro ao atualizar usuário.')
 }
 
 export async function getMyExams() {
-    const token = getToken()
-
     const response = await fetch(`${API_URL}/exams`, {
         method: 'GET',
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
+        headers: authHeaders(),
     })
 
-    const data = await response.json()
-
-    if (!response.ok) {
-        throw new Error(data.message || 'Erro ao buscar exames.')
-    }
-
-    return data
+    return handleResponse(response, 'Erro ao buscar exames.')
 }
 
 export async function createExam(examData) {
-    const token = getToken()
-
     const response = await fetch(`${API_URL}/exams`, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-        },
+        headers: jsonAuthHeaders(),
         body: JSON.stringify(examData),
     })
 
-    const data = await response.json()
-
-    if (!response.ok) {
-        throw new Error(data.message || 'Erro ao criar exame.')
-    }
-
-    return data
+    return handleResponse(response, 'Erro ao criar exame.')
 }
 
 export async function deleteExam(id) {
-    const token = getToken()
-
     const response = await fetch(`${API_URL}/exams/${id}`, {
         method: 'DELETE',
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
+        headers: authHeaders(),
     })
 
-    const data = await response.json()
-
-    if (!response.ok) {
-        throw new Error(data.message || 'Erro ao deletar exame.')
-    }
-
-    return data
+    return handleResponse(response, 'Erro ao deletar exame.')
 }
 
 export async function createDoctorInvite({ patientName, patientEmail }) {
-    const token = getToken()
-
     const response = await fetch(`${API_URL}/doctors/invites`, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-        },
+        headers: jsonAuthHeaders(),
         body: JSON.stringify({ patientName, patientEmail }),
     })
 
-    const data = await response.json()
-
-    if (!response.ok) {
-        throw new Error(data.message || 'Erro ao criar convite.')
-    }
-
-    return data
+    return handleResponse(response, 'Erro ao criar convite.')
 }
 
 export async function getDoctorPatients() {
-    const token = getToken()
-
     const response = await fetch(`${API_URL}/doctors/patients`, {
         method: 'GET',
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
+        headers: authHeaders(),
     })
 
-    const data = await response.json()
-
-    if (!response.ok) {
-        throw new Error(data.message || 'Erro ao buscar pacientes do médico.')
-    }
-
-    return data
+    return handleResponse(response, 'Erro ao buscar pacientes do médico.')
 }
 
 export async function getDoctorPatientById(id) {
-    const token = getToken()
-
     const response = await fetch(`${API_URL}/doctors/patients/${id}`, {
         method: 'GET',
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
+        headers: authHeaders(),
     })
 
-    const data = await response.json()
-
-    if (!response.ok) {
-        throw new Error(data.message || 'Erro ao buscar paciente.')
-    }
-
-    return data
+    return handleResponse(response, 'Erro ao buscar paciente.')
 }
 
 export async function getDoctorPatientExams(id) {
-    const token = getToken()
-
     const response = await fetch(`${API_URL}/doctors/patients/${id}/exams`, {
         method: 'GET',
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
+        headers: authHeaders(),
     })
 
-    const data = await response.json()
-
-    if (!response.ok) {
-        throw new Error(data.message || 'Erro ao buscar exames do paciente.')
-    }
-
-    return data
+    return handleResponse(response, 'Erro ao buscar exames do paciente.')
 }
 
 export async function uploadDoctorPatientExamPdf(id, file) {
-    const token = getToken()
-
     const formData = new FormData()
     formData.append('examPdf', file)
 
     const response = await fetch(`${API_URL}/doctors/patients/${id}/exams/upload`, {
         method: 'POST',
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
+        headers: authHeaders(),
         body: formData,
     })
 
-    const data = await response.json()
-
-    if (!response.ok) {
-        throw new Error(data.message || 'Erro ao importar PDF do exame.')
-    }
-
-    return data
+    return handleResponse(response, 'Erro ao importar PDF do exame.')
 }
 
 export async function getInviteByToken(inviteToken) {
     const response = await fetch(`${API_URL}/doctors/invites/${inviteToken}`)
 
-    const data = await response.json()
-
-    if (!response.ok) {
-        throw new Error(data.message || 'Erro ao buscar convite.')
-    }
-
-    return data
+    return handleResponse(response, 'Erro ao buscar convite.')
 }
 
 export async function acceptDoctorInvite(inviteToken) {
-    const token = getToken()
-
     const response = await fetch(`${API_URL}/doctors/invites/${inviteToken}/accept`, {
         method: 'POST',
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
+        headers: authHeaders(),
     })
 
-    const data = await response.json()
-
-    if (!response.ok) {
-        throw new Error(data.message || 'Erro ao aceitar convite.')
-    }
-
-    return data
+    return handleResponse(response, 'Erro ao aceitar convite.')
 }
-export async function getMyFollowup() {
-    const token = getToken()
 
+export async function getMyFollowup() {
     const response = await fetch(`${API_URL}/patients/me/followup`, {
         method: 'GET',
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
+        headers: authHeaders(),
     })
 
-    const data = await response.json()
-
-    if (!response.ok) {
-        throw new Error(data.message || 'Erro ao buscar acompanhamento médico.')
-    }
-
-    return data
+    return handleResponse(response, 'Erro ao buscar acompanhamento médico.')
 }
-export async function getDoctorPatientFollowup(patientId) {
-    const token = getToken()
 
+export async function getDoctorPatientFollowup(patientId) {
     const response = await fetch(`${API_URL}/doctors/patients/${patientId}/followup`, {
         method: 'GET',
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
+        headers: authHeaders(),
     })
 
-    const data = await response.json()
-
-    if (!response.ok) {
-        throw new Error(data.message || 'Erro ao buscar acompanhamento do paciente.')
-    }
-
-    return data
+    return handleResponse(response, 'Erro ao buscar acompanhamento do paciente.')
 }
 
 export async function createDoctorPatientNote(patientId, text) {
-    const token = getToken()
-
     const response = await fetch(`${API_URL}/doctors/patients/${patientId}/notes`, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-        },
+        headers: jsonAuthHeaders(),
         body: JSON.stringify({ text }),
     })
 
-    const data = await response.json()
-
-    if (!response.ok) {
-        throw new Error(data.message || 'Erro ao criar anotação clínica.')
-    }
-
-    return data
+    return handleResponse(response, 'Erro ao criar anotação clínica.')
 }
 
 export async function toggleDoctorPatientRequestedExam(patientId, label) {
-    const token = getToken()
-
     const response = await fetch(`${API_URL}/doctors/patients/${patientId}/requested-exams`, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-        },
+        headers: jsonAuthHeaders(),
         body: JSON.stringify({ label }),
     })
 
-    const data = await response.json()
-
-    if (!response.ok) {
-        throw new Error(data.message || 'Erro ao solicitar exame.')
-    }
-
-    return data
+    return handleResponse(response, 'Erro ao solicitar exame.')
 }
 
 export async function deleteDoctorPatientExam(patientId, examId) {
-    const token = getToken()
-
     const response = await fetch(`${API_URL}/doctors/patients/${patientId}/exams/${examId}`, {
         method: 'DELETE',
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
+        headers: authHeaders(),
     })
 
-    const data = await response.json()
-
-    if (!response.ok) {
-        throw new Error(data.message || 'Erro ao deletar exame do paciente.')
-    }
-
-    return data
+    return handleResponse(response, 'Erro ao deletar exame do paciente.')
 }
-export async function getMyDoctorProfile() {
-    const token = getToken()
 
+export async function getMyDoctorProfile() {
     const response = await fetch(`${API_URL}/doctors/me`, {
         method: 'GET',
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
+        headers: authHeaders(),
     })
 
-    const data = await response.json()
-
-    if (!response.ok) {
-        throw new Error(data.message || 'Erro ao buscar perfil médico.')
-    }
-
-    return data
+    return handleResponse(response, 'Erro ao buscar perfil médico.')
 }
 
 export async function updateMyDoctorProfile({ crm, specialty }) {
-    const token = getToken()
-
     const response = await fetch(`${API_URL}/doctors/me`, {
         method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-            crm,
-            specialty,
-        }),
+        headers: jsonAuthHeaders(),
+        body: JSON.stringify({ crm, specialty }),
     })
 
-    const data = await response.json()
-
-    if (!response.ok) {
-        throw new Error(data.message || 'Erro ao atualizar perfil médico.')
-    }
-
-    return data
+    return handleResponse(response, 'Erro ao atualizar perfil médico.')
 }
-export async function updateDoctorPatientNote(noteId, text) {
-    const token = getToken()
 
+export async function updateDoctorPatientNote(noteId, text) {
     const response = await fetch(`${API_URL}/doctors/notes/${noteId}`, {
         method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-        },
+        headers: jsonAuthHeaders(),
         body: JSON.stringify({ text }),
     })
 
-    const data = await response.json()
-
-    if (!response.ok) {
-        throw new Error(data.message || 'Erro ao editar anotação.')
-    }
-
-    return data
+    return handleResponse(response, 'Erro ao editar anotação.')
 }
 
 export async function deleteDoctorPatientNote(noteId) {
-    const token = getToken()
-
     const response = await fetch(`${API_URL}/doctors/notes/${noteId}`, {
         method: 'DELETE',
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
+        headers: authHeaders(),
     })
 
-    const data = await response.json()
-
-    if (!response.ok) {
-        throw new Error(data.message || 'Erro ao excluir anotação.')
-    }
-
-    return data
+    return handleResponse(response, 'Erro ao excluir anotação.')
 }
