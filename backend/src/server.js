@@ -12,28 +12,20 @@ dotenv.config();
 
 const app = express();
 
-const allowedOrigins = [
-  "http://localhost:5173",
-  "https://juicers-challenge.vercel.app",
-  process.env.FRONTEND_URL,
-].filter(Boolean);
-
 app.use(
   cors({
     origin: function (origin, callback) {
-      if (!origin) {
-        return callback(null, true);
-      }
+      if (!origin) return callback(null, true);
 
-      const isAllowed =
-        allowedOrigins.includes(origin) ||
+      const allowed =
+        origin === "http://localhost:5173" ||
         origin.endsWith(".vercel.app");
 
-      if (isAllowed) {
+      if (allowed) {
         return callback(null, true);
       }
 
-      return callback(new Error(`Origem não permitida pelo CORS: ${origin}`));
+      return callback(new Error(`Origem não permitida: ${origin}`));
     },
     credentials: true,
   })
@@ -44,9 +36,7 @@ app.use(express.json());
 connectDatabase();
 
 app.get("/", (req, res) => {
-  res.json({
-    message: "API Juicers funcionando",
-  });
+  res.json({ message: "API Juicers funcionando" });
 });
 
 app.use("/api/users", userRoutes);
