@@ -6,6 +6,8 @@ import OnboardingForm from '../components/OnboardingForm'
 import { acceptDoctorInvite, loginUser, registerUser } from '../services/api'
 import { useAuth } from '../context/AuthContext'
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api'
+
 export default function Login() {
     const navigate = useNavigate()
     const { token: conviteToken } = useParams()
@@ -54,17 +56,30 @@ export default function Login() {
 
     async function backendOnline() {
         try {
-            const res = await fetch('http://localhost:3000/api/users/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email: '__ping__', password: '__ping__' }),
-                signal: AbortSignal.timeout(2000),
+            const controller = new AbortController()
+
+            const timeoutId = setTimeout(() => {
+                controller.abort()
+            }, 4000)
+
+            const baseUrl = API_URL.replace('/api', '')
+
+            const res = await fetch(baseUrl, {
+                method: 'GET',
+                signal: controller.signal,
             })
 
-            return res.status !== 0
+            clearTimeout(timeoutId)
+
+            return res.ok
         } catch {
             return false
         }
+    }
+
+    function salvarSessao(token, user) {
+        localStorage.setItem('tokenJuicers', token)
+        localStorage.setItem('userJuicers', JSON.stringify(user))
     }
 
     function getRoleApi() {
@@ -111,6 +126,7 @@ export default function Login() {
 
             const fakeToken = `mock-token-${Date.now()}`
 
+            salvarSessao(fakeToken, fakeUser)
             loginComToken(fakeToken, fakeUser, role)
             setCarregando(false)
 
@@ -136,6 +152,8 @@ export default function Login() {
                 email,
                 password: senha,
             })
+
+            salvarSessao(loginResponse.token, loginResponse.user)
 
             loginComToken(
                 loginResponse.token,
@@ -186,6 +204,8 @@ export default function Login() {
                 email,
                 password: senha,
             })
+
+            salvarSessao(data.token, data.user)
 
             loginComToken(
                 data.token,
