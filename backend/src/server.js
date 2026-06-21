@@ -14,29 +14,22 @@ const app = express();
 
 app.use(
   cors({
-    origin: function (origin, callback) {
-      if (!origin) return callback(null, true);
-
-      const allowed =
-        origin === "http://localhost:5173" ||
-        origin.endsWith(".vercel.app");
-
-      if (allowed) {
-        return callback(null, true);
-      }
-
-      return callback(new Error(`Origem não permitida: ${origin}`));
-    },
-    credentials: true,
+    origin: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+
+app.options("*", cors());
 
 app.use(express.json());
 
 connectDatabase();
 
 app.get("/", (req, res) => {
-  res.json({ message: "API Juicers funcionando" });
+  res.json({
+    message: "API Juicers funcionando",
+  });
 });
 
 app.use("/api/users", userRoutes);
