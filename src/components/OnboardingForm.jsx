@@ -44,7 +44,6 @@ export default function OnboardingForm({
         peso: '',
         altura: '',
         cicloAtivo: 'sim',
-        // cada item: { nome, dosagem } (dosagem em mg/semana)
         compostos: [],
         tempoUso: '',
         fezeExames: 'recentes',
@@ -70,7 +69,6 @@ export default function OnboardingForm({
         }))
     }
 
-    // ── Compostos: adicionar (sugestão ou livre), remover e editar dosagem ──
     const nomesSelecionados = form.compostos.map(c => c.nome)
     const sugestoesDisponiveis = COMPOSTOS.filter(c => !nomesSelecionados.includes(c))
 
@@ -81,19 +79,28 @@ export default function OnboardingForm({
 
         setErro('')
         setErrors(prev => ({ ...prev, compostos: '' }))
-        setForm(p => ({ ...p, compostos: [...p.compostos, { nome, dosagem: '' }] }))
+        setForm(p => ({
+            ...p,
+            compostos: [...p.compostos, { nome, dosagem: '' }],
+        }))
     }
 
     const removerComposto = nome => {
-        setForm(p => ({ ...p, compostos: p.compostos.filter(c => c.nome !== nome) }))
+        setForm(p => ({
+            ...p,
+            compostos: p.compostos.filter(c => c.nome !== nome),
+        }))
     }
 
     const atualizarDosagemComposto = (nome, val) => {
         setErro('')
         setErrors(prev => ({ ...prev, compostos: '' }))
+
         setForm(p => ({
             ...p,
-            compostos: p.compostos.map(c => (c.nome === nome ? { ...c, dosagem: val } : c)),
+            compostos: p.compostos.map(c =>
+                c.nome === nome ? { ...c, dosagem: val } : c
+            ),
         }))
     }
 
@@ -248,10 +255,7 @@ export default function OnboardingForm({
                 cycleTime: form.tempoUso,
                 examStatus: form.fezeExames,
                 lastExamDate: form.dataUltimoExame,
-                substances: form.compostos.map(c => ({
-                    name: c.nome,
-                    weeklyDosage: Number(c.dosagem) || 0,
-                })),
+                substances: form.compostos.map(c => c.nome),
                 healthConditions: form.condicoes,
             }
 
@@ -283,7 +287,10 @@ export default function OnboardingForm({
                 }),
             }
 
-            localStorage.setItem('dadosContaCicloRisco', JSON.stringify(dadosFormatados))
+            localStorage.setItem(
+                'dadosContaCicloRisco',
+                JSON.stringify(dadosFormatados)
+            )
 
             onFinish()
         } catch (error) {
@@ -315,24 +322,26 @@ export default function OnboardingForm({
                         <div key={s.n}>
                             <div className={`ob-step ${etapa === s.n ? 'active' : ''}`}>
                                 <div
-                                    className={`ob-step-num ${etapa > s.n
-                                        ? 'done'
-                                        : etapa === s.n
-                                            ? 'current'
-                                            : 'pending'
-                                        }`}
+                                    className={`ob-step-num ${
+                                        etapa > s.n
+                                            ? 'done'
+                                            : etapa === s.n
+                                                ? 'current'
+                                                : 'pending'
+                                    }`}
                                 >
                                     {etapa > s.n ? '✓' : s.n}
                                 </div>
 
                                 <div>
                                     <div
-                                        className={`ob-step-label ${etapa === s.n
-                                            ? 'active'
-                                            : etapa > s.n
-                                                ? 'done'
-                                                : ''
-                                            }`}
+                                        className={`ob-step-label ${
+                                            etapa === s.n
+                                                ? 'active'
+                                                : etapa > s.n
+                                                    ? 'done'
+                                                    : ''
+                                        }`}
                                     >
                                         {s.label}
                                     </div>
@@ -385,60 +394,41 @@ export default function OnboardingForm({
                             <div className="ob-row">
                                 <div className={`ob-field ${errors.nome ? 'ob-field-error' : ''}`}>
                                     <label>Nome</label>
-
                                     <input
                                         type="text"
                                         placeholder="Seu nome"
                                         value={form.nome}
                                         onChange={e => update('nome', e.target.value)}
                                     />
-
-                                    {errors.nome && (
-                                        <small className="ob-error-text">
-                                            {errors.nome}
-                                        </small>
-                                    )}
+                                    {errors.nome && <small className="ob-error-text">{errors.nome}</small>}
                                 </div>
 
                                 <div className={`ob-field ${errors.sobrenome ? 'ob-field-error' : ''}`}>
                                     <label>Sobrenome</label>
-
                                     <input
                                         type="text"
                                         placeholder="Sobrenome"
                                         value={form.sobrenome}
                                         onChange={e => update('sobrenome', e.target.value)}
                                     />
-
-                                    {errors.sobrenome && (
-                                        <small className="ob-error-text">
-                                            {errors.sobrenome}
-                                        </small>
-                                    )}
+                                    {errors.sobrenome && <small className="ob-error-text">{errors.sobrenome}</small>}
                                 </div>
                             </div>
 
                             <div className="ob-row">
                                 <div className={`ob-field ${errors.idade ? 'ob-field-error' : ''}`}>
                                     <label>Idade</label>
-
                                     <input
                                         type="number"
                                         placeholder="28"
                                         value={form.idade}
                                         onChange={e => update('idade', e.target.value)}
                                     />
-
-                                    {errors.idade && (
-                                        <small className="ob-error-text">
-                                            {errors.idade}
-                                        </small>
-                                    )}
+                                    {errors.idade && <small className="ob-error-text">{errors.idade}</small>}
                                 </div>
 
                                 <div className={`ob-field ${errors.sexo ? 'ob-field-error' : ''}`}>
                                     <label>Sexo biológico</label>
-
                                     <select
                                         value={form.sexo}
                                         onChange={e => update('sexo', e.target.value)}
@@ -447,48 +437,31 @@ export default function OnboardingForm({
                                         <option value="Masculino">Masculino</option>
                                         <option value="Feminino">Feminino</option>
                                     </select>
-
-                                    {errors.sexo && (
-                                        <small className="ob-error-text">
-                                            {errors.sexo}
-                                        </small>
-                                    )}
+                                    {errors.sexo && <small className="ob-error-text">{errors.sexo}</small>}
                                 </div>
                             </div>
 
                             <div className="ob-row">
                                 <div className={`ob-field ${errors.peso ? 'ob-field-error' : ''}`}>
                                     <label>Peso (kg)</label>
-
                                     <input
                                         type="number"
                                         placeholder="85"
                                         value={form.peso}
                                         onChange={e => update('peso', e.target.value)}
                                     />
-
-                                    {errors.peso && (
-                                        <small className="ob-error-text">
-                                            {errors.peso}
-                                        </small>
-                                    )}
+                                    {errors.peso && <small className="ob-error-text">{errors.peso}</small>}
                                 </div>
 
                                 <div className={`ob-field ${errors.altura ? 'ob-field-error' : ''}`}>
                                     <label>Altura (cm)</label>
-
                                     <input
                                         type="number"
                                         placeholder="178"
                                         value={form.altura}
                                         onChange={e => update('altura', e.target.value)}
                                     />
-
-                                    {errors.altura && (
-                                        <small className="ob-error-text">
-                                            {errors.altura}
-                                        </small>
-                                    )}
+                                    {errors.altura && <small className="ob-error-text">{errors.altura}</small>}
                                 </div>
                             </div>
 
@@ -531,9 +504,7 @@ export default function OnboardingForm({
                                             onClick={() => update('cicloAtivo', o.val)}
                                         >
                                             <div className="ob-radio-dot">
-                                                {form.cicloAtivo === o.val && (
-                                                    <div className="ob-radio-inner" />
-                                                )}
+                                                {form.cicloAtivo === o.val && <div className="ob-radio-inner" />}
                                             </div>
 
                                             <span className="ob-radio-text">
@@ -543,11 +514,7 @@ export default function OnboardingForm({
                                     ))}
                                 </div>
 
-                                {errors.cicloAtivo && (
-                                    <small className="ob-error-text">
-                                        {errors.cicloAtivo}
-                                    </small>
-                                )}
+                                {errors.cicloAtivo && <small className="ob-error-text">{errors.cicloAtivo}</small>}
                             </div>
 
                             {form.cicloAtivo !== 'nunca' && (
@@ -556,7 +523,6 @@ export default function OnboardingForm({
                                         <label>Compostos utilizados</label>
 
                                         <div className="ob-compost-block">
-                                            {/* sugestões rápidas (1 clique adiciona) */}
                                             {sugestoesDisponiveis.length > 0 && (
                                                 <div className="ob-tags">
                                                     {sugestoesDisponiveis.map(c => (
@@ -571,7 +537,6 @@ export default function OnboardingForm({
                                                 </div>
                                             )}
 
-                                            {/* composto livre, não-listado */}
                                             <div className="ob-compost-custom">
                                                 <input
                                                     type="text"
@@ -589,7 +554,6 @@ export default function OnboardingForm({
                                                 </button>
                                             </div>
 
-                                            {/* lista de compostos selecionados, com mg/semana */}
                                             <div className="ob-compost-list">
                                                 {form.compostos.length === 0 && (
                                                     <div className="ob-compost-empty">
@@ -626,11 +590,7 @@ export default function OnboardingForm({
                                             </div>
                                         </div>
 
-                                        {errors.compostos && (
-                                            <small className="ob-error-text">
-                                                {errors.compostos}
-                                            </small>
-                                        )}
+                                        {errors.compostos && <small className="ob-error-text">{errors.compostos}</small>}
                                     </div>
 
                                     <div className={`ob-field ${errors.tempoUso ? 'ob-field-error' : ''}`}>
@@ -647,11 +607,7 @@ export default function OnboardingForm({
                                             <option>Mais de 12 meses</option>
                                         </select>
 
-                                        {errors.tempoUso && (
-                                            <small className="ob-error-text">
-                                                {errors.tempoUso}
-                                            </small>
-                                        )}
+                                        {errors.tempoUso && <small className="ob-error-text">{errors.tempoUso}</small>}
                                     </div>
                                 </>
                             )}
@@ -695,9 +651,7 @@ export default function OnboardingForm({
                                             onClick={() => update('fezeExames', o.val)}
                                         >
                                             <div className="ob-radio-dot">
-                                                {form.fezeExames === o.val && (
-                                                    <div className="ob-radio-inner" />
-                                                )}
+                                                {form.fezeExames === o.val && <div className="ob-radio-inner" />}
                                             </div>
 
                                             <span className="ob-radio-text">
@@ -707,11 +661,7 @@ export default function OnboardingForm({
                                     ))}
                                 </div>
 
-                                {errors.fezeExames && (
-                                    <small className="ob-error-text">
-                                        {errors.fezeExames}
-                                    </small>
-                                )}
+                                {errors.fezeExames && <small className="ob-error-text">{errors.fezeExames}</small>}
                             </div>
 
                             {form.fezeExames !== 'nunca' && (
@@ -724,11 +674,7 @@ export default function OnboardingForm({
                                         onChange={e => update('dataUltimoExame', e.target.value)}
                                     />
 
-                                    {errors.dataUltimoExame && (
-                                        <small className="ob-error-text">
-                                            {errors.dataUltimoExame}
-                                        </small>
-                                    )}
+                                    {errors.dataUltimoExame && <small className="ob-error-text">{errors.dataUltimoExame}</small>}
                                 </div>
                             )}
 
@@ -743,9 +689,7 @@ export default function OnboardingForm({
                                             onClick={() => toggleArray('condicoes', c)}
                                         >
                                             <div className="ob-check-box">
-                                                {form.condicoes.includes(c) && (
-                                                    <span>✓</span>
-                                                )}
+                                                {form.condicoes.includes(c) && <span>✓</span>}
                                             </div>
 
                                             <span className="ob-check-text">
@@ -755,11 +699,7 @@ export default function OnboardingForm({
                                     ))}
                                 </div>
 
-                                {errors.condicoes && (
-                                    <small className="ob-error-text">
-                                        {errors.condicoes}
-                                    </small>
-                                )}
+                                {errors.condicoes && <small className="ob-error-text">{errors.condicoes}</small>}
                             </div>
 
                             <div className="ob-btn-row">
