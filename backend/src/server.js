@@ -14,17 +14,26 @@ const app = express();
 
 const allowedOrigins = [
   "http://localhost:5173",
+  "https://juicers-challenge.vercel.app",
   process.env.FRONTEND_URL,
 ].filter(Boolean);
 
 app.use(
   cors({
     origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
+      if (!origin) {
         return callback(null, true);
       }
 
-      return callback(new Error("Origem não permitida pelo CORS"));
+      const isAllowed =
+        allowedOrigins.includes(origin) ||
+        origin.endsWith(".vercel.app");
+
+      if (isAllowed) {
+        return callback(null, true);
+      }
+
+      return callback(new Error(`Origem não permitida pelo CORS: ${origin}`));
     },
     credentials: true,
   })
